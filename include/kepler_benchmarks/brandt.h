@@ -74,6 +74,12 @@ INLINE_OR_DEVICE Scalar EAstart(const Scalar &M, const Scalar &ecc) {
 // 0.999999.
 template <typename Scalar>
 INLINE_OR_DEVICE Scalar calcEA(const Scalar &M, const Scalar &ecc, Scalar *sinE, Scalar *cosE) {
+  if (ecc < 1e-12 || M < 1e-12) {
+    *sinE = 0;
+    *cosE = 1;
+    return M;
+  }
+
   const Scalar one_sixth = 1. / 6;
 
   const Scalar pi = M_PI;
@@ -315,6 +321,12 @@ template <typename Scalar>
 INLINE_OR_DEVICE Scalar calcEA_fixed_ecc(const Scalar bounds[], const Scalar EA_tab[],
                                          const Scalar &M, const Scalar &ecc, Scalar *sinE,
                                          Scalar *cosE) {
+  if (ecc < 1e-12 || M < 1e-12) {
+    *sinE = 0;
+    *cosE = 1;
+    return M;
+  }
+
   const Scalar one_sixth = 1. / 6;
   const Scalar pi = 3.14159265358979323846264338327950288;
   const Scalar pi_d_4 = 0.25 * pi;
