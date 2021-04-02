@@ -49,9 +49,8 @@ struct Contour : public Solver<T> {
     T this_ell = mean_anomaly;
     T e = this->eccentricity_;
 
-    // This algorithm can't handle e == 0 so let's catch those first;
-    // it also fails for M == 0; but we'll just accept that for now
-    if (e < 1e-12) return mean_anomaly;
+    // This algorithm can't handle e == 0 or M == 0 so let's catch those first
+    if (e < 1e-12 || this_ell < 1e-12) return mean_anomaly;
 
     T ft_gx2, ft_gx1, zR, zI, cosC, sinC, center;
     T fxR, fxI, ftmp, tmpcosh, tmpsinh, tmpcos, tmpsin;

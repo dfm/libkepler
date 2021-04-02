@@ -1,0 +1,28 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Build & run benchmarks"
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          cmake --build .
+      - name: Upload results
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: build/benchmarks/results/*
