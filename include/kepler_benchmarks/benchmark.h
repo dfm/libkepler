@@ -13,11 +13,11 @@
 #endif
 
 #ifndef KEPLER_BENCHMARK_ECCENTRIC_ANOMALY_STEPS
-#define KEPLER_BENCHMARK_ECCENTRIC_ANOMALY_STEPS 13
+#define KEPLER_BENCHMARK_ECCENTRIC_ANOMALY_STEPS 125
 #endif
 
 #ifndef KEPLER_BENCHMARK_ITERATIONS
-#define KEPLER_BENCHMARK_ITERATIONS 5000000
+#define KEPLER_BENCHMARK_ITERATIONS 5000
 #endif
 
 namespace kepler_benchmarks {
@@ -32,7 +32,7 @@ struct BenchmarkResults {
   T computed_sin_eccentric_anomaly;
   T computed_cos_eccentric_anomaly;
   ssize_t iterations;
-  std::chrono::milliseconds elapsed;
+  std::chrono::nanoseconds elapsed;
 
   std::string to_csv() {
     std::ostringstream stream;
@@ -55,10 +55,10 @@ struct BenchmarkResults {
 
   static std::string header() {
     std::ostringstream stream;
-    stream << "index_ecc,index_anom,";
+    stream << "ecc_ind,anom_ind,";
     stream << "eccentricity,mean_anomaly,true_eccentric_anomaly,";
     stream << "computed_sin,computed_cos,error_sin,error_cos,";
-    stream << "iterations,time_ms\n";
+    stream << "iterations,time_ns\n";
     return stream.str();
   }
 };
@@ -79,9 +79,9 @@ void run_general_benchmark(const std::string& filename, SolverType& solver) {
   output_file_stream << BenchmarkResults<T>::header();
 
   for (ssize_t i = 0; i < eccentricity_steps; ++i) {
-    T eccentricity = T(i) / T(eccentricity_steps);
+    T eccentricity = T(i + 0.5) / T(eccentricity_steps);
     for (ssize_t j = 0; j < eccentric_anomaly_steps; ++j) {
-      T eccentric_anomaly = 2 * M_PI * T(j) / T(eccentric_anomaly_steps);
+      T eccentric_anomaly = 2 * M_PI * T(j + 0.5) / T(eccentric_anomaly_steps);
 
       // Compute the mean anomaly from the true eccentric anomaly and wrap into [0, 2*pi)
       T mean_anomaly = eccentric_anomaly - eccentricity * sin(eccentric_anomaly);
@@ -94,7 +94,7 @@ void run_general_benchmark(const std::string& filename, SolverType& solver) {
         solver.evaluate(mean_anomaly, eccentricity, &sinE, &cosE);
       }
       auto end = std::chrono::high_resolution_clock::now();
-      auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+      auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
       // Save the results
       BenchmarkResults<T> results(
@@ -121,11 +121,11 @@ void run_fixed_eccentricity_benchmark(const std::string& filename, SolverType& s
   output_file_stream << BenchmarkResults<T>::header();
 
   for (ssize_t i = 0; i < eccentricity_steps; ++i) {
-    T eccentricity = T(i) / T(eccentricity_steps);
+    T eccentricity = T(i + 0.5) / T(eccentricity_steps);
     solver.precompute_for_eccentricity(eccentricity);
 
     for (ssize_t j = 0; j < eccentric_anomaly_steps; ++j) {
-      T eccentric_anomaly = 2 * M_PI * T(j) / T(eccentric_anomaly_steps);
+      T eccentric_anomaly = 2 * M_PI * T(j + 0.5) / T(eccentric_anomaly_steps);
 
       // Compute the mean anomaly from the true eccentric anomaly and wrap into [0, 2*pi)
       T mean_anomaly = eccentric_anomaly - eccentricity * sin(eccentric_anomaly);
@@ -138,7 +138,7 @@ void run_fixed_eccentricity_benchmark(const std::string& filename, SolverType& s
         solver.evaluate(mean_anomaly, &sinE, &cosE);
       }
       auto end = std::chrono::high_resolution_clock::now();
-      auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+      auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
       // Save the results
       BenchmarkResults<T> results(
