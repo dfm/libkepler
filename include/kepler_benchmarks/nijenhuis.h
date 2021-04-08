@@ -59,7 +59,6 @@ inline T get_markley_starter(T M, T ecc, T ome) {
   // M must be in the range [0, pi)
   const T FACTOR1 = 3 * M_PI / (M_PI - 6 / M_PI);
   const T FACTOR2 = 1.6 / (M_PI - 6 / M_PI);
-
   T M2 = M * M;
   T alpha = FACTOR1 + FACTOR2 * (M_PI - M) / (1 + ecc);
   T d = 3 * ome + alpha * ecc;
@@ -67,17 +66,18 @@ inline T get_markley_starter(T M, T ecc, T ome) {
   T r = (3 * alphad * (d - ome) + M2) * M;
   T q = 2 * alphad * ome - M2;
   T q2 = q * q;
-  T w = pow(std::abs(r) + sqrt(q2 * q + r * r), 2.0 / 3);
+  T w = cbrt(std::abs(r) + sqrt(q2 * q + r * r));
+  w *= w;
   return (2 * r * w / (w * w + w * q + q2) + M) / d;
 }
 
 template <typename T>
 inline T refine_estimate(T M, T ecc, T ome, T E) {
-  // T sE, cE;
-  // sin_cos_reduc(E, &sE, &cE);
+  T sE, cE;
+  sin_cos_reduc(E, &sE, &cE);
 
-  T sE = E - sin(E);
-  T cE = 1 - cos(E);
+  // T sE = E - sin(E);
+  // T cE = 1 - cos(E);
 
   T f_0 = ecc * sE + E * ome - M;
   T f_1 = ecc * cE + ome;
