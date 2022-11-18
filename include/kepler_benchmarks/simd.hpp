@@ -1,34 +1,13 @@
-#ifndef _KEPLER_BENCHMARKS_SIMD_H_
-#define _KEPLER_BENCHMARKS_SIMD_H_
+#ifndef KEPLER_SIMD_HPP
+#define KEPLER_SIMD_HPP
 
+#include "./math/constants.hpp"
 #include "xsimd/xsimd.hpp"
 
 namespace xs = xsimd;
 
-namespace kepler_benchmarks {
+namespace kepler {
 namespace simd {
-
-#define KB_SIMD_DEFINE_CONSTANT(NAME, SINGLE, DOUBLE) \
-  template <class T>                                  \
-  inline T NAME() noexcept {                          \
-    return T(NAME<typename T::value_type>());         \
-  }                                                   \
-  template <>                                         \
-  inline float NAME<float>() noexcept {               \
-    return xs::bit_cast<float>((uint32_t)SINGLE);     \
-  }                                                   \
-  template <>                                         \
-  inline double NAME<double>() noexcept {             \
-    return xs::bit_cast<double>((uint64_t)DOUBLE);    \
-  }
-
-KB_SIMD_DEFINE_CONSTANT(twopi, 0x40c90fdb, 0x401921fb54442d18)
-KB_SIMD_DEFINE_CONSTANT(sixth, 0x3e2aaaab, 0x3fc5555555555555)
-KB_SIMD_DEFINE_CONSTANT(twentieth, 0x3d2aaaab, 0x3fa5555555555555)
-KB_SIMD_DEFINE_CONSTANT(factor1, 0x40f4da39, 0x401e9b471164c596)
-KB_SIMD_DEFINE_CONSTANT(factor2, 0x3fa6450f, 0x3ff4c8a1d518acbd)
-
-#undef KB_SIMD_DEFINE_CONSTANT
 
 template <class B, uint64_t c0>
 inline B poly(const B& x) noexcept {
@@ -88,20 +67,20 @@ inline xs::batch<double, A> cos_reduc_eval(const xs::batch<double, A>& x2) noexc
 // x - sin(x) and 1 - cos(x) for x in [0, pi)
 template <class B>
 inline void sin_cos_reduc(const B& x, B& sr, B& cr) noexcept {
-  auto big = x >= xs::constants::pio2<B>();
-  auto u = xs::select(big, xs::constants::pi<B>() - x, x);
+  auto big = x >= constants::pio2<B>();
+  auto u = xs::select(big, constants::pi<B>() - x, x);
 
-  auto mid = u >= xs::constants::pio2<B>();
-  auto v = xs::select(mid, xs::constants::pi<B>() - u, u);
+  auto mid = u >= constants::pio2<B>();
+  auto v = xs::select(mid, constants::pi<B>() - u, u);
   auto v2 = v * v;
 
   sr = sin_reduc_eval(v, v2);
   cr = cos_reduc_eval(v2);
 
   sr = xs::select(mid, u + cr - B(1.), sr);
-  cr = xs::select(mid, u + sr + B(1. - xs::constants::pio2<typename B::value_type>()), cr);
+  cr = xs::select(mid, u + sr + B(1. - constants::pio2<typename B::value_type>()), cr);
 
-  sr = xs::select(big, xs::fma(B(2.), x, sr) - xs::constants::pi<B>(), sr);
+  sr = xs::select(big, xs::fma(B(2.), x, sr) - constants::pi<B>(), sr);
   cr = xs::select(big, B(2.) - cr, cr);
 }
 
@@ -110,34 +89,33 @@ template <class A, class T>
 inline xs::batch_bool<T, A> reduce(xs::batch<T, A> const& x, xs::batch<T, A>& xr) noexcept {
   using B = xs::batch<T, A>;
   auto quad = xs::kernel::detail::trigo_reducer<B>::reduce(x, xr);
-  xr = xs::fma(quad, xs::constants::pio2<B>(), xr);
+  xr = xs::fma(quad, constants::pio2<B>(), xr);
   auto lo = xr < B(0.);
-  auto hi = xr >= xs::constants::pi<B>();
-  xr = xs::select(hi, twopi<B>() - xr, xs::abs(xr));
+  auto hi = xr >= constants::pi<B>();
+  xr = xs::select(hi, constants::twopi<B>() - xr, xs::abs(xr));
   return hi || lo;
 }
 
 template <class A, class T>
-inline void starter(const T& ecc, const T& ome, const xs::batch<T, A>& mean_anom,
-                    xs::batch<T, A>& ecc_anom) noexcept {
+inline xs::batch<T, A> starter(const T& ecc, const T& ome,
+                               const xs::batch<T, A>& mean_anom) noexcept {
   using B = xs::batch<T, A>;
 
-  auto Bome = B(ome);
   auto m2 = mean_anom * mean_anom;
 
   // alpha = FACTOR1 + FACTOR2 * (M_PI - M) / (1 + ecc)
-  auto alpha =
-      xs::fma(B(factor2<T>() / (1. + ecc)), xs::constants::pi<B>() - mean_anom, factor1<B>());
+  auto alpha = xs::fma(B(constants::nijenhuis_factor2<T>() / (1. + ecc)),
+                       constants::pi<B>() - mean_anom, constants::nijenhuis_factor1<B>());
 
   // d = 3 * ome + alpha * ecc
   auto d = xs::fma(B(ecc), alpha, B(3. * ome));
   alpha *= d;
 
   // r = (3 * alpha * (d - ome) + M2) * M
-  auto r = mean_anom * xs::fma(B(3.) * alpha, d - Bome, m2);
+  auto r = mean_anom * xs::fma(B(3.) * alpha, d - B(ome), m2);
 
   // q = 2 * alphad * ome - M2
-  auto q = xs::fms(B(2.) * alpha, Bome, m2);
+  auto q = xs::fms(B(2.) * alpha, B(ome), m2);
   auto q2 = q * q;
 
   // w = cbrt(std::abs(r) + sqrt(q2 * q + r * r))
@@ -146,7 +124,7 @@ inline void starter(const T& ecc, const T& ome, const xs::batch<T, A>& mean_anom
 
   // E = (2 * r * w / (w * w + w * q + q2) + M) / d
   auto denom = xs::fma(w, w + q, q2);
-  ecc_anom = xs::fma(B(2.) * r / denom, w, mean_anom) / d;
+  return xs::fma(B(2.) * r / denom, w, mean_anom) / d;
 }
 
 template <class B>
@@ -155,26 +133,27 @@ inline B newton_step(const B& f0, const B& f1, const B& f2, const B& f3) noexcep
   auto d3 = f0 / xs::fms(B(0.5) * f0 / f1, f2, f1);
 
   // d_4 = -f_0 / (f_1 + 0.5 * d_3 * f_2 + (d_3 * d_3) * f_3 / 6)
-  auto d4 = f0 / xs::fnms(d3, xs::fma(sixth<B>() * d3, f3, B(0.5) * f2), f1);
+  auto d4 = f0 / xs::fnms(d3, xs::fma(constants::sixth<B>() * d3, f3, B(0.5) * f2), f1);
 
   // dE = -f_0 / (f_1 + 0.5 * d_4 * f_2 + d_4 * d_4 * f_3 / 6 - d_42 * d_4 * f_2 / 24)
   return f0 /
-         xs::fnms(d4, xs::fma(d4, xs::fnma(twentieth<B>() * d4, f2, sixth<B>() * f3), B(0.5) * f2),
-                  f1);
+         xs::fnms(
+             d4,
+             xs::fma(d4, xs::fnma(constants::twentieth<B>() * d4, f2, constants::sixth<B>() * f3),
+                     B(0.5) * f2),
+             f1);
 }
 
 template <class A, class T>
 inline void refine(const T& ecc, const T& ome, const xs::batch<T, A>& mean_anom,
                    xs::batch<T, A>& ecc_anom) noexcept {
   using B = xs::batch<T, A>;
-  auto Bome = B(ome);
-  auto Becc = B(ecc);
   B sr, cr;
   sin_cos_reduc(ecc_anom, sr, cr);
-  sr *= Becc;
-  auto f0 = sr + xs::fms(ecc_anom, Bome, mean_anom);
-  auto f1 = xs::fma(Becc, cr, Bome);
-  auto f2 = xs::fms(Becc, ecc_anom, sr);
+  sr *= B(ecc);
+  auto f0 = sr + xs::fms(ecc_anom, B(ome), mean_anom);
+  auto f1 = xs::fma(B(ecc), cr, B(ome));
+  auto f2 = xs::fms(B(ecc), ecc_anom, sr);
   auto f3 = B(1.) - f1;
   ecc_anom += newton_step(f0, f1, f2, f3);
 }
@@ -183,11 +162,11 @@ template <class A, class T>
 inline xs::batch<T, A> solve_one_batch(const T& ecc, const xs::batch<T, A>& mean_anom) noexcept {
   using B = xs::batch<T, A>;
   auto ome = 1. - ecc;
-  B mean_anom_reduc, ecc_anom;
-  auto flag = reduce(mean_anom, mean_anom_reduc);
-  starter(ecc, ome, mean_anom_reduc, ecc_anom);
-  refine(ecc, ome, mean_anom_reduc, ecc_anom);
-  return xs::select(flag, twopi<B>() - ecc_anom, ecc_anom);
+  auto mean_anom_reduc = xs::abs(mean_anom);
+  auto flag = reduce<A, T>(mean_anom_reduc, mean_anom_reduc);
+  auto ecc_anom = starter<A, T>(ecc, ome, mean_anom_reduc);
+  refine<A, T>(ecc, ome, mean_anom_reduc, ecc_anom);
+  return xs::select(flag, constants::twopi<B>() - ecc_anom, ecc_anom);
 }
 
 template <class T, class Tag = xs::unaligned_mode>
@@ -217,6 +196,6 @@ inline void solve(std::size_t size, const T& ecc, const T* mean_anom, T* ecc_ano
 }
 
 }  // namespace simd
-}  // namespace kepler_benchmarks
+}  // namespace kepler
 
 #endif
