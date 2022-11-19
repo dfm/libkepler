@@ -25,7 +25,7 @@ jobs:
           mkdir -p build
           cd build
           cmake ..
-          cmake --build .
+          cmake --build . --parallel 2
       - name: Test
         run: |
           cd build
