@@ -54,6 +54,13 @@ KB_DEFINE_CONSTANT(nijenhuis_factor2, 0x3fa6450f, 0x3ff4c8a1d518acbd)
 
 #undef KB_DEFINE_CONSTANT
 
+/* Note to self: to generate HEX constants in Python:
+
+>>> import struct
+>>> print(hex(struct.unpack('!L', struct.pack('!f', v))[0]))
+>>> print(hex(struct.unpack('!Q', struct.pack('!d', v))[0]))
+*/
+
 }  // namespace constants
 }  // namespace kepler
 
