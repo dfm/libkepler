@@ -1,9 +1,7 @@
+# CMake
 build
+vscode-build
+
+# Other files
 results
-CMakeCache.txt
-CMakeFiles
-Makefile
-build.ninja
-cmake_install.cmake
-compile_commands.json
 *.ipynb
