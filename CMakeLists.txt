@@ -11,7 +11,7 @@ ExternalProject_Add(xsimd
   GIT_TAG           9.0.1
   PREFIX            ${CMAKE_CURRENT_BINARY_DIR}/xsimd-9.0.1
   CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ${CMAKE_COMMAND} -D CMAKE_INSTALL_PREFIX=<INSTALL_DIR> <SOURCE_DIR> 
+  BUILD_COMMAND     ${CMAKE_COMMAND} -D CMAKE_INSTALL_PREFIX=<INSTALL_DIR> <SOURCE_DIR>
   INSTALL_COMMAND   make install
 )
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/xsimd-9.0.1/include)
@@ -43,5 +43,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/benchmarks)
 
-add_executable(demo demo.cc)
-target_compile_options(demo PUBLIC -O3 -Wall -pedantic -Wextra -Werror)
+# add_executable(demo demo.cc)
+# target_compile_options(demo PUBLIC -O3 -Wall -pedantic -Wextra -Werror)
