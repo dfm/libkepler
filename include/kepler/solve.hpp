@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cstddef>
+#include <type_traits>
 
 #include "./constants.hpp"
 #include "./reduction.hpp"
@@ -11,10 +12,20 @@
 
 namespace kepler {
 
-template <typename Refiner, typename Starter = typename Refiner::default_starter,
-          typename T = typename Refiner::value_type>
-inline void solve(const T& eccentricity, std::size_t size, const T* mean_anomaly,
-                  T* eccentric_anomaly, const Refiner& refiner = Refiner()) {
+template <typename A, typename B>
+struct value_type {
+  static_assert(std::is_same<typename A::value_type, typename B::value_type>::value,
+                "value_type of A and B must be the same");
+  typedef typename A::value_type type;
+};
+
+template <typename Starter, typename Refiner>
+inline void solve(const typename value_type<Starter, Refiner>::type& eccentricity,
+                  std::size_t size,
+                  const typename value_type<Starter, Refiner>::type* mean_anomaly,
+                  typename value_type<Starter, Refiner>::type* eccentric_anomaly,
+                  const Refiner& refiner = Refiner()) {
+  using T = typename value_type<Starter, Refiner>::type;
   const Starter starter(eccentricity);
   for (std::size_t i = 0; i < size; ++i) {
     auto mean_anom_reduc = std::abs(mean_anomaly[i]);
@@ -24,13 +35,6 @@ inline void solve(const T& eccentricity, std::size_t size, const T* mean_anomaly
     eccentric_anomaly[i] = std::copysign(
         high ? constants::twopi<T>() - ecc_anom_reduc : ecc_anom_reduc, mean_anomaly[i]);
   }
-}
-
-template <typename T>
-inline void solve_non_iterative_1(const T& eccentricity, std::size_t size, const T* mean_anomaly,
-                                  T* eccentric_anomaly) {
-  solve<refiners::non_iterative<4, T>, starters::markley<T>>(eccentricity, size, mean_anomaly,
-                                                             eccentric_anomaly);
 }
 
 }  // namespace kepler
