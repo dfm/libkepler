@@ -51,7 +51,8 @@ TEST_CASE("Nijenhuis / Markley", "[refiners]") {
       mean_anomaly[m] = ecc_anom_expect[m] - eccentricity * std::sin(ecc_anom_expect[m]);
     }
 
-    kepler::solve_ni_1(eccentricity, anom_size, mean_anomaly.data(), ecc_anom_calc.data());
+    kepler::solve_non_iterative_1(eccentricity, anom_size, mean_anomaly.data(),
+                                  ecc_anom_calc.data());
 
     for (size_t m = 0; m < anom_size; ++m) {
       REQUIRE_THAT(ecc_anom_calc[m], WithinAbs(ecc_anom_expect[m], abs_tol));

@@ -20,8 +20,8 @@ inline void solve(const T& eccentricity, std::size_t size, const T* mean_anomaly
 }
 
 template <typename T>
-inline void solve_ni_1(const T& eccentricity, std::size_t size, const T* mean_anomaly,
-                       T* eccentric_anomaly) {
+inline void solve_non_iterative_1(const T& eccentricity, std::size_t size, const T* mean_anomaly,
+                                  T* eccentric_anomaly) {
   solve<refiners::non_iterative<4, T>, starters::markley<T>>(eccentricity, size, mean_anomaly,
                                                              eccentric_anomaly);
 }
