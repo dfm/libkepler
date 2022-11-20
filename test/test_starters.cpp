@@ -93,7 +93,8 @@ TEST_CASE("RPP17/B21 singular corner", "[starters]") {
 
 TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[starters][simd]",
                            (kepler::starters::noop, kepler::starters::basic,
-                            kepler::starters::mikkola, kepler::starters::markley),
+                            kepler::starters::mikkola, kepler::starters::markley,
+                            kepler::starters::rppb),
                            (double, float)) {
   using T = typename TestType::value_type;
   constexpr std::size_t simd_size = xs::simd_type<T>::size;

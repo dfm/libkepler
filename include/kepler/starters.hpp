@@ -233,20 +233,67 @@ struct rppb {
     return sigma * sqrt_ome * E;
   }
 
+  template <typename A>
+  inline xs::batch<T, A> singular(const xs::batch<T, A>& mean_anomaly) const {
+    using B = xs::batch<T, A>;
+    auto chi = mean_anomaly / (ome * sqrt_ome);
+    auto lambda = xs::sqrt(xs::fma(B(9.) * chi, chi, B(8.)));
+    auto s = xs::cbrt(xs::fma(B(3.), chi, lambda));
+    s *= s;
+    auto sigma = B(6.) * chi / (B(2.) + s + B(4.) / s);
+    auto s2 = sigma * sigma;
+    auto denom = B(1.) / (s2 + B(2.));
+    auto arg =
+        B(ome) * s2 * denom * denom * xs::fma(s2, xs::fma(s2, (s2 + 25.), B(340.)), B(840.));
+    auto E = xs::fma(B(ome) * s2, denom * ((s2 + 20.) / 60. + arg / 1400.), B(1.));
+    return sigma * sqrt_ome * E;
+  }
+
+  inline T lookup(const T& mean_anomaly) const {
+    int j;
+    for (j = 11; j > 0; --j)
+      if (mean_anomaly > bounds[j]) break;
+    auto k = 6 * j;
+    auto dx = mean_anomaly - bounds[j];
+    return table[k] + dx * (table[k + 1] +
+                            dx * (table[k + 2] +
+                                  dx * (table[k + 3] + dx * (table[k + 4] + dx * table[k + 5]))));
+  }
+
+  template <typename A>
+  inline xs::batch<T, A> lookup(const xs::batch<T, A>& mean_anomaly) const {
+    using B = xs::batch<T, A>;
+    xs::batch_bool<T, A> mask(true);
+    B ecc_anom = mean_anomaly;
+    for (int j = 11; j >= 0; --j) {
+      auto k = 6 * j;
+      auto dx = mean_anomaly - B(bounds[j]);
+      auto m = dx >= B(0.);
+      auto y = xs::fma(xs::fma(xs::fma(xs::fma(xs::fma(B(table[k + 5]), dx, B(table[k + 4])), dx,
+                                               B(table[k + 3])),
+                                       dx, B(table[k + 2])),
+                               dx, B(table[k + 1])),
+                       dx, B(table[k]));
+      ecc_anom = xs::select(m & mask, y, ecc_anom);
+      mask = mask & !m;
+      if (!xs::any(mask)) break;
+    }
+    return ecc_anom;
+  }
+
   inline T start(const T& mean_anomaly) const {
     if ((eccentricity < 0.78) || (2. * mean_anomaly + ome > 0.2)) {
-      int j;
-      for (j = 11; j > 0; --j)
-        if (mean_anomaly > bounds[j]) break;
-      auto k = 6 * j;
-      auto dx = mean_anomaly - bounds[j];
-      return table[k] +
-             dx * (table[k + 1] +
-                   dx * (table[k + 2] +
-                         dx * (table[k + 3] + dx * (table[k + 4] + dx * table[k + 5]))));
+      return lookup(mean_anomaly);
     } else {
       return singular(mean_anomaly);
     }
+  }
+
+  template <typename A>
+  inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
+    using B = xs::batch<T, A>;
+    auto flag = (B(eccentricity) < 0.78) | (xs::fma(B(2.), mean_anomaly, B(ome)) > 0.2);
+    return xs::select(flag, lookup(mean_anomaly), singular(mean_anomaly));
   }
 };
 
