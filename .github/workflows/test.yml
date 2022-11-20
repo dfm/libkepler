@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - refactor
     tags:
       - "*"
   pull_request:
