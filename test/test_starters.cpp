@@ -2,8 +2,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cmath>
 
-#include "kepler/constants.hpp"
-#include "kepler/starters.hpp"
+#include "kepler/kepler.hpp"
 
 using namespace Catch::Matchers;
 

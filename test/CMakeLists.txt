@@ -11,7 +11,9 @@ check_cxx_compiler_flag(-Wno-deprecated-copy HAS_NO_DEPRECATED_COPY)
 check_cxx_compiler_flag(-march=native HAS_MARCH_NATIVE)
 
 set(KEPLER_TESTS
+  test_math
   test_reduction
+  test_refiners
   test_starters)
 
 foreach(name ${KEPLER_TESTS})

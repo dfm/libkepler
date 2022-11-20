@@ -8,16 +8,6 @@
 namespace kepler {
 namespace constants {
 
-// origin: xsimd/arch/xsimd_constants.hpp
-/****************************************************************************
- * Copyright (c) Johan Mabille, Sylvain Corlay, Wolf Vollprecht and         *
- * Martin Renou                                                             *
- * Copyright (c) QuantStack                                                 *
- * Copyright (c) Serge Guelton                                              *
- *                                                                          *
- * Distributed under the terms of the BSD 3-Clause License.                 *
- ****************************************************************************/
-
 #define KEPLER_DEFINE_CONSTANT(NAME, SINGLE, DOUBLE) \
   template <class T>                                 \
   inline T NAME() noexcept {                         \
@@ -73,6 +63,14 @@ KEPLER_DEFINE_CONSTANT(rppb_g3s, 0x3f000000, 0x3fe0000000000000)
 KEPLER_DEFINE_CONSTANT(rppb_g4s, 0x3f3504f3, 0x3fe6a09e667f3bcc)
 KEPLER_DEFINE_CONSTANT(rppb_g5s, 0x3f5db3d7, 0x3febb67ae8584caa)
 KEPLER_DEFINE_CONSTANT(rppb_g6s, 0x3f7746ea, 0x3feee8dd4748bf15)
+
+// Factorials for Householder's method
+KEPLER_DEFINE_CONSTANT(hh2, 0x3f000000, 0x3fe0000000000000)
+KEPLER_DEFINE_CONSTANT(hh3, 0x3e2aaaab, 0x3fc5555555555555)
+KEPLER_DEFINE_CONSTANT(hh4, 0x3d2aaaab, 0x3fa5555555555555)
+KEPLER_DEFINE_CONSTANT(hh5, 0x3c088889, 0x3f81111111111111)
+KEPLER_DEFINE_CONSTANT(hh6, 0x3ab60b61, 0x3f56c16c16c16c17)
+KEPLER_DEFINE_CONSTANT(hh7, 0x39500d01, 0x3f2a01a01a01a01a)
 
 #undef KEPLER_DEFINE_CONSTANT
 

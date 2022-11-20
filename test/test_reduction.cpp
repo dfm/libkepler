@@ -1,8 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-#include "kepler/constants.hpp"
-#include "kepler/reduction.hpp"
+#include "kepler/kepler.hpp"
 
 using namespace Catch::Matchers;
 
