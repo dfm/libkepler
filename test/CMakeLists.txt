@@ -19,6 +19,7 @@ foreach(name ${KEPLER_TESTS})
   target_link_libraries(${name} PRIVATE Catch2::Catch2WithMain)
 
   if(WIN32)
+    # TODO(dfm): Add a Windows-specific compiler flags
   else()
     target_compile_options(${name} PRIVATE -O3 -Wall -pedantic -Wextra -Werror)
     if(HAS_NO_DEPRECATED_COPY)
