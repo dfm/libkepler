@@ -2,46 +2,79 @@
 #define KEPLER_STARTERS_HPP
 
 #include <cmath>
+#include <xsimd/xsimd.hpp>
 
 #include "./constants.hpp"
+
+namespace xs = xsimd;
 
 namespace kepler {
 namespace starters {
 
 template <typename T>
 struct noop {
+  typedef T value_type;
   noop(T) {}
+
   inline T start(const T& mean_anomaly) const { return mean_anomaly; }
+
+  template <typename A>
+  inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
+    return mean_anomaly;
+  }
 };
 
 template <typename T>
 struct basic {
+  typedef T value_type;
   T eccentricity;
   basic(T eccentricity) : eccentricity(eccentricity) {}
+
   inline T start(const T& mean_anomaly) const { return mean_anomaly + 0.85 * eccentricity; }
+
+  template <typename A>
+  inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
+    return mean_anomaly + xs::batch<T, A>(0.85 * eccentricity);
+  }
 };
 
 // https://ui.adsabs.harvard.edu/abs/1987CeMec..40..329M/abstract
 template <typename T>
 struct mikkola {
-  T eccentricity;
-  mikkola(T eccentricity) : eccentricity(eccentricity) {}
+  typedef T value_type;
+  T eccentricity, factor, alpha, alpha3;
+  mikkola(T eccentricity)
+      : eccentricity(eccentricity),
+        factor(1. / (4. * eccentricity + 0.5)),
+        alpha((1. - eccentricity) * factor),
+        alpha3(alpha * alpha * alpha) {}
+
   inline T start(const T& mean_anomaly) const {
-    auto factor = 1. / (4. * eccentricity + 0.5);
-    auto alpha = (1. - eccentricity) * factor;
     auto beta = 0.5 * mean_anomaly * factor;
-    auto z = std::cbrt(beta + std::copysign(std::sqrt(beta * beta + alpha * alpha * alpha), beta));
+    auto z = std::cbrt(beta + std::copysign(std::sqrt(beta * beta + alpha3), beta));
     auto s = z - alpha / z;
     s -= 0.078 * std::pow(s, 5) / (1. + eccentricity);
     return mean_anomaly + eccentricity * s * (3. - 4. * s * s);
+  }
+
+  template <typename A>
+  inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
+    using B = xs::batch<T, A>;
+    auto beta = B(0.5 * factor) * mean_anomaly;
+    auto z = xs::cbrt(beta + xs::copysign(xs::sqrt(xs::fma(beta, beta, B(alpha3))), beta));
+    auto s = xs::fnma(B(alpha), 1. / z, z);
+    s -= B(0.078 / (1. + eccentricity)) * xs::pow(s, 5);
+    return xs::fma(B(eccentricity) * s, xs::fnma(B(4.) * s, s, B(3.)), mean_anomaly);
   }
 };
 
 // https://ui.adsabs.harvard.edu/abs/1995CeMDA..63..101M/abstract
 template <typename T>
 struct markley {
+  typedef T value_type;
   T eccentricity;
   markley(T eccentricity) : eccentricity(eccentricity) {}
+
   inline T start(const T& mean_anomaly) const {
     auto m2 = mean_anomaly * mean_anomaly;
     auto ome = 1. - eccentricity;
@@ -63,12 +96,36 @@ struct markley {
     auto denom = w * (w + q) + q2;
     return (2. * r * w / denom + mean_anomaly) / d;
   }
+
+  template <typename A>
+  inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
+    using B = xs::batch<T, A>;
+    auto m2 = mean_anomaly * mean_anomaly;
+    auto ome = 1. - eccentricity;
+
+    auto alpha = xs::fma(B(constants::markley_factor2<T>() / (1. + eccentricity)),
+                         constants::pi<T>() - mean_anomaly, B(constants::markley_factor1<T>()));
+
+    auto d = xs::fma(B(eccentricity), alpha, B(3. * ome));
+    alpha *= d;
+
+    auto r = mean_anomaly * xs::fma(B(3.) * alpha, d - B(ome), m2);
+    auto q = xs::fms(B(2. * ome), alpha, m2);
+    auto q2 = q * q;
+
+    auto w = xs::cbrt(xs::abs(r) + xs::sqrt(xs::fma(q2, q, r * r)));
+    w *= w;
+
+    auto denom = xs::fma(w, w + q, q2);
+    return xs::fma(B(2.) * r / denom, w, mean_anomaly) / d;
+  }
 };
 
 // https://ui.adsabs.harvard.edu/abs/2017MNRAS.467.1702R/abstract
 // https://ui.adsabs.harvard.edu/abs/2021AJ....162..186B/abstract
 template <typename T>
 struct rppb {
+  typedef T value_type;
   T eccentricity, ome, sqrt_ome, bounds[13], table[78];
 
   rppb(T eccentricity)
