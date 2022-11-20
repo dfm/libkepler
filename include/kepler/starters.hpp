@@ -9,6 +9,12 @@ namespace kepler {
 namespace starters {
 
 template <typename T>
+struct noop {
+  noop(T) {}
+  inline T start(const T& mean_anomaly) const { return mean_anomaly; }
+};
+
+template <typename T>
 struct basic {
   T eccentricity;
   basic(T eccentricity) : eccentricity(eccentricity) {}

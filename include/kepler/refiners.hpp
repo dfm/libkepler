@@ -46,6 +46,18 @@ struct iterative {
   }
 };
 
+template <int order, typename T>
+struct non_iterative {
+  typedef T value_type;
+  typedef starters::basic<T> default_starter;
+  inline T refine(const T& eccentricity, const T& mean_anomaly,
+                  const T& initial_eccentric_anomaly) const {
+    T eccentric_anomaly = initial_eccentric_anomaly;
+    ::kepler::detail::householder<order>::step(eccentricity, mean_anomaly, eccentric_anomaly);
+    return eccentric_anomaly;
+  }
+};
+
 }  // namespace refiners
 }  // namespace kepler
 
