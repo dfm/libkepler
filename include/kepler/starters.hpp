@@ -227,11 +227,9 @@ struct rppb {
     s *= s;
     auto sigma = 6. * chi / (2. + s + 4. / s);
     auto s2 = sigma * sigma;
-    auto s4 = s2 * s2;
     auto denom = 1. / (s2 + 2.);
-    auto E = 1. + s2 * ome * denom *
-                      ((s2 + 20.) / 60. +
-                       s2 * ome * denom * denom * (s2 * s4 + 25. * s4 + 340. * s2 + 840.) / 1400.);
+    auto arg = s2 * ome * denom * denom * (s2 * (s2 * (s2 + 25.) + 340.) + 840.);
+    auto E = 1. + s2 * ome * denom * ((s2 + 20.) / 60. + arg / 1400.);
     return sigma * sqrt_ome * E;
   }
 
