@@ -65,7 +65,8 @@ TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[starters][simd]",
                             kepler::starters::rppb),
                            (double, float)) {
   using T = typename TestType::value_type;
-  constexpr std::size_t simd_size = xs::simd_type<T>::size;
+  using B = xs::batch<T>;
+  constexpr std::size_t simd_size = B::size;
   const T abs_tol = default_abs<T>::value;
   const size_t ecc_size = 10;
   const size_t anom_size = 100 * simd_size;
