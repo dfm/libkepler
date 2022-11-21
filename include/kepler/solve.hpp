@@ -37,6 +37,38 @@ inline void solve(const typename value_type<Starter, Refiner>::type& eccentricit
   }
 }
 
+template <typename Starter, typename Refiner, typename Tag = xs::unaligned_mode>
+inline void solve_simd(const typename value_type<Starter, Refiner>::type& eccentricity,
+                       std::size_t size,
+                       const typename value_type<Starter, Refiner>::type* mean_anomaly,
+                       typename value_type<Starter, Refiner>::type* eccentric_anomaly,
+                       const Refiner& refiner = Refiner()) {
+  using T = typename value_type<Starter, Refiner>::type;
+  constexpr std::size_t simd_size = xs::simd_type<T>::size;
+  std::size_t vec_size = size - size % simd_size;
+  const Starter starter(eccentricity);
+
+  for (std::size_t i = 0; i < vec_size; i += simd_size) {
+    auto mean_anom = xs::load(&mean_anomaly[i], Tag());
+    auto mean_anom_reduc = xs::abs(mean_anom);
+    auto high = range_reduce(mean_anom_reduc, mean_anom_reduc);
+    auto ecc_anom_reduc = starter.start(mean_anom_reduc);
+    ecc_anom_reduc = refiner.refine(eccentricity, mean_anom_reduc, ecc_anom_reduc);
+    auto ecc_anom = xs::copysign(
+        xs::select(high, constants::twopi<T>() - ecc_anom_reduc, ecc_anom_reduc), mean_anom);
+    xs::store(&eccentric_anomaly[i], ecc_anom, Tag());
+  }
+
+  for (std::size_t i = vec_size; i < size; ++i) {
+    auto mean_anom_reduc = std::abs(mean_anomaly[i]);
+    bool high = range_reduce(mean_anom_reduc, mean_anom_reduc);
+    auto ecc_anom_reduc = starter.start(mean_anom_reduc);
+    ecc_anom_reduc = refiner.refine(eccentricity, mean_anom_reduc, ecc_anom_reduc);
+    eccentric_anomaly[i] = std::copysign(
+        high ? constants::twopi<T>() - ecc_anom_reduc : ecc_anom_reduc, mean_anomaly[i]);
+  }
+}
+
 }  // namespace kepler
 
 #endif

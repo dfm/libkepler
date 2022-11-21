@@ -3,6 +3,8 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <xsimd/xsimd.hpp>
 
+#include "kepler/kepler.hpp"
+
 using namespace Catch::Matchers;
 namespace xs = xsimd;
 
@@ -30,4 +32,11 @@ template <typename T>
 struct tolerance {
   constexpr static typename T::value_type abs = default_abs<typename T::value_type>::value;
   constexpr static typename T::value_type rel = default_rel<typename T::value_type>::value;
+};
+
+template <typename R, typename S = kepler::starters::basic<typename R::value_type>>
+struct SolveTestCase {
+  typedef typename R::value_type value_type;
+  typedef R refiner_type;
+  typedef S starter_type;
 };

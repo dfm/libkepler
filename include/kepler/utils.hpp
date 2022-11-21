@@ -5,7 +5,7 @@
 
 namespace kepler {
 
-template <class To, class From>
+template <typename To, typename From>
 inline To bit_cast(From val) noexcept {
   static_assert(sizeof(From) == sizeof(To), "casting between compatible layout");
   To res;

@@ -32,7 +32,6 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/xtensor-stack/xsimd.git
   GIT_TAG        9.0.1
 )
-
 FetchContent_MakeAvailable(xsimd)
 include_directories(${xsimd_SOURCE_DIR}/include)
 
@@ -41,7 +40,20 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 # Testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   include(CTest)
-endif()
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
-  add_subdirectory(test)
+
+  FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v3.2.0
+  )
+  FetchContent_MakeAvailable(Catch2)
+
+  if(BUILD_TESTING)
+    add_subdirectory(test)
+  endif()
+
+  OPTION(BUILD_KEPLER_BENCHMARK "microbenchmarks" ON)
+  if(BUILD_KEPLER_BENCHMARK)
+    add_subdirectory(benchmark)
+  endif()
 endif()

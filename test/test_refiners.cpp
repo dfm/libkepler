@@ -4,15 +4,8 @@
 #include "./test_utils.hpp"
 #include "kepler/kepler.hpp"
 
-template <typename R, typename S = kepler::starters::basic<typename R::value_type>>
-struct TestCase {
-  typedef typename R::value_type value_type;
-  typedef R refiner_type;
-  typedef S starter_type;
-};
-
 TEMPLATE_PRODUCT_TEST_CASE(
-    "Refiners", "[refiners]", TestCase,
+    "Refiners", "[refiners]", SolveTestCase,
     ((kepler::refiners::iterative<1, float>), (kepler::refiners::iterative<1, double>),
      (kepler::refiners::iterative<2, double>), (kepler::refiners::iterative<3, double>),
      (kepler::refiners::iterative<4, double>), (kepler::refiners::iterative<5, double>),
@@ -44,7 +37,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
 }
 
 TEMPLATE_PRODUCT_TEST_CASE(
-    "SIMD comparison", "[refiners][simd]", TestCase,
+    "SIMD comparison", "[refiners][simd]", SolveTestCase,
     (kepler::refiners::noop<double>, (kepler::refiners::iterative<1, float>),
      (kepler::refiners::iterative<1, double>), (kepler::refiners::iterative<2, double>),
      (kepler::refiners::iterative<3, double>), (kepler::refiners::iterative<4, double>),

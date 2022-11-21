@@ -9,7 +9,7 @@ namespace kepler {
 namespace constants {
 
 #define KEPLER_DEFINE_CONSTANT(NAME, SINGLE, DOUBLE) \
-  template <class T>                                 \
+  template <typename T>                              \
   inline T NAME() noexcept {                         \
     return T(NAME<typename T::value_type>());        \
   }                                                  \

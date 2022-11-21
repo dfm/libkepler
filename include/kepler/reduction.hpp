@@ -8,6 +8,8 @@
 
 #include "./constants.hpp"
 
+namespace xs = xsimd;
+
 namespace kepler {
 
 namespace detail {
@@ -29,7 +31,7 @@ namespace detail {
  * Distributed under the terms of the BSD 3-Clause License.                 *
  ****************************************************************************/
 
-template <class T>
+template <typename T>
 inline T quadrant(const T& x) noexcept {
   return x & T(3);
 }
@@ -45,7 +47,7 @@ inline double quadrant(const double& x) noexcept {
   return 4. * (a - floor(a));
 }
 
-template <class T>
+template <typename T>
 inline T trig_reduce(const T& x, T& xr) noexcept {
   if (x <= constants::pio4<T>()) {
     xr = x;
@@ -92,7 +94,7 @@ inline T trig_reduce(const T& x, T& xr) noexcept {
 
 }  // namespace detail
 
-template <class T>
+template <typename T>
 inline bool range_reduce(const T& x, T& xr) noexcept {
   auto quad = detail::trig_reduce(x, xr);
   xr += quad * constants::pio2<T>();
@@ -104,6 +106,17 @@ inline bool range_reduce(const T& x, T& xr) noexcept {
     return true;
   }
   return false;
+}
+
+template <typename A, typename T>
+inline xs::batch_bool<T, A> range_reduce(xs::batch<T, A> const& x, xs::batch<T, A>& xr) noexcept {
+  using B = xs::batch<T, A>;
+  auto quad = xs::kernel::detail::trigo_reducer<B>::reduce(x, xr);
+  xr = xs::fma(quad, constants::pio2<B>(), xr);
+  auto lo = xr < B(0.);
+  auto hi = xr >= constants::pi<B>();
+  xr = xs::select(hi, constants::twopi<B>() - xr, xs::abs(xr));
+  return hi | lo;
 }
 
 }  // namespace kepler

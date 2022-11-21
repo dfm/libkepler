@@ -11,7 +11,7 @@ namespace xs = xsimd;
 namespace kepler {
 namespace detail {
 
-template <class T>
+template <typename T>
 struct as_unsigned_integer : std::make_unsigned<T> {};
 
 template <>
@@ -27,7 +27,7 @@ struct as_unsigned_integer<double> {
 template <typename T>
 using as_unsigned_integer_t = typename as_unsigned_integer<T>::type;
 
-template <class T, uint64_t c>
+template <typename T, uint64_t c>
 inline T coef() noexcept {
   return bit_cast<T>(as_unsigned_integer_t<T>(c));
 }
@@ -121,22 +121,22 @@ inline void sin_cos_reduc(const T& x, T& sr, T& cr) noexcept {
 }
 
 namespace simd {
-template <class B, uint64_t c0>
+template <typename B, uint64_t c0>
 inline B poly(const B& x) noexcept {
   return B(1.) - xs::kernel::detail::coef<B, c0>() * x;
 }
 
-template <class B, uint64_t c0, uint64_t c1, uint64_t... args>
+template <typename B, uint64_t c0, uint64_t c1, uint64_t... args>
 inline B poly(const B& x) noexcept {
   return xs::fnma(xs::kernel::detail::coef<B, c0>() * x, poly<B, c1, args...>(x), B(1.));
 }
 
 // sin_reduc(x, x^2) = x - sin(x); for x in [0, pi/4)
-template <class A, class T>
+template <typename A, typename T>
 inline xs::batch<T, A> sin_reduc_eval(const xs::batch<T, A>& x,
                                       const xs::batch<T, A>& x2) noexcept;
 
-template <class A>
+template <typename A>
 inline xs::batch<float, A> sin_reduc_eval(const xs::batch<float, A>& x,
                                           const xs::batch<float, A>& x2) noexcept {
   auto s = poly<xs::batch<float, A>, 0x3d4ccccd, 0x3cc30c31, 0x3c638e39, 0x3c14f209, 0x3bd20d21,
@@ -145,7 +145,7 @@ inline xs::batch<float, A> sin_reduc_eval(const xs::batch<float, A>& x,
   return s;
 }
 
-template <class A>
+template <typename A>
 inline xs::batch<double, A> sin_reduc_eval(const xs::batch<double, A>& x,
                                            const xs::batch<double, A>& x2) noexcept {
   auto s = poly<xs::batch<double, A>, 0x3fa999999999999a, 0x3f98618618618618, 0x3f8c71c71c71c71c,
@@ -156,10 +156,10 @@ inline xs::batch<double, A> sin_reduc_eval(const xs::batch<double, A>& x,
 }
 
 // cos_reduc(x^2) = 1 - cos(x); for x in [0, pi/4)
-template <class A, class T>
+template <typename A, typename T>
 inline xs::batch<T, A> cos_reduc_eval(const xs::batch<T, A>& x2) noexcept;
 
-template <class A>
+template <typename A>
 inline xs::batch<float, A> cos_reduc_eval(const xs::batch<float, A>& x2) noexcept {
   auto c = poly<xs::batch<float, A>, 0x3daaaaab, 0x3d088889, 0x3c924925, 0x3c360b61, 0x3bf83e10,
                 0x3bb40b41, 0x3b888889, 0x3b562b81, 0x3b2c7692>(x2);
@@ -167,7 +167,7 @@ inline xs::batch<float, A> cos_reduc_eval(const xs::batch<float, A>& x2) noexcep
   return c;
 }
 
-template <class A>
+template <typename A>
 inline xs::batch<double, A> cos_reduc_eval(const xs::batch<double, A>& x2) noexcept {
   auto c = poly<xs::batch<double, A>, 0x3fb5555555555555, 0x3fa1111111111111, 0x3f92492492492492,
                 0x3f86c16c16c16c17, 0x3f7f07c1f07c1f08, 0x3f76816816816817, 0x3f71111111111111,
@@ -178,7 +178,7 @@ inline xs::batch<double, A> cos_reduc_eval(const xs::batch<double, A>& x2) noexc
 }  // namespace simd
 
 // x - sin(x) and 1 - cos(x) for x in [0, pi)
-template <class A, class T>
+template <typename A, typename T>
 inline void sin_cos_reduc(const xs::batch<T, A>& x, xs::batch<T, A>& sr,
                           xs::batch<T, A>& cr) noexcept {
   using B = xs::batch<T, A>;
