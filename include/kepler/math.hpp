@@ -123,7 +123,7 @@ inline void sin_cos_reduc(const T& x, T& sr, T& cr) noexcept {
 namespace simd {
 template <typename B, uint64_t c0>
 inline B poly(const B& x) noexcept {
-  return B(T(1.)) - xs::kernel::detail::coef<B, c0>() * x;
+  return 1 - xs::kernel::detail::coef<B, c0>() * x;
 }
 
 template <typename B, uint64_t c0, uint64_t c1, uint64_t... args>
