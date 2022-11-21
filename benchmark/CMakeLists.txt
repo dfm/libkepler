@@ -7,7 +7,7 @@ target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain)
 
 if(MSVC)
   # TODO(dfm): Add a Windows-specific compiler flags
-  target_compile_options(benchmark PRIVATE /arch:AVX2 /O2)
+  target_compile_options(benchmark PRIVATE /arch:AVX2)
 else()
   target_compile_options(benchmark PRIVATE -O3 -Wall -pedantic -Wextra -Werror)
   if(HAS_NO_DEPRECATED_COPY)
