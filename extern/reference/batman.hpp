@@ -15,12 +15,16 @@ struct batman {
   typedef double value_type;
   int max_iterations = 30;
   double tolerance = 1e-7;
+  double eccentricity = 0.0;
+
   batman() {}
   batman(double tolerance) : tolerance(tolerance) {}
   batman(int max_iterations, double tolerance)
       : max_iterations(max_iterations), tolerance(tolerance) {}
 
-  inline double solve(const double& eccentricity, const double& mean_anomaly) const {
+  inline double setup(const double& eccentricity) { this->eccentricity = eccentricity; }
+
+  inline double solve(const double& mean_anomaly) const {
     double E = mean_anomaly;
     double fe, fs;
     for (int i = 0; i < max_iterations; ++i) {

@@ -17,12 +17,16 @@ struct radvel {
   typedef double value_type;
   int max_iterations = 30;
   double tolerance = 1e-12;
+  double eccentricity = 0.0;
+
   radvel() {}
   radvel(double tolerance) : tolerance(tolerance) {}
   radvel(int max_iterations, double tolerance)
       : max_iterations(max_iterations), tolerance(tolerance) {}
 
-  inline double solve(const double& eccentricity, const double& mean_anomaly) const {
+  inline double setup(const double& eccentricity) { this->eccentricity = eccentricity; }
+
+  inline double solve(const double& mean_anomaly) const {
     double E = mean_anomaly + sign(std::sin(mean_anomaly)) * 0.85 * eccentricity;
     double fi, fip, fipp, fippp, d1;
 
