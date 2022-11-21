@@ -1,29 +1,29 @@
-#ifndef _KEPLER_BENCHMARKS_CONTOUR_H_
-#define _KEPLER_BENCHMARKS_CONTOUR_H_
+#ifndef KEPLER_EXTERN_CONTOUR_HPP
+#define KEPLER_EXTERN_CONTOUR_HPP
 
-// Solve Kepler's equation via the contour integration method of Philcox et al. (2021)
-// This uses techniques described in Ullisch (2020) to solve the `geometric goat problem'.
+#include <cmath>
 
-#include "math_utils.h"
-#include "solver.h"
+namespace kepler {
+namespace reference {
 
-namespace kepler_benchmarks {
-
-template <int NumGrid, typename T>
-struct Contour : public Solver<T> {
+template <int NumGrid>
+struct contour {
   static constexpr int NumPoints = NumGrid - 2;
-  T exp2R[NumPoints], exp2I[NumPoints], exp4R[NumPoints], exp4I[NumPoints], coshI[NumPoints],
-      sinhI[NumPoints], ecosR[NumPoints], esinR[NumPoints];
-  T radius, esinRadius, ecosRadius;
+  typedef double value_type;
 
-  INLINE_OR_DEVICE void precompute_for_eccentricity(const T &eccentricity) override {
-    T e = this->eccentricity_ = eccentricity;
+  double eccentricity = 0.0;
+  double radius, esinRadius, ecosRadius;
+  double exp2R[NumPoints], exp2I[NumPoints], exp4R[NumPoints], exp4I[NumPoints], coshI[NumPoints],
+      sinhI[NumPoints], ecosR[NumPoints], esinR[NumPoints];
+
+  inline void setup(const double& eccentricity) {
+    double e = this->eccentricity = eccentricity;
 
     // Define contour radius
     radius = e / 2;
 
     // Generate e^{ikx} sampling points and precompute real and imaginary parts
-    T cf, sf, freq;
+    double cf, sf, freq;
     int N_fft = (NumGrid - 1) * 2;
     for (int jj = 0; jj < NumPoints; jj++) {
       // NB: j = jj+1
@@ -45,15 +45,15 @@ struct Contour : public Solver<T> {
     ecosRadius = e * cos(radius);
   }
 
-  INLINE_OR_DEVICE T compute_eccentric_anomaly(const T &mean_anomaly) override {
-    T this_ell = mean_anomaly;
-    T e = this->eccentricity_;
+  inline double solve(const double& mean_anomaly) const {
+    double this_ell = mean_anomaly;
+    double e = this->eccentricity;
 
     // This algorithm can't handle e == 0 or M == 0 so let's catch those first
     if (e < 1e-12 || this_ell < 1e-12) return mean_anomaly;
 
-    T ft_gx2, ft_gx1, zR, zI, cosC, sinC, center;
-    T fxR, fxI, ftmp, tmpcosh, tmpsinh, tmpcos, tmpsin;
+    double ft_gx2, ft_gx1, zR, zI, cosC, sinC, center;
+    double fxR, fxI, ftmp, tmpcosh, tmpsinh, tmpcos, tmpsin;
 
     // Define contour center for each ell and precompute sin(center), cos(center)
     if (this_ell < M_PI)
@@ -129,27 +129,9 @@ struct Contour : public Solver<T> {
     // Compute E(ell)
     return center + radius * ft_gx2 / ft_gx1;
   }
-
-  INLINE_OR_DEVICE T compute_eccentric_anomaly(const T &mean_anomaly,
-                                               const T &eccentricity) override {
-    precompute_for_eccentricity(eccentricity);
-    return compute_eccentric_anomaly(mean_anomaly);
-  }
-
-  INLINE_OR_DEVICE void evaluate(const T &mean_anomaly, const T &eccentricity, T *sin_ecc_anomaly,
-                                 T *cos_ecc_anomaly) override {
-    precompute_for_eccentricity(eccentricity);
-    evaluate(mean_anomaly, sin_ecc_anomaly, cos_ecc_anomaly);
-  };
-
-  INLINE_OR_DEVICE void evaluate(const T &mean_anomaly, T *sin_ecc_anomaly,
-                                 T *cos_ecc_anomaly) override {
-    T E = compute_eccentric_anomaly(mean_anomaly);
-    *sin_ecc_anomaly = sin(E);
-    *cos_ecc_anomaly = cos(E);
-  }
 };
 
-}  // namespace kepler_benchmarks
+}  // namespace reference
+}  // namespace kepler
 
 #endif
