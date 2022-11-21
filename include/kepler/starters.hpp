@@ -30,7 +30,7 @@ struct basic {
   T eccentricity;
   basic(T eccentricity) : eccentricity(eccentricity) {}
 
-  inline T start(const T& mean_anomaly) const { return mean_anomaly + 0.85 * eccentricity; }
+  inline T start(const T& mean_anomaly) const { return mean_anomaly + T(0.85) * eccentricity; }
 
   template <typename A>
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
@@ -77,24 +77,24 @@ struct markley {
 
   inline T start(const T& mean_anomaly) const {
     auto m2 = mean_anomaly * mean_anomaly;
-    auto ome = 1. - eccentricity;
+    auto ome = T(1.) - eccentricity;
 
-    auto alpha = (constants::pi<T>() - mean_anomaly) / (1. + eccentricity);
+    auto alpha = (constants::pi<T>() - mean_anomaly) / (T(1.) + eccentricity);
     alpha *= constants::markley_factor2<T>();
     alpha += constants::markley_factor1<T>();
 
-    auto d = 3. * ome + alpha * eccentricity;
+    auto d = T(3.) * ome + alpha * eccentricity;
     alpha *= d;
 
-    auto r = mean_anomaly * (3. * alpha * (d - ome) + m2);
-    auto q = 2. * alpha * ome - m2;
+    auto r = mean_anomaly * (T(3.) * alpha * (d - ome) + m2);
+    auto q = T(2.) * alpha * ome - m2;
     auto q2 = q * q;
 
     auto w = std::cbrt(std::abs(r) + std::sqrt(q2 * q + r * r));
     w *= w;
 
     auto denom = w * (w + q) + q2;
-    return (2. * r * w / denom + mean_anomaly) / d;
+    return (T(2.) * r * w / denom + mean_anomaly) / d;
   }
 
   template <typename A>
@@ -156,53 +156,53 @@ struct rppb {
     bounds[12] = constants::pi<T>();
 
     T x;
-    table[1] = 1. / (1. - eccentricity);
+    table[1] = T(1.) / (T(1.) - eccentricity);
     table[2] = T(0.);
 
-    x = 1. / (1 - g2c_e);
+    x = T(1.) / (T(1.) - g2c_e);
     table[7] = x;
-    table[8] = -0.5 * g2s_e * x * x * x;
+    table[8] = -T(0.5) * g2s_e * x * x * x;
 
-    x = 1. / (1. - g3c_e);
+    x = T(1.) / (T(1.) - g3c_e);
     table[13] = x;
-    table[14] = -0.5 * g3s_e * x * x * x;
+    table[14] = -T(0.5) * g3s_e * x * x * x;
 
-    x = 1. / (1. - g4c_e);
+    x = T(1.) / (T(1.) - g4c_e);
     table[19] = x;
-    table[20] = -0.5 * g4s_e * x * x * x;
+    table[20] = -T(0.5) * g4s_e * x * x * x;
 
-    x = 1. / (1. - g5c_e);
+    x = T(1.) / (T(1.) - g5c_e);
     table[25] = x;
-    table[26] = -0.5 * g5s_e * x * x * x;
+    table[26] = -T(0.5) * g5s_e * x * x * x;
 
-    x = 1. / (1. - g6c_e);
+    x = T(1.) / (T(1.) - g6c_e);
     table[31] = x;
-    table[32] = -0.5 * g6s_e * x * x * x;
+    table[32] = -T(0.5) * g6s_e * x * x * x;
 
     table[37] = T(1.);
-    table[38] = -0.5 * eccentricity;
+    table[38] = -T(0.5) * eccentricity;
 
-    x = 1. / (1. + g6c_e);
+    x = T(1.) / (T(1.) + g6c_e);
     table[43] = x;
-    table[44] = -0.5 * g6s_e * x * x * x;
+    table[44] = -T(0.5) * g6s_e * x * x * x;
 
-    x = 1. / (1. + g5c_e);
+    x = T(1.) / (T(1.) + g5c_e);
     table[49] = x;
-    table[50] = -0.5 * g5s_e * x * x * x;
+    table[50] = -T(0.5) * g5s_e * x * x * x;
 
-    x = 1. / (1. + g4c_e);
+    x = T(1.) / (T(1.) + g4c_e);
     table[55] = x;
-    table[56] = -0.5 * g4s_e * x * x * x;
+    table[56] = -T(0.5) * g4s_e * x * x * x;
 
-    x = 1. / (1. + g3c_e);
+    x = T(1.) / (T(1.) + g3c_e);
     table[61] = x;
-    table[62] = -0.5 * g3s_e * x * x * x;
+    table[62] = -T(0.5) * g3s_e * x * x * x;
 
-    x = 1. / (1. + g2c_e);
+    x = T(1.) / (T(1.) + g2c_e);
     table[67] = x;
-    table[68] = -0.5 * g2s_e * x * x * x;
+    table[68] = -T(0.5) * g2s_e * x * x * x;
 
-    table[73] = 1. / (1 + eccentricity);
+    table[73] = T(1.) / (T(1.) + eccentricity);
     table[74] = T(0.);
 
     for (int i = 0; i < 12; i++) {
@@ -211,25 +211,25 @@ struct rppb {
 
       auto idx = 1. / (bounds[i + 1] - bounds[i]);
       auto B0 = idx * (-table[k + 2] - idx * (table[k + 1] - idx * constants::pio12<T>()));
-      auto B1 = idx * (-2. * table[k + 2] - idx * (table[k + 1] - table[k + 7]));
+      auto B1 = idx * (-T(2.) * table[k + 2] - idx * (table[k + 1] - table[k + 7]));
       auto B2 = idx * (table[k + 8] - table[k + 2]);
 
-      table[k + 3] = B2 - 4. * B1 + 10. * B0;
-      table[k + 4] = (-2. * B2 + 7. * B1 - 15. * B0) * idx;
-      table[k + 5] = (B2 - 3. * B1 + 6. * B0) * idx * idx;
+      table[k + 3] = B2 - T(4.) * B1 + T(10.) * B0;
+      table[k + 4] = (-T(2.) * B2 + T(7.) * B1 - T(15.) * B0) * idx;
+      table[k + 5] = (B2 - T(3.) * B1 + T(6.) * B0) * idx * idx;
     }
   }
 
   inline T singular(const T& mean_anomaly) const {
     auto chi = mean_anomaly / (ome * sqrt_ome);
-    auto lambda = std::sqrt(8. + 9. * chi * chi);
-    auto s = std::cbrt(lambda + 3. * chi);
+    auto lambda = std::sqrt(T(8.) + T(9.) * chi * chi);
+    auto s = std::cbrt(lambda + T(3.) * chi);
     s *= s;
-    auto sigma = 6. * chi / (2. + s + 4. / s);
+    auto sigma = T(6.) * chi / (T(2.) + s + T(4.) / s);
     auto s2 = sigma * sigma;
-    auto denom = 1. / (s2 + 2.);
-    auto arg = s2 * ome * denom * denom * (s2 * (s2 * (s2 + 25.) + 340.) + 840.);
-    auto E = 1. + s2 * ome * denom * ((s2 + 20.) / 60. + arg / 1400.);
+    auto denom = T(1.) / (s2 + T(2.));
+    auto arg = s2 * ome * denom * denom * (s2 * (s2 * (s2 + T(25.)) + T(340.)) + T(840.));
+    auto E = T(1.) + s2 * ome * denom * ((s2 + T(20.)) / T(60.) + arg / T(1400.));
     return sigma * sqrt_ome * E;
   }
 
@@ -282,7 +282,7 @@ struct rppb {
   }
 
   inline T start(const T& mean_anomaly) const {
-    if ((eccentricity < 0.78) || (2. * mean_anomaly + ome > 0.2)) {
+    if ((eccentricity < T(0.78)) || (T(2.) * mean_anomaly + ome > T(0.2))) {
       return lookup(mean_anomaly);
     } else {
       return singular(mean_anomaly);
@@ -292,7 +292,7 @@ struct rppb {
   template <typename A>
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
-    auto flag = (B(eccentricity) < 0.78) | (xs::fma(B(2.), mean_anomaly, B(ome)) > 0.2);
+    auto flag = (B(eccentricity) < B(0.78)) | (xs::fma(B(2.), mean_anomaly, B(ome)) > 0.2);
     return xs::select(flag, lookup(mean_anomaly), singular(mean_anomaly));
   }
 };

@@ -52,7 +52,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_subdirectory(test)
   endif()
 
-  OPTION(BUILD_KEPLER_BENCHMARK "microbenchmarks" ON)
+  OPTION(BUILD_KEPLER_BENCHMARK "Build the benchmark script" OFF)
   if(BUILD_KEPLER_BENCHMARK)
     add_subdirectory(benchmark)
   endif()
