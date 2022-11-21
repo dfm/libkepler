@@ -22,7 +22,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
   for (size_t n = 0; n < ecc_size; ++n) {
     const T eccentricity = n / T(ecc_size);
     for (size_t m = 0; m < anom_size; ++m) {
-      ecc_anom_expect[m] = 100. * m / T(anom_size - 1) - 50.;
+      ecc_anom_expect[m] = T(100.) * m / T(anom_size - 1) - T(50.);
       mean_anomaly[m] = ecc_anom_expect[m] - eccentricity * std::sin(ecc_anom_expect[m]);
     }
 

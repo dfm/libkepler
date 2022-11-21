@@ -53,7 +53,7 @@ struct mikkola {
     auto beta = T(0.5) * mean_anomaly * factor;
     auto z = std::cbrt(beta + std::copysign(std::sqrt(beta * beta + alpha3), beta));
     auto s = z - alpha / z;
-    s -= T(0.078) * std::pow(s, 5) / (T(1.) + eccentricity);
+    s -= T(0.078) * std::pow(s, T(5.)) / (T(1.) + eccentricity);
     return mean_anomaly + eccentricity * s * (T(3.) - T(4.) * s * s);
   }
 
@@ -292,7 +292,8 @@ struct rppb {
   template <typename A>
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
-    auto flag = (B(eccentricity) < B(0.78)) | (xs::fma(B(2.), mean_anomaly, B(ome)) > 0.2);
+    auto flag =
+        (B(eccentricity) < B(T(0.78))) | (xs::fma(B(T(2.)), mean_anomaly, B(ome)) > B(T(0.2)));
     return xs::select(flag, lookup(mean_anomaly), singular(mean_anomaly));
   }
 };
