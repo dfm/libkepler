@@ -52,10 +52,10 @@ struct iterative {
                   const T& initial_eccentric_anomaly) const {
     T eccentric_anomaly = initial_eccentric_anomaly;
     for (int i = 0; i < max_iterations; ++i) {
-      auto state = ::kepler::detail::householder<order>::init(eccentricity, mean_anomaly,
-                                                              eccentric_anomaly);
+      auto state =
+          householder::householder<order>::init(eccentricity, mean_anomaly, eccentric_anomaly);
       if (std::abs(state.f0) < tolerance) break;
-      eccentric_anomaly += ::kepler::detail::householder<order>::step(state, eccentricity);
+      eccentric_anomaly += householder::householder<order>::step(state, eccentricity);
     }
     return eccentric_anomaly;
   }
@@ -67,11 +67,11 @@ struct iterative {
     B eccentric_anomaly = initial_eccentric_anomaly;
     typename B::batch_bool_type converged(false);
     for (int i = 0; i < max_iterations; ++i) {
-      auto state = ::kepler::detail::householder<order>::init(eccentricity, mean_anomaly,
-                                                              eccentric_anomaly);
+      auto state =
+          householder::householder<order>::init(eccentricity, mean_anomaly, eccentric_anomaly);
       converged = converged | (xs::abs(state.f0) < B(tolerance));
       if (xs::all(converged)) break;
-      auto delta = ::kepler::detail::householder<order>::step(state, eccentricity);
+      auto delta = householder::householder<order>::step(state, eccentricity);
       eccentric_anomaly = xs::select(converged, eccentric_anomaly, eccentric_anomaly + delta);
     }
     return eccentric_anomaly;
@@ -86,8 +86,8 @@ struct non_iterative {
                   const T& initial_eccentric_anomaly) const {
     T eccentric_anomaly = initial_eccentric_anomaly;
     auto state =
-        ::kepler::detail::householder<order>::init(eccentricity, mean_anomaly, eccentric_anomaly);
-    eccentric_anomaly += ::kepler::detail::householder<order>::step(state, eccentricity);
+        householder::householder<order>::init(eccentricity, mean_anomaly, eccentric_anomaly);
+    eccentric_anomaly += householder::householder<order>::step(state, eccentricity);
     return eccentric_anomaly;
   }
 
@@ -97,8 +97,8 @@ struct non_iterative {
     using B = xs::batch<T, A>;
     B eccentric_anomaly = initial_eccentric_anomaly;
     auto state =
-        ::kepler::detail::householder<order>::init(eccentricity, mean_anomaly, eccentric_anomaly);
-    eccentric_anomaly += ::kepler::detail::householder<order>::step(state, eccentricity);
+        householder::householder<order>::init(eccentricity, mean_anomaly, eccentric_anomaly);
+    eccentric_anomaly += householder::householder<order>::step(state, eccentricity);
     return eccentric_anomaly;
   }
 };

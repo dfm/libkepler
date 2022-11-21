@@ -77,6 +77,18 @@ MAIN_BENCHMARK("Third-order iterative (float)", "[bench][iterative][third-order]
 MAIN_BENCHMARK("Third-order iterative (double)", "[bench][iterative][third-order][double]",
                (kepler::refiners::iterative<3, double>))
 
+MAIN_BENCHMARK("Nijenhuis 91 / Markley 95 (float)", "[bench][non-iterative][markley][float]",
+               (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))
+MAIN_BENCHMARK("Nijenhuis 91 / Markley 95 (double)", "[bench][non-iterative][markley][double]",
+               (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>))
+
+MAIN_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (float)", "[bench][non-iterative][brandt][float]",
+               (kepler::refiners::non_iterative<1, float>,
+                kepler::starters::raposo_pulido_brandt<float>))
+MAIN_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (double)", "[bench][non-iterative][brandt][double]",
+               (kepler::refiners::non_iterative<1, double>,
+                kepler::starters::raposo_pulido_brandt<double>))
+
 #undef MAIN_BENCHMARK
 
 #define SIMD_BENCHMARK(NAME, TAGS, ALGO)                                                       \
@@ -110,6 +122,21 @@ SIMD_BENCHMARK("Third-order iterative (double, SIMD)",
                "[bench][iterative][third-order][double][simd]",
                (kepler::refiners::iterative<3, double>))
 
+SIMD_BENCHMARK("Nijenhuis 91 / Markley 95 (float, SIMD)", "[bench][non-iterative][markley][float]",
+               (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))
+SIMD_BENCHMARK("Nijenhuis 91 / Markley 95 (double, SIMD)",
+               "[bench][non-iterative][markley][double]",
+               (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>))
+
+SIMD_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (float, SIMD)",
+               "[bench][non-iterative][brandt][float][simd]",
+               (kepler::refiners::non_iterative<1, float>,
+                kepler::starters::raposo_pulido_brandt<float>))
+SIMD_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (double, SIMD)",
+               "[bench][non-iterative][brandt][double][simd]",
+               (kepler::refiners::non_iterative<1, double>,
+                kepler::starters::raposo_pulido_brandt<double>))
+
 #undef SIMD_BENCHMARK
 
 #define REFERENCE_BENCHMARK(NAME, TAGS, ALGO)                                                  \
@@ -131,13 +158,13 @@ SIMD_BENCHMARK("Third-order iterative (double, SIMD)",
     }                                                                                          \
   }
 
-REFERENCE_BENCHMARK("Batman", "[bench][reference][batman][first-order][double]",
+REFERENCE_BENCHMARK("Batman", "[bench][reference][batman][iterative][first-order][double]",
                     kepler::reference::batman)
-REFERENCE_BENCHMARK("RadVel", "[bench][reference][radvel][third-order][double]",
+REFERENCE_BENCHMARK("RadVel", "[bench][reference][radvel][iterative][third-order][double]",
                     kepler::reference::radvel)
-REFERENCE_BENCHMARK("Contour 8", "[bench][reference][contour][contour-8][double]",
+REFERENCE_BENCHMARK("Contour 8", "[bench][reference][non-iterative][contour][contour-8][double]",
                     kepler::reference::contour<8>)
-REFERENCE_BENCHMARK("Contour 16", "[bench][reference][contour][contour-16][double]",
+REFERENCE_BENCHMARK("Contour 16", "[bench][reference][non-iterative][contour][contour-16][double]",
                     kepler::reference::contour<16>)
 
 #undef REFERENCE_BENCHMARK

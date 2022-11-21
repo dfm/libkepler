@@ -2,7 +2,6 @@
 #include <vector>
 
 #include "./test_utils.hpp"
-#include "kepler/kepler.hpp"
 
 TEMPLATE_PRODUCT_TEST_CASE(
     "SIMD comparison", "[refiners][simd]", SolveTestCase,
@@ -11,8 +10,11 @@ TEMPLATE_PRODUCT_TEST_CASE(
      (kepler::refiners::iterative<3, double>), (kepler::refiners::iterative<4, double>),
      (kepler::refiners::iterative<5, double>), (kepler::refiners::iterative<6, double>),
      (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<4, double>, kepler::starters::markley<double>),
-     (kepler::refiners::non_iterative<4, float>, kepler::starters::markley<float>))) {
+     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
+     (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>),
+     (kepler::refiners::non_iterative<1, float>, kepler::starters::raposo_pulido_brandt<float>),
+     (kepler::refiners::non_iterative<1, double>,
+      kepler::starters::raposo_pulido_brandt<double>))) {
   using T = typename TestType::value_type;
   const T abs_tol = tolerance<TestType>::abs;
   const size_t ecc_size = 10;

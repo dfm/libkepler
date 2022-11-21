@@ -2,7 +2,6 @@
 #include <vector>
 
 #include "./test_utils.hpp"
-#include "kepler/kepler.hpp"
 
 template <typename T>
 struct has_tolerance {
@@ -20,8 +19,8 @@ TEMPLATE_PRODUCT_TEST_CASE(
      (kepler::refiners::iterative<2, double>), (kepler::refiners::iterative<3, double>),
      (kepler::refiners::iterative<4, double>), (kepler::refiners::iterative<5, double>),
      (kepler::refiners::iterative<6, double>), (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<4, double>, kepler::starters::markley<double>),
-     (kepler::refiners::non_iterative<4, float>, kepler::starters::markley<float>))) {
+     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
+     (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))) {
   using T = typename TestType::value_type;
   const size_t ecc_size = 10;
   const size_t anom_size = 1000;
@@ -57,8 +56,8 @@ TEMPLATE_PRODUCT_TEST_CASE(
      (kepler::refiners::iterative<3, double>), (kepler::refiners::iterative<4, double>),
      (kepler::refiners::iterative<5, double>), (kepler::refiners::iterative<6, double>),
      (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<4, double>, kepler::starters::markley<double>),
-     (kepler::refiners::non_iterative<4, float>, kepler::starters::markley<float>))) {
+     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
+     (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))) {
   using T = typename TestType::value_type;
   using B = xs::batch<T>;
   constexpr std::size_t simd_size = B::size;

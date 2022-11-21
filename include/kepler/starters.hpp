@@ -122,11 +122,11 @@ struct markley {
 // https://ui.adsabs.harvard.edu/abs/2017MNRAS.467.1702R/abstract
 // https://ui.adsabs.harvard.edu/abs/2021AJ....162..186B/abstract
 template <typename T>
-struct rppb {
+struct raposo_pulido_brandt {
   typedef T value_type;
   T eccentricity, ome, sqrt_ome, bounds[13], table[78];
 
-  rppb(T eccentricity)
+  raposo_pulido_brandt(T eccentricity)
       : eccentricity(eccentricity), ome(T(1.) - eccentricity), sqrt_ome(std::sqrt(ome)) {
     auto g2s_e = constants::rppb_g2s<T>() * eccentricity;
     auto g3s_e = constants::rppb_g3s<T>() * eccentricity;
