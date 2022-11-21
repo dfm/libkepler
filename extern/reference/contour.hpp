@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "kepler/constants.hpp"
+
 namespace kepler {
 namespace reference {
 
@@ -27,7 +29,7 @@ struct contour {
     int N_fft = (NumGrid - 1) * 2;
     for (int jj = 0; jj < NumPoints; jj++) {
       // NB: j = jj+1
-      freq = 2.0 * M_PI * (jj + 1) / N_fft;
+      freq = 2.0 * constants::pi<double>() * (jj + 1) / N_fft;
       cf = cos(freq);
       sf = sin(freq);
       exp2R[jj] = cf;
@@ -56,7 +58,7 @@ struct contour {
     double fxR, fxI, ftmp, tmpcosh, tmpsinh, tmpcos, tmpsin;
 
     // Define contour center for each ell and precompute sin(center), cos(center)
-    if (this_ell < M_PI)
+    if (this_ell < constants::pi<double>())
       center = this_ell + e / 2;
     else
       center = this_ell - e / 2;
