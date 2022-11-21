@@ -1,11 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include <xsimd/xsimd.hpp>
-
-#include "kepler/kepler.hpp"
-
-namespace xs = xsimd;
-using namespace Catch::Matchers;
+#include "./test_utils.hpp"
 
 TEST_CASE("Range reduction", "[reduction]") {
   const double abs_tol = 5e-15;

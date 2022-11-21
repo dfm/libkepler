@@ -4,11 +4,9 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
-#include <xsimd/xsimd.hpp>
 
 #include "./constants.hpp"
-
-namespace xs = xsimd;
+#include "./simd.hpp"
 
 namespace kepler {
 

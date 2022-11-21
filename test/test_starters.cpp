@@ -2,7 +2,6 @@
 #include <cmath>
 
 #include "./test_utils.hpp"
-#include "kepler/kepler.hpp"
 
 template <>
 struct tolerance<kepler::starters::mikkola<double>> {
@@ -12,7 +11,7 @@ struct tolerance<kepler::starters::mikkola<double>> {
 
 TEMPLATE_PRODUCT_TEST_CASE("Starters", "[starters]",
                            (kepler::starters::mikkola, kepler::starters::markley,
-                            kepler::starters::rppb),
+                            kepler::starters::raposo_pulido_brandt),
                            (double, float)) {
   using T = typename TestType::value_type;
   const T abs_tol = tolerance<TestType>::abs;
@@ -45,7 +44,7 @@ TEST_CASE("RPP17/B21 singular corner", "[starters]") {
   const T ecc_anom_max = 0.1;
   for (size_t n = 0; n < ecc_size; ++n) {
     const T eccentricity = ecc_min + (1. - ecc_min) * n / T(ecc_size);
-    const kepler::starters::rppb starter(eccentricity);
+    const kepler::starters::raposo_pulido_brandt starter(eccentricity);
     for (size_t m = 0; m < anom_size; ++m) {
       const T ecc_anom_expect = ecc_anom_max * m / T(anom_size - 1);
       auto mean_anomaly = ecc_anom_expect - eccentricity * std::sin(ecc_anom_expect);
@@ -62,7 +61,7 @@ TEST_CASE("RPP17/B21 singular corner", "[starters]") {
 TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[starters][simd]",
                            (kepler::starters::noop, kepler::starters::basic,
                             kepler::starters::mikkola, kepler::starters::markley,
-                            kepler::starters::rppb),
+                            kepler::starters::raposo_pulido_brandt),
                            (double, float)) {
   using T = typename TestType::value_type;
   using B = xs::batch<T>;

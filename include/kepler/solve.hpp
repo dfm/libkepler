@@ -28,8 +28,9 @@ inline void solve(const typename value_type<Starter, Refiner>::type& eccentricit
   using T = typename value_type<Starter, Refiner>::type;
   const Starter starter(eccentricity);
   for (std::size_t i = 0; i < size; ++i) {
-    auto mean_anom_reduc = std::abs(mean_anomaly[i]);
-    bool high = range_reduce(mean_anom_reduc, mean_anom_reduc);
+    auto abs_mean_anom = std::abs(mean_anomaly[i]);
+    T mean_anom_reduc;
+    bool high = range_reduce(abs_mean_anom, mean_anom_reduc);
     auto ecc_anom_reduc = starter.start(mean_anom_reduc);
     ecc_anom_reduc = refiner.refine(eccentricity, mean_anom_reduc, ecc_anom_reduc);
     eccentric_anomaly[i] = std::copysign(
@@ -62,8 +63,9 @@ inline void solve_simd(const typename value_type<Starter, Refiner>::type& eccent
   }
 
   for (std::size_t i = vec_size; i < size; ++i) {
-    auto mean_anom_reduc = std::abs(mean_anomaly[i]);
-    bool high = range_reduce(mean_anom_reduc, mean_anom_reduc);
+    auto abs_mean_anom = std::abs(mean_anomaly[i]);
+    T mean_anom_reduc;
+    bool high = range_reduce(abs_mean_anom, mean_anom_reduc);
     auto ecc_anom_reduc = starter.start(mean_anom_reduc);
     ecc_anom_reduc = refiner.refine(eccentricity, mean_anom_reduc, ecc_anom_reduc);
     eccentric_anomaly[i] = std::copysign(

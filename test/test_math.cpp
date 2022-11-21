@@ -1,21 +1,30 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <cmath>
 
-#include "kepler/kepler.hpp"
+#include "./test_utils.hpp"
 
-using namespace Catch::Matchers;
-
-TEST_CASE("Sin and cos reduced", "[math]") {
-  using T = double;
-  const T abs_tol = 1e-15;
-  const std::size_t size = 1000;
-
-  for (size_t n = 0; n < size; ++n) {
+TEMPLATE_TEST_CASE("Short sine", "[math]", double, float) {
+  using T = TestType;
+  const T abs_tol = default_abs<TestType>::value;
+  const std::size_t size = 10000;
+  for (std::size_t n = 0; n < size; ++n) {
     auto x = kepler::constants::pi<T>() * n / T(size - 1);
-    T sr, cr;
-    kepler::detail::sin_cos_reduc(x, sr, cr);
-    REQUIRE_THAT(sr, WithinAbs(x - std::sin(x), abs_tol));
-    REQUIRE_THAT(cr, WithinAbs(1 - std::cos(x), abs_tol));
+    auto calc = kepler::math::sincos(x);
+    REQUIRE_THAT(calc.first, WithinAbs(std::sin(x), abs_tol));
+    REQUIRE_THAT(calc.second, WithinAbs(std::cos(x), abs_tol));
+  }
+}
+
+TEMPLATE_TEST_CASE("Short sine (SIMD)", "[math][simd]", double, float) {
+  using T = TestType;
+  const T abs_tol = default_abs<TestType>::value;
+  const std::size_t size = 10000;
+
+  for (std::size_t n = 0; n < size; ++n) {
+    auto x = kepler::constants::pi<T>() * n / T(size - 1);
+    xs::batch<T> xr;
+    xs::kernel::detail::trigo_reducer<xs::batch<T>>::reduce(x, xr);
+    auto calc = kepler::math::sincos(xs::batch<T>(x));
+    REQUIRE_THAT(calc.first.get(0), WithinAbs(std::sin(x), abs_tol));
+    REQUIRE_THAT(calc.second.get(0), WithinAbs(std::cos(x), abs_tol));
   }
 }

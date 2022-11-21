@@ -1,205 +1,79 @@
 #ifndef KEPLER_MATH_HPP
 #define KEPLER_MATH_HPP
 
-#include <xsimd/xsimd.hpp>
-
-#include "./constants.hpp"
-#include "./utils.hpp"
-
-namespace xs = xsimd;
+#include "./simd.hpp"
 
 namespace kepler {
+namespace math {
+
+template <typename T>
+inline T fma(const T& a, const T& b, const T& c) {
+  return a * b + c;
+}
+
+template <typename T>
+inline T fnma(const T& a, const T& b, const T& c) {
+  return c - a * b;
+}
+
+template <typename A, typename T>
+inline xs::batch<T, A> fma(const xs::batch<T, A>& a, const xs::batch<T, A>& b,
+                           const xs::batch<T, A>& c) {
+  return xs::fma(a, b, c);
+}
+
+template <typename A, typename T>
+inline xs::batch<T, A> fnma(const xs::batch<T, A>& a, const xs::batch<T, A>& b,
+                            const xs::batch<T, A>& c) {
+  return xs::fnma(a, b, c);
+}
+
+template <typename T>
+inline T horner(const T&, const T& c1) {
+  return c1;
+}
+
+template <typename T, typename... Args>
+inline T horner(const T& x, const T& c1, Args... c2) {
+  return fma<T>(horner(x, c2...), x, c1);
+}
+
 namespace detail {
 
 template <typename T>
-struct as_unsigned_integer : std::make_unsigned<T> {};
-
-template <>
-struct as_unsigned_integer<float> {
-  using type = uint32_t;
-};
-
-template <>
-struct as_unsigned_integer<double> {
-  using type = uint64_t;
-};
-
-template <typename T>
-using as_unsigned_integer_t = typename as_unsigned_integer<T>::type;
-
-template <typename T, uint64_t c>
-inline T coef() noexcept {
-  return bit_cast<T>(as_unsigned_integer_t<T>(c));
-}
-
-template <uint64_t c>
-inline float coef() noexcept {
-  return bit_cast<float>((uint32_t)c);
-}
-
-template <uint64_t c>
-inline double coef() noexcept {
-  return bit_cast<double>((uint64_t)c);
-}
-
-template <typename T, uint64_t c0>
-inline T poly(const T& x) noexcept {
-  return T(1.) - coef<T, c0>() * x;
-}
-
-template <typename T, uint64_t c0, uint64_t c1, uint64_t... args>
-inline T poly(const T& x) noexcept {
-  return T(1.) - coef<T, c0>() * x * poly<T, c1, args...>(x);
-}
-
-// sin_reduc(x, x^2) = x - sin(x); for x in [0, pi/4)
-template <typename T>
-inline T sin_reduc_eval(const T& x, const T& x2) noexcept;
-
-template <>
-inline float sin_reduc_eval<float>(const float& x, const float& x2) noexcept {
-  auto s = poly<float, 0x3d4ccccd, 0x3cc30c31, 0x3c638e39, 0x3c14f209, 0x3bd20d21, 0x3b9c09c1,
-                0x3b70f0f1, 0x3b3fa030, 0x3b1c09c1>(x2);
-  s *= x * x2 * coef<float, 0x3e2aaaab>();
-  return s;
-}
-
-template <>
-inline double sin_reduc_eval<double>(const double& x, const double& x2) noexcept {
-  auto s = poly<double, 0x3fa999999999999a, 0x3f98618618618618, 0x3f8c71c71c71c71c,
-                0x3f829e4129e4129e, 0x3f7a41a41a41a41a, 0x3f73813813813814, 0x3f6e1e1e1e1e1e1e,
-                0x3f67f405fd017f40, 0x3f63813813813814>(x2);
-  s *= x * x2 * coef<double, 0x3fc5555555555555>();
-  return s;
-}
-
-// cos_reduc(x^2) = 1 - cos(x); for x in [0, pi/4)
-template <typename T>
-inline T cos_reduc_eval(const T& x2) noexcept;
-
-template <>
-inline float cos_reduc_eval(const float& x2) noexcept {
-  auto c = poly<float, 0x3daaaaab, 0x3d088889, 0x3c924925, 0x3c360b61, 0x3bf83e10, 0x3bb40b41,
-                0x3b888889, 0x3b562b81, 0x3b2c7692>(x2);
-  c *= x2 * coef<float, 0x3f000000>();
-  return c;
-}
-
-template <>
-inline double cos_reduc_eval(const double& x2) noexcept {
-  auto c = poly<double, 0x3fb5555555555555, 0x3fa1111111111111, 0x3f92492492492492,
-                0x3f86c16c16c16c17, 0x3f7f07c1f07c1f08, 0x3f76816816816817, 0x3f71111111111111,
-                0x3f6ac5701ac5701b, 0x3f658ed2308158ed>(x2);
-  c *= x2 * coef<double, 0x3fe0000000000000>();
-  return c;
-}
-
-// x - sin(x) and 1 - cos(x) for x in [0, pi)
-template <typename T>
-inline void sin_cos_reduc(const T& x, T& sr, T& cr) noexcept {
-  auto big = x >= constants::pio2<T>();
-  auto u = big ? constants::pi<T>() - x : x;
-
-  auto mid = u >= constants::pio2<T>();
-  auto v = mid ? constants::pi<T>() - u : u;
-  auto v2 = v * v;
-
-  auto s = sin_reduc_eval(v, v2);
-  auto c = cos_reduc_eval(v2);
-
-  if (mid) {
-    sr = u + c - T(1.);
-    cr = u + s + T(1.) - constants::pio2<T>();
-  } else {
-    sr = s;
-    cr = c;
-  }
-  if (big) {
-    sr += T(2.) * x - constants::pi<T>();
-    cr = T(2.) - cr;
-  }
-}
-
-namespace simd {
-template <typename B, uint64_t c0>
-inline B poly(const B& x) noexcept {
-  return 1 - xs::kernel::detail::coef<B, c0>() * x;
-}
-
-template <typename B, uint64_t c0, uint64_t c1, uint64_t... args>
-inline B poly(const B& x) noexcept {
-  return xs::fnma(xs::kernel::detail::coef<B, c0>() * x, poly<B, c1, args...>(x), B(1.));
-}
-
-// sin_reduc(x, x^2) = x - sin(x); for x in [0, pi/4)
-template <typename A, typename T>
-inline xs::batch<T, A> sin_reduc_eval(const xs::batch<T, A>& x,
-                                      const xs::batch<T, A>& x2) noexcept;
-
-template <typename A>
-inline xs::batch<float, A> sin_reduc_eval(const xs::batch<float, A>& x,
-                                          const xs::batch<float, A>& x2) noexcept {
-  auto s = poly<xs::batch<float, A>, 0x3d4ccccd, 0x3cc30c31, 0x3c638e39, 0x3c14f209, 0x3bd20d21,
-                0x3b9c09c1, 0x3b70f0f1, 0x3b3fa030, 0x3b1c09c1>(x2);
-  s *= x * x2 * xs::kernel::detail::coef<xs::batch<float, A>, 0x3e2aaaab>();
-  return s;
-}
-
-template <typename A>
-inline xs::batch<double, A> sin_reduc_eval(const xs::batch<double, A>& x,
-                                           const xs::batch<double, A>& x2) noexcept {
-  auto s = poly<xs::batch<double, A>, 0x3fa999999999999a, 0x3f98618618618618, 0x3f8c71c71c71c71c,
-                0x3f829e4129e4129e, 0x3f7a41a41a41a41a, 0x3f73813813813814, 0x3f6e1e1e1e1e1e1e,
-                0x3f67f405fd017f40, 0x3f63813813813814>(x2);
-  s *= x * x2 * xs::kernel::detail::coef<xs::batch<double, A>, 0x3fc5555555555555>();
-  return s;
-}
-
-// cos_reduc(x^2) = 1 - cos(x); for x in [0, pi/4)
-template <typename A, typename T>
-inline xs::batch<T, A> cos_reduc_eval(const xs::batch<T, A>& x2) noexcept;
-
-template <typename A>
-inline xs::batch<float, A> cos_reduc_eval(const xs::batch<float, A>& x2) noexcept {
-  auto c = poly<xs::batch<float, A>, 0x3daaaaab, 0x3d088889, 0x3c924925, 0x3c360b61, 0x3bf83e10,
-                0x3bb40b41, 0x3b888889, 0x3b562b81, 0x3b2c7692>(x2);
-  c *= x2 * xs::kernel::detail::coef<xs::batch<float, A>, 0x3f000000>();
-  return c;
-}
-
-template <typename A>
-inline xs::batch<double, A> cos_reduc_eval(const xs::batch<double, A>& x2) noexcept {
-  auto c = poly<xs::batch<double, A>, 0x3fb5555555555555, 0x3fa1111111111111, 0x3f92492492492492,
-                0x3f86c16c16c16c17, 0x3f7f07c1f07c1f08, 0x3f76816816816817, 0x3f71111111111111,
-                0x3f6ac5701ac5701b, 0x3f658ed2308158ed>(x2);
-  c *= x2 * xs::kernel::detail::coef<xs::batch<double, A>, 0x3fe0000000000000>();
-  return c;
-}
-}  // namespace simd
-
-// x - sin(x) and 1 - cos(x) for x in [0, pi)
-template <typename A, typename T>
-inline void sin_cos_reduc(const xs::batch<T, A>& x, xs::batch<T, A>& sr,
-                          xs::batch<T, A>& cr) noexcept {
-  using B = xs::batch<T, A>;
-  auto big = x >= constants::pio2<B>();
-  auto u = xs::select(big, constants::pi<B>() - x, x);
-
-  auto mid = u >= constants::pio2<B>();
-  auto v = xs::select(mid, constants::pi<B>() - u, u);
-  auto v2 = v * v;
-
-  auto s = simd::sin_reduc_eval(v, v2);
-  auto c = simd::cos_reduc_eval(v2);
-
-  sr = xs::select(mid, u + c - B(T(1.)), s);
-  cr = xs::select(mid, u + s + B(T(1.) - constants::pio2<typename B::value_type>()), c);
-
-  sr = xs::select(big, xs::fma(B(T(2.)), x, sr) - constants::pi<B>(), sr);
-  cr = xs::select(big, B(T(2.)) - cr, cr);
+inline T short_sin_eval(const T& x) {
+  auto x2 = x * x;
+  return x * horner(-x2, T(1), constants::shortsin1<T>(), constants::shortsin2<T>(),
+                    constants::shortsin3<T>(), constants::shortsin4<T>(),
+                    constants::shortsin5<T>(), constants::shortsin6<T>(),
+                    constants::shortsin7<T>());
 }
 
 }  // namespace detail
+
+// NOTE: only valid for x in [0, pi]
+template <typename T>
+inline std::pair<T, T> sincos(const T& x) {
+  T s, c;
+  if (x < constants::pio4<T>()) {
+    s = std::sin(x);  // detail::short_sin_eval(x);
+    c = std::sqrt(1 - s * s);
+  } else if (x > constants::threepio4<T>()) {
+    s = std::sin(constants::pi<T>() - x);  // detail::short_sin_eval(constants::pi<T>() - x);
+    c = -std::sqrt(1 - s * s);
+  } else {
+    c = std::sin(constants::pio2<T>() - x);  // detail::short_sin_eval(constants::pio2<T>() - x);
+    s = std::sqrt(1 - c * c);
+  }
+  return std::make_pair(s, c);
+}
+
+template <typename A, typename T>
+inline std::pair<xs::batch<T, A>, xs::batch<T, A>> sincos(const xs::batch<T, A>& x) {
+  return xs::sincos(x);
+}
+
+}  // namespace math
 }  // namespace kepler
 
 #endif

@@ -29,8 +29,8 @@ struct RefBenchmark {
     mean_anomaly[m] = T(100.) * m / T(SIZE - 1) - T(50.); \
   }
 
-TEMPLATE_PRODUCT_TEST_CASE("Baseline", "[baseline][bench]", Benchmark,
-                           (kepler::refiners::noop<float>, kepler::refiners::noop<double>)) {
+TEMPLATE_PRODUCT_TEST_CASE("Baseline (float)", "[bench][baseline][float]", Benchmark,
+                           kepler::refiners::noop<float>) {
   const size_t num_anom = DEFAULT_NUM_DATA;
   GENERATE_TEST_DATA(num_anom);
   BENCHMARK("Baseline") {
@@ -40,59 +40,131 @@ TEMPLATE_PRODUCT_TEST_CASE("Baseline", "[baseline][bench]", Benchmark,
   };
 }
 
-TEMPLATE_PRODUCT_TEST_CASE("Reference", "[reference][bench]", RefBenchmark,
-                           (kepler::reference::batman, kepler::reference::radvel,
-                            kepler::reference::contour<8>)) {
-  const size_t num_ecc = 5;
+TEMPLATE_PRODUCT_TEST_CASE("Baseline (double)", "[bench][baseline][double]", Benchmark,
+                           kepler::refiners::noop<double>) {
   const size_t num_anom = DEFAULT_NUM_DATA;
-  typename TestType::solver_type solver;
-  for (size_t n = 0; n < num_ecc; ++n) {
-    GENERATE_TEST_DATA(num_anom);
-    const T eccentricity = n / T(num_ecc);
-    auto name = "Eccentricity = " + std::to_string(eccentricity);
-    BENCHMARK(name.c_str()) {
-      solver.setup(eccentricity);
-      for (std::size_t n = 0; n < num_anom; ++n) {
-        ecc_anomaly[n] = solver.solve(mean_anomaly[n]);
-      }
-    };
-  }
+  GENERATE_TEST_DATA(num_anom);
+  BENCHMARK("Baseline") {
+    for (std::size_t n = 0; n < num_anom; ++n) {
+      ecc_anomaly[n] = std::sin(mean_anomaly[n]) + std::cos(mean_anomaly[n]);
+    }
+  };
 }
 
-TEMPLATE_PRODUCT_TEST_CASE("Iterative", "[iterative][bench]", Benchmark,
-                           ((kepler::refiners::iterative<1, float>),
-                            (kepler::refiners::iterative<1, double>),
-                            (kepler::refiners::iterative<3, float>),
-                            (kepler::refiners::iterative<3, double>))) {
-  const size_t num_ecc = 5;
-  const size_t num_anom = DEFAULT_NUM_DATA;
-  const typename TestType::refiner_type refiner;
-  for (size_t n = 0; n < num_ecc; ++n) {
-    GENERATE_TEST_DATA(num_anom);
-    const T eccentricity = n / T(num_ecc);
-    auto name = "Eccentricity = " + std::to_string(eccentricity);
-    BENCHMARK(name.c_str()) {
-      return kepler::solve<typename TestType::starter_type, typename TestType::refiner_type>(
-          eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner);
-    };
+#define MAIN_BENCHMARK(NAME, TAGS, ALGO)                                                        \
+  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, Benchmark, (ALGO)) {                                   \
+    const size_t num_ecc = 5;                                                                   \
+    const size_t num_anom = DEFAULT_NUM_DATA;                                                   \
+    const typename TestType::refiner_type refiner;                                              \
+    for (size_t n = 0; n < num_ecc; ++n) {                                                      \
+      GENERATE_TEST_DATA(num_anom);                                                             \
+      const T eccentricity = n / T(num_ecc);                                                    \
+      auto name = "e = " + std::to_string(eccentricity) + "; n = " + std::to_string(num_anom);  \
+      BENCHMARK(name.c_str()) {                                                                 \
+        return kepler::solve<typename TestType::starter_type, typename TestType::refiner_type>( \
+            eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner);          \
+      };                                                                                        \
+    }                                                                                           \
   }
-}
 
-TEMPLATE_PRODUCT_TEST_CASE("Iterative (SIMD)", "[iterative][bench][simd]", Benchmark,
-                           ((kepler::refiners::iterative<1, float>),
-                            (kepler::refiners::iterative<1, double>),
-                            (kepler::refiners::iterative<3, float>),
-                            (kepler::refiners::iterative<3, double>))) {
-  const size_t num_ecc = 5;
-  const size_t num_anom = DEFAULT_NUM_DATA;
-  const typename TestType::refiner_type refiner;
-  for (size_t n = 0; n < num_ecc; ++n) {
-    GENERATE_TEST_DATA(num_anom);
-    const T eccentricity = n / T(num_ecc);
-    auto name = "Eccentricity = " + std::to_string(eccentricity);
-    BENCHMARK(name.c_str()) {
-      return kepler::solve_simd<typename TestType::starter_type, typename TestType::refiner_type>(
-          eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner);
-    };
+MAIN_BENCHMARK("First-order iterative (float)", "[bench][iterative][first-order][float]",
+               (kepler::refiners::iterative<1, float>))
+MAIN_BENCHMARK("First-order iterative (double)", "[bench][iterative][first-order][double]",
+               (kepler::refiners::iterative<1, double>))
+
+MAIN_BENCHMARK("Third-order iterative (float)", "[bench][iterative][third-order][float]",
+               (kepler::refiners::iterative<3, float>))
+MAIN_BENCHMARK("Third-order iterative (double)", "[bench][iterative][third-order][double]",
+               (kepler::refiners::iterative<3, double>))
+
+MAIN_BENCHMARK("Nijenhuis 91 / Markley 95 (float)", "[bench][non-iterative][markley][float]",
+               (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))
+MAIN_BENCHMARK("Nijenhuis 91 / Markley 95 (double)", "[bench][non-iterative][markley][double]",
+               (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>))
+
+MAIN_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (float)", "[bench][non-iterative][brandt][float]",
+               (kepler::refiners::non_iterative<1, float>,
+                kepler::starters::raposo_pulido_brandt<float>))
+MAIN_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (double)", "[bench][non-iterative][brandt][double]",
+               (kepler::refiners::non_iterative<1, double>,
+                kepler::starters::raposo_pulido_brandt<double>))
+
+#undef MAIN_BENCHMARK
+
+#define SIMD_BENCHMARK(NAME, TAGS, ALGO)                                                       \
+  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, Benchmark, (ALGO)) {                                  \
+    const size_t num_ecc = 5;                                                                  \
+    const size_t num_anom = DEFAULT_NUM_DATA;                                                  \
+    const typename TestType::refiner_type refiner;                                             \
+    for (size_t n = 0; n < num_ecc; ++n) {                                                     \
+      GENERATE_TEST_DATA(num_anom);                                                            \
+      const T eccentricity = n / T(num_ecc);                                                   \
+      auto name = "e = " + std::to_string(eccentricity) + "; n = " + std::to_string(num_anom); \
+      BENCHMARK(name.c_str()) {                                                                \
+        return kepler::solve_simd<typename TestType::starter_type,                             \
+                                  typename TestType::refiner_type>(                            \
+            eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner);         \
+      };                                                                                       \
+    }                                                                                          \
   }
-}
+
+SIMD_BENCHMARK("First-order iterative (float, SIMD)",
+               "[bench][iterative][first-order][float][simd]",
+               (kepler::refiners::iterative<1, float>))
+SIMD_BENCHMARK("First-order iterative (double, SIMD)",
+               "[bench][iterative][first-order][double][simd]",
+               (kepler::refiners::iterative<1, double>))
+
+SIMD_BENCHMARK("Third-order iterative (float, SIMD)",
+               "[bench][iterative][third-order][float][simd]",
+               (kepler::refiners::iterative<3, float>))
+SIMD_BENCHMARK("Third-order iterative (double, SIMD)",
+               "[bench][iterative][third-order][double][simd]",
+               (kepler::refiners::iterative<3, double>))
+
+SIMD_BENCHMARK("Nijenhuis 91 / Markley 95 (float, SIMD)", "[bench][non-iterative][markley][float]",
+               (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))
+SIMD_BENCHMARK("Nijenhuis 91 / Markley 95 (double, SIMD)",
+               "[bench][non-iterative][markley][double]",
+               (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>))
+
+SIMD_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (float, SIMD)",
+               "[bench][non-iterative][brandt][float][simd]",
+               (kepler::refiners::non_iterative<1, float>,
+                kepler::starters::raposo_pulido_brandt<float>))
+SIMD_BENCHMARK("Raposo-Pulido 17 / Brandt 21 (double, SIMD)",
+               "[bench][non-iterative][brandt][double][simd]",
+               (kepler::refiners::non_iterative<1, double>,
+                kepler::starters::raposo_pulido_brandt<double>))
+
+#undef SIMD_BENCHMARK
+
+#define REFERENCE_BENCHMARK(NAME, TAGS, ALGO)                                                  \
+  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, RefBenchmark, (ALGO)) {                               \
+    const size_t num_ecc = 5;                                                                  \
+    const size_t num_anom = DEFAULT_NUM_DATA;                                                  \
+    typename TestType::solver_type solver;                                                     \
+    for (size_t n = 0; n < num_ecc; ++n) {                                                     \
+      GENERATE_TEST_DATA(num_anom);                                                            \
+      const T eccentricity = n / T(num_ecc);                                                   \
+      auto name = "e = " + std::to_string(eccentricity) + "; n = " + std::to_string(num_anom); \
+      BENCHMARK(name.c_str()) {                                                                \
+        solver.setup(eccentricity);                                                            \
+        for (std::size_t n = 0; n < num_anom; ++n) {                                           \
+          ecc_anomaly[n] = solver.solve(mean_anomaly[n]);                                      \
+        }                                                                                      \
+        return ecc_anomaly[num_anom - 1];                                                      \
+      };                                                                                       \
+    }                                                                                          \
+  }
+
+REFERENCE_BENCHMARK("Batman", "[bench][reference][batman][iterative][first-order][double]",
+                    kepler::reference::batman)
+REFERENCE_BENCHMARK("RadVel", "[bench][reference][radvel][iterative][third-order][double]",
+                    kepler::reference::radvel)
+REFERENCE_BENCHMARK("Contour 8", "[bench][reference][non-iterative][contour][contour-8][double]",
+                    kepler::reference::contour<8>)
+REFERENCE_BENCHMARK("Contour 16", "[bench][reference][non-iterative][contour][contour-16][double]",
+                    kepler::reference::contour<16>)
+
+#undef REFERENCE_BENCHMARK
