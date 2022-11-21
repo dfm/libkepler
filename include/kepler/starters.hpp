@@ -2,11 +2,9 @@
 #define KEPLER_STARTERS_HPP
 
 #include <cmath>
-#include <xsimd/xsimd.hpp>
 
 #include "./constants.hpp"
-
-namespace xs = xsimd;
+#include "./simd.hpp"
 
 namespace kepler {
 namespace starters {

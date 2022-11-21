@@ -1,12 +1,8 @@
 #ifndef KEPLER_HOUSEHOLDER_HPP
 #define KEPLER_HOUSEHOLDER_HPP
 
-#include <xsimd/xsimd.hpp>
-
 #include "./constants.hpp"
-#include "./math.hpp"
-
-namespace xs = xsimd;
+#include "./simd.hpp"
 
 namespace kepler {
 namespace detail {
@@ -68,244 +64,93 @@ inline T householder_eval(const T& f0, const T& f1, const T& f2, const T& f3, co
                               d * (constants::hh6<T>() * f6 + d * constants::hh7<T>() * f7))))));
 }
 
+template <typename T>
+struct householder_state {
+  T f0;
+  T sin;
+  T cos;
+};
+
 template <int order>
 struct householder {
-  template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly);
+  static_assert(order > 0, "order must be positive");
+  static_assert(order <= 7, "order cannot be larger than 7");
 
-  template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly);
-};
-
-template <>
-struct householder<1> {
   template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    eccentric_anomaly += householder_eval(f0, f1);
-    return f0;
+  static inline householder_state<T> init(const T& eccentricity, const T& mean_anomaly,
+                                          T& eccentric_anomaly) {
+    auto s = std::sin(eccentric_anomaly);
+    auto c = std::cos(eccentric_anomaly);
+    auto f0 = eccentric_anomaly - eccentricity * s - mean_anomaly;
+    return householder_state<T>{f0, s, c};
   }
 
   template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
+  static inline householder_state<xs::batch<T, A>> init(const T& eccentricity,
+                                                        const xs::batch<T, A>& mean_anomaly,
+                                                        xs::batch<T, A>& eccentric_anomaly) {
     using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    eccentric_anomaly += householder_eval(f0, f1);
-    return f0;
+    auto sincos = xs::sincos(eccentric_anomaly);
+    auto f0 = eccentric_anomaly - xs::fma(B(eccentricity), sincos.first, mean_anomaly);
+    return householder_state<B>{f0, sincos.first, sincos.second};
   }
-};
 
-template <>
-struct householder<2> {
   template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    auto f2 = eccentricity * (eccentric_anomaly - s);
-    eccentric_anomaly += householder_eval(f0, f1, f2);
-    return f0;
-  }
+  static inline T step(const householder_state<T>& state, const T& eccentricity) {
+    auto f0 = state.f0;
+    auto s = state.sin;
+    auto c = state.cos;
 
-  template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
-    using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    auto f2 = B(eccentricity) * (eccentric_anomaly - s);
-    eccentric_anomaly += householder_eval(f0, f1, f2);
-    return f0;
-  }
-};
+    auto f1 = T(1.) - eccentricity * c;
+    KEPLER_IF_CONSTEXPR(order == 1) { return householder_eval(f0, f1); }
 
-template <>
-struct householder<3> {
-  template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    auto f2 = eccentricity * (eccentric_anomaly - s);
+    auto f2 = eccentricity * s;
+    KEPLER_IF_CONSTEXPR(order == 2) { return householder_eval(f0, f1, f2); }
+
     auto f3 = T(1.) - f1;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3);
-    return f0;
-  }
+    KEPLER_IF_CONSTEXPR(order == 3) { return householder_eval(f0, f1, f2, f3); }
 
-  template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
-    using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    auto f2 = B(eccentricity) * (eccentric_anomaly - s);
-    auto f3 = B(1.) - f1;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3);
-    return f0;
-  }
-};
-
-template <>
-struct householder<4> {
-  template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    auto f2 = eccentricity * (eccentric_anomaly - s);
-    auto f3 = T(1.) - f1;
     auto f4 = -f2;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4);
-    return f0;
-  }
+    KEPLER_IF_CONSTEXPR(order == 4) { return householder_eval(f0, f1, f2, f3, f4); }
 
-  template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
-    using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    auto f2 = B(eccentricity) * (eccentric_anomaly - s);
-    auto f3 = B(1.) - f1;
-    auto f4 = -f2;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4);
-    return f0;
-  }
-};
-
-template <>
-struct householder<5> {
-  template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    auto f2 = eccentricity * (eccentric_anomaly - s);
-    auto f3 = T(1.) - f1;
-    auto f4 = -f2;
     auto f5 = -f3;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4, f5);
-    return f0;
-  }
+    KEPLER_IF_CONSTEXPR(order == 5) { return householder_eval(f0, f1, f2, f3, f4, f5); }
 
-  template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
-    using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    auto f2 = B(eccentricity) * (eccentric_anomaly - s);
-    auto f3 = B(1.) - f1;
-    auto f4 = -f2;
-    auto f5 = -f3;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4, f5);
-    return f0;
-  }
-};
-
-template <>
-struct householder<6> {
-  template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    auto f2 = eccentricity * (eccentric_anomaly - s);
-    auto f3 = T(1.) - f1;
-    auto f4 = -f2;
-    auto f5 = -f3;
     auto f6 = -f4;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4, f5, f6);
-    return f0;
-  }
+    KEPLER_IF_CONSTEXPR(order == 5) { return householder_eval(f0, f1, f2, f3, f4, f5, f6); }
 
-  template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
-    using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    auto f2 = B(eccentricity) * (eccentric_anomaly - s);
-    auto f3 = B(1.) - f1;
-    auto f4 = -f2;
-    auto f5 = -f3;
-    auto f6 = -f4;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4, f5, f6);
-    return f0;
-  }
-};
-
-template <>
-struct householder<7> {
-  template <typename T>
-  static inline T step(const T& eccentricity, const T& mean_anomaly, T& eccentric_anomaly) {
-    T s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = T(1.) - eccentricity;
-    auto f0 = eccentricity * s + eccentric_anomaly * ome - mean_anomaly;
-    auto f1 = eccentricity * c + ome;
-    auto f2 = eccentricity * (eccentric_anomaly - s);
-    auto f3 = T(1.) - f1;
-    auto f4 = -f2;
-    auto f5 = -f3;
-    auto f6 = -f4;
     auto f7 = -f5;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4, f5, f6, f7);
-    return f0;
+    return householder_eval(f0, f1, f2, f3, f4, f5, f6, f7);
   }
 
   template <typename A, typename T>
-  static inline xs::batch<T, A> step(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-                                     xs::batch<T, A>& eccentric_anomaly) {
+  static inline xs::batch<T, A> step(const householder_state<xs::batch<T, A>>& state,
+                                     const T& eccentricity) {
     using B = xs::batch<T, A>;
-    B s, c;
-    ::kepler::detail::sin_cos_reduc(eccentric_anomaly, s, c);
-    auto ome = B(T(1.) - eccentricity);
-    auto f0 = xs::fma(B(eccentricity), s, eccentric_anomaly * ome) - mean_anomaly;
-    auto f1 = xs::fma(B(eccentricity), c, B(ome));
-    auto f2 = B(eccentricity) * (eccentric_anomaly - s);
-    auto f3 = B(1.) - f1;
+    auto f0 = state.f0;
+    auto s = state.sin;
+    auto c = state.cos;
+
+    auto f1 = xs::fnma(B(eccentricity), c, B(T(1.)));
+    KEPLER_IF_CONSTEXPR(order == 1) { return householder_eval(f0, f1); }
+
+    auto f2 = eccentricity * s;
+    KEPLER_IF_CONSTEXPR(order == 2) { return householder_eval(f0, f1, f2); }
+
+    auto f3 = B(T(1.)) - f1;
+    KEPLER_IF_CONSTEXPR(order == 3) { return householder_eval(f0, f1, f2, f3); }
+
     auto f4 = -f2;
+    KEPLER_IF_CONSTEXPR(order == 4) { return householder_eval(f0, f1, f2, f3, f4); }
+
     auto f5 = -f3;
+    KEPLER_IF_CONSTEXPR(order == 5) { return householder_eval(f0, f1, f2, f3, f4, f5); }
+
     auto f6 = -f4;
+    KEPLER_IF_CONSTEXPR(order == 5) { return householder_eval(f0, f1, f2, f3, f4, f5, f6); }
+
     auto f7 = -f5;
-    eccentric_anomaly += householder_eval(f0, f1, f2, f3, f4, f5, f6, f7);
-    return f0;
+    return householder_eval(f0, f1, f2, f3, f4, f5, f6, f7);
   }
 };
 

@@ -4,6 +4,16 @@
 #include "./test_utils.hpp"
 #include "kepler/kepler.hpp"
 
+template <typename T>
+struct has_tolerance {
+  static const bool value = false;
+};
+
+template <int order, typename T>
+struct has_tolerance<kepler::refiners::iterative<order, T>> {
+  static const bool value = true;
+};
+
 TEMPLATE_PRODUCT_TEST_CASE(
     "Refiners", "[refiners]", SolveTestCase,
     ((kepler::refiners::iterative<1, float>), (kepler::refiners::iterative<1, double>),
@@ -13,11 +23,15 @@ TEMPLATE_PRODUCT_TEST_CASE(
      (kepler::refiners::non_iterative<4, double>, kepler::starters::markley<double>),
      (kepler::refiners::non_iterative<4, float>, kepler::starters::markley<float>))) {
   using T = typename TestType::value_type;
-  const T abs_tol = tolerance<TestType>::abs;
   const size_t ecc_size = 10;
   const size_t anom_size = 1000;
   const typename TestType::refiner_type refiner;
   std::vector<T> ecc_anom_expect(anom_size), mean_anomaly(anom_size), ecc_anom_calc(anom_size);
+
+  T abs_tol = tolerance<TestType>::abs;
+  KEPLER_IF_CONSTEXPR(has_tolerance<typename TestType::refiner_type>::value) {
+    abs_tol = 20 * refiner.tolerance;
+  }
 
   for (size_t n = 0; n < ecc_size; ++n) {
     const T eccentricity = n / T(ecc_size);
@@ -70,9 +84,8 @@ TEMPLATE_PRODUCT_TEST_CASE(
       ecc_anom_b.store_aligned(ecc_anom.data());
 
       for (size_t k = 0; k < simd_size; ++k) {
-        REQUIRE_THAT(ecc_anom[k], WithinAbs(refiner.refine(eccentricity, mean_anom[k],
-                                                           starter.start(mean_anom[k])),
-                                            abs_tol));
+        auto expect = refiner.refine(eccentricity, mean_anom[k], starter.start(mean_anom[k]));
+        REQUIRE_THAT(ecc_anom[k], WithinAbs(expect, abs_tol));
       }
     }
   }
