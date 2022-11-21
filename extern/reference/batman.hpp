@@ -22,7 +22,7 @@ struct batman {
   batman(int max_iterations, double tolerance)
       : max_iterations(max_iterations), tolerance(tolerance) {}
 
-  inline double setup(const double& eccentricity) { this->eccentricity = eccentricity; }
+  inline void setup(const double& eccentricity) { this->eccentricity = eccentricity; }
 
   inline double solve(const double& mean_anomaly) const {
     double E = mean_anomaly;

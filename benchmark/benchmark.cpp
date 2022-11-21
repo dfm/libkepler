@@ -4,12 +4,21 @@
 #include <string>
 
 #include "kepler/kepler.hpp"
+#include "reference/batman.hpp"
+#include "reference/contour.hpp"
+#include "reference/radvel.hpp"
 
 template <typename R, typename S = kepler::starters::basic<typename R::value_type>>
 struct Benchmark {
   typedef typename R::value_type value_type;
   typedef R refiner_type;
   typedef S starter_type;
+};
+
+template <typename S>
+struct RefBenchmark {
+  typedef typename S::value_type value_type;
+  typedef S solver_type;
 };
 
 #define DEFAULT_NUM_DATA 1000
@@ -31,9 +40,30 @@ TEMPLATE_PRODUCT_TEST_CASE("Baseline", "[baseline][bench]", Benchmark,
   };
 }
 
+TEMPLATE_PRODUCT_TEST_CASE("Reference", "[reference][bench]", RefBenchmark,
+                           (kepler::reference::batman, kepler::reference::radvel,
+                            kepler::reference::contour<8>)) {
+  const size_t num_ecc = 5;
+  const size_t num_anom = DEFAULT_NUM_DATA;
+  typename TestType::solver_type solver;
+  for (size_t n = 0; n < num_ecc; ++n) {
+    GENERATE_TEST_DATA(num_anom);
+    const T eccentricity = n / T(num_ecc);
+    auto name = "Eccentricity = " + std::to_string(eccentricity);
+    BENCHMARK(name.c_str()) {
+      solver.setup(eccentricity);
+      for (std::size_t n = 0; n < num_anom; ++n) {
+        ecc_anomaly[n] = solver.solve(mean_anomaly[n]);
+      }
+    };
+  }
+}
+
 TEMPLATE_PRODUCT_TEST_CASE("Iterative", "[iterative][bench]", Benchmark,
                            ((kepler::refiners::iterative<1, float>),
-                            (kepler::refiners::iterative<1, double>))) {
+                            (kepler::refiners::iterative<1, double>),
+                            (kepler::refiners::iterative<3, float>),
+                            (kepler::refiners::iterative<3, double>))) {
   const size_t num_ecc = 5;
   const size_t num_anom = DEFAULT_NUM_DATA;
   const typename TestType::refiner_type refiner;
@@ -50,7 +80,9 @@ TEMPLATE_PRODUCT_TEST_CASE("Iterative", "[iterative][bench]", Benchmark,
 
 TEMPLATE_PRODUCT_TEST_CASE("Iterative (SIMD)", "[iterative][bench][simd]", Benchmark,
                            ((kepler::refiners::iterative<1, float>),
-                            (kepler::refiners::iterative<1, double>))) {
+                            (kepler::refiners::iterative<1, double>),
+                            (kepler::refiners::iterative<3, float>),
+                            (kepler::refiners::iterative<3, double>))) {
   const size_t num_ecc = 5;
   const size_t num_anom = DEFAULT_NUM_DATA;
   const typename TestType::refiner_type refiner;

@@ -3,6 +3,7 @@ check_cxx_compiler_flag(-Wno-deprecated-copy HAS_NO_DEPRECATED_COPY)
 check_cxx_compiler_flag(-march=native HAS_MARCH_NATIVE)
 
 add_executable(benchmark benchmark.cpp)
+target_include_directories(benchmark PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../extern)
 target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain)
 if(MSVC)
   target_compile_options(benchmark PRIVATE /arch:AVX2)

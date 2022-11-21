@@ -16,7 +16,7 @@ struct contour {
   double exp2R[NumPoints], exp2I[NumPoints], exp4R[NumPoints], exp4I[NumPoints], coshI[NumPoints],
       sinhI[NumPoints], ecosR[NumPoints], esinR[NumPoints];
 
-  inline double setup(const double& eccentricity) {
+  inline void setup(const double& eccentricity) {
     double e = this->eccentricity = eccentricity;
 
     // Define contour radius
