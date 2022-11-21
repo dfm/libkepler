@@ -29,8 +29,19 @@ struct RefBenchmark {
     mean_anomaly[m] = T(100.) * m / T(SIZE - 1) - T(50.); \
   }
 
-TEMPLATE_PRODUCT_TEST_CASE("Baseline", "[bench][baseline]", Benchmark,
-                           (kepler::refiners::noop<float>, kepler::refiners::noop<double>)) {
+TEMPLATE_PRODUCT_TEST_CASE("Baseline (float)", "[bench][baseline][float]", Benchmark,
+                           kepler::refiners::noop<float>) {
+  const size_t num_anom = DEFAULT_NUM_DATA;
+  GENERATE_TEST_DATA(num_anom);
+  BENCHMARK("Baseline") {
+    for (std::size_t n = 0; n < num_anom; ++n) {
+      ecc_anomaly[n] = std::sin(mean_anomaly[n]) + std::cos(mean_anomaly[n]);
+    }
+  };
+}
+
+TEMPLATE_PRODUCT_TEST_CASE("Baseline (double)", "[bench][baseline][double]", Benchmark,
+                           kepler::refiners::noop<double>) {
   const size_t num_anom = DEFAULT_NUM_DATA;
   GENERATE_TEST_DATA(num_anom);
   BENCHMARK("Baseline") {
@@ -56,15 +67,15 @@ TEMPLATE_PRODUCT_TEST_CASE("Baseline", "[bench][baseline]", Benchmark,
     }                                                                                           \
   }
 
-MAIN_BENCHMARK("First-order iterative float", "[bench][iterative][first-order][float]",
-               (kepler::refiners::iterative<1, float>));
-MAIN_BENCHMARK("First-order iterative double", "[bench][iterative][first-order][double]",
-               (kepler::refiners::iterative<1, double>));
+MAIN_BENCHMARK("First-order iterative (float)", "[bench][iterative][first-order][float]",
+               (kepler::refiners::iterative<1, float>))
+MAIN_BENCHMARK("First-order iterative (double)", "[bench][iterative][first-order][double]",
+               (kepler::refiners::iterative<1, double>))
 
-MAIN_BENCHMARK("Third-order iterative float", "[bench][iterative][third-order][float]",
-               (kepler::refiners::iterative<3, float>));
-MAIN_BENCHMARK("Third-order iterative double", "[bench][iterative][third-order][double]",
-               (kepler::refiners::iterative<3, double>));
+MAIN_BENCHMARK("Third-order iterative (float)", "[bench][iterative][third-order][float]",
+               (kepler::refiners::iterative<3, float>))
+MAIN_BENCHMARK("Third-order iterative (double)", "[bench][iterative][third-order][double]",
+               (kepler::refiners::iterative<3, double>))
 
 #undef MAIN_BENCHMARK
 
@@ -85,19 +96,19 @@ MAIN_BENCHMARK("Third-order iterative double", "[bench][iterative][third-order][
     }                                                                                          \
   }
 
-SIMD_BENCHMARK("First-order iterative float (SIMD)",
+SIMD_BENCHMARK("First-order iterative (float, SIMD)",
                "[bench][iterative][first-order][float][simd]",
-               (kepler::refiners::iterative<1, float>));
-SIMD_BENCHMARK("First-order iterative double (SIMD)",
+               (kepler::refiners::iterative<1, float>))
+SIMD_BENCHMARK("First-order iterative (double, SIMD)",
                "[bench][iterative][first-order][double][simd]",
-               (kepler::refiners::iterative<1, double>));
+               (kepler::refiners::iterative<1, double>))
 
-SIMD_BENCHMARK("Third-order iterative float (SIMD)",
+SIMD_BENCHMARK("Third-order iterative (float, SIMD)",
                "[bench][iterative][third-order][float][simd]",
-               (kepler::refiners::iterative<3, float>));
-SIMD_BENCHMARK("Third-order iterative double (SIMD)",
+               (kepler::refiners::iterative<3, float>))
+SIMD_BENCHMARK("Third-order iterative (double, SIMD)",
                "[bench][iterative][third-order][double][simd]",
-               (kepler::refiners::iterative<3, double>));
+               (kepler::refiners::iterative<3, double>))
 
 #undef SIMD_BENCHMARK
 
@@ -120,13 +131,13 @@ SIMD_BENCHMARK("Third-order iterative double (SIMD)",
     }                                                                                          \
   }
 
-REFERENCE_BENCHMARK("Batman", "[bench][reference][batman][first-order]",
-                    kepler::reference::batman);
-REFERENCE_BENCHMARK("RadVel", "[bench][reference][radvel][third-order]",
-                    kepler::reference::radvel);
-REFERENCE_BENCHMARK("Contour 8", "[bench][reference][contour][contour-8]",
-                    kepler::reference::contour<8>);
-REFERENCE_BENCHMARK("Contour 16", "[bench][reference][contour][contour-16]",
-                    kepler::reference::contour<16>);
+REFERENCE_BENCHMARK("Batman", "[bench][reference][batman][first-order][double]",
+                    kepler::reference::batman)
+REFERENCE_BENCHMARK("RadVel", "[bench][reference][radvel][third-order][double]",
+                    kepler::reference::radvel)
+REFERENCE_BENCHMARK("Contour 8", "[bench][reference][contour][contour-8][double]",
+                    kepler::reference::contour<8>)
+REFERENCE_BENCHMARK("Contour 16", "[bench][reference][contour][contour-16][double]",
+                    kepler::reference::contour<16>)
 
 #undef REFERENCE_BENCHMARK
