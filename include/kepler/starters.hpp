@@ -34,7 +34,7 @@ struct basic {
 
   template <typename A>
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
-    return mean_anomaly + xs::batch<T, A>(0.85 * eccentricity);
+    return mean_anomaly + xs::batch<T, A>(T(0.85) * eccentricity);
   }
 };
 
@@ -45,25 +45,25 @@ struct mikkola {
   T eccentricity, factor, alpha, alpha3;
   mikkola(T eccentricity)
       : eccentricity(eccentricity),
-        factor(1. / (4. * eccentricity + 0.5)),
-        alpha((1. - eccentricity) * factor),
+        factor(T(1.) / (T(4.) * eccentricity + T(0.5))),
+        alpha((T(1.) - eccentricity) * factor),
         alpha3(alpha * alpha * alpha) {}
 
   inline T start(const T& mean_anomaly) const {
-    auto beta = 0.5 * mean_anomaly * factor;
+    auto beta = T(0.5) * mean_anomaly * factor;
     auto z = std::cbrt(beta + std::copysign(std::sqrt(beta * beta + alpha3), beta));
     auto s = z - alpha / z;
-    s -= 0.078 * std::pow(s, 5) / (1. + eccentricity);
-    return mean_anomaly + eccentricity * s * (3. - 4. * s * s);
+    s -= T(0.078) * std::pow(s, 5) / (T(1.) + eccentricity);
+    return mean_anomaly + eccentricity * s * (T(3.) - T(4.) * s * s);
   }
 
   template <typename A>
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
-    auto beta = B(0.5 * factor) * mean_anomaly;
+    auto beta = B(T(0.5) * factor) * mean_anomaly;
     auto z = xs::cbrt(beta + xs::copysign(xs::sqrt(xs::fma(beta, beta, B(alpha3))), beta));
-    auto s = xs::fnma(B(alpha), 1. / z, z);
-    s -= B(0.078 / (1. + eccentricity)) * xs::pow(s, 5);
+    auto s = xs::fnma(B(alpha), T(1.) / z, z);
+    s -= B(T(0.078) / (T(1.) + eccentricity)) * xs::pow(s, 5);
     return xs::fma(B(eccentricity) * s, xs::fnma(B(4.) * s, s, B(3.)), mean_anomaly);
   }
 };
@@ -101,23 +101,23 @@ struct markley {
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
     auto m2 = mean_anomaly * mean_anomaly;
-    auto ome = 1. - eccentricity;
+    auto ome = T(1.) - eccentricity;
 
-    auto alpha = xs::fma(B(constants::markley_factor2<T>() / (1. + eccentricity)),
+    auto alpha = xs::fma(B(constants::markley_factor2<T>() / (T(1.) + eccentricity)),
                          constants::pi<T>() - mean_anomaly, B(constants::markley_factor1<T>()));
 
-    auto d = xs::fma(B(eccentricity), alpha, B(3. * ome));
+    auto d = xs::fma(B(eccentricity), alpha, B(T(3.) * ome));
     alpha *= d;
 
-    auto r = mean_anomaly * xs::fma(B(3.) * alpha, d - B(ome), m2);
-    auto q = xs::fms(B(2. * ome), alpha, m2);
+    auto r = mean_anomaly * xs::fma(B(T(3.)) * alpha, d - B(ome), m2);
+    auto q = xs::fms(B(T(2.) * ome), alpha, m2);
     auto q2 = q * q;
 
     auto w = xs::cbrt(xs::abs(r) + xs::sqrt(xs::fma(q2, q, r * r)));
     w *= w;
 
     auto denom = xs::fma(w, w + q, q2);
-    return xs::fma(B(2.) * r / denom, w, mean_anomaly) / d;
+    return xs::fma(B(T(2.)) * r / denom, w, mean_anomaly) / d;
   }
 };
 
@@ -129,7 +129,7 @@ struct rppb {
   T eccentricity, ome, sqrt_ome, bounds[13], table[78];
 
   rppb(T eccentricity)
-      : eccentricity(eccentricity), ome(1. - eccentricity), sqrt_ome(std::sqrt(ome)) {
+      : eccentricity(eccentricity), ome(T(1.) - eccentricity), sqrt_ome(std::sqrt(ome)) {
     auto g2s_e = constants::rppb_g2s<T>() * eccentricity;
     auto g3s_e = constants::rppb_g3s<T>() * eccentricity;
     auto g4s_e = constants::rppb_g4s<T>() * eccentricity;
@@ -209,7 +209,7 @@ struct rppb {
       int k = 6 * i;
       table[k] = T(i) * constants::pio12<T>();
 
-      auto idx = 1. / (bounds[i + 1] - bounds[i]);
+      auto idx = T(1.) / (bounds[i + 1] - bounds[i]);
       auto B0 = idx * (-table[k + 2] - idx * (table[k + 1] - idx * constants::pio12<T>()));
       auto B1 = idx * (-T(2.) * table[k + 2] - idx * (table[k + 1] - table[k + 7]));
       auto B2 = idx * (table[k + 8] - table[k + 2]);
@@ -237,15 +237,15 @@ struct rppb {
   inline xs::batch<T, A> singular(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
     auto chi = mean_anomaly / (ome * sqrt_ome);
-    auto lambda = xs::sqrt(xs::fma(B(9.) * chi, chi, B(8.)));
-    auto s = xs::cbrt(xs::fma(B(3.), chi, lambda));
+    auto lambda = xs::sqrt(xs::fma(B(T(9.)) * chi, chi, B(T(8.))));
+    auto s = xs::cbrt(xs::fma(B(T(3.)), chi, lambda));
     s *= s;
-    auto sigma = B(6.) * chi / (B(2.) + s + B(4.) / s);
+    auto sigma = B(T(6.)) * chi / (B(T(2.)) + s + B(T(4.)) / s);
     auto s2 = sigma * sigma;
-    auto denom = B(1.) / (s2 + B(2.));
-    auto arg =
-        B(ome) * s2 * denom * denom * xs::fma(s2, xs::fma(s2, (s2 + 25.), B(340.)), B(840.));
-    auto E = xs::fma(B(ome) * s2, denom * ((s2 + 20.) / 60. + arg / 1400.), B(1.));
+    auto denom = B(T(1.)) / (s2 + B(T(2.)));
+    auto arg = B(ome) * s2 * denom * denom *
+               xs::fma(s2, xs::fma(s2, (s2 + T(25.)), B(T(340.))), B(T(840.)));
+    auto E = xs::fma(B(ome) * s2, denom * ((s2 + T(20.)) / T(60.) + arg / T(1400.)), B(T(1.)));
     return sigma * sqrt_ome * E;
   }
 
@@ -268,7 +268,7 @@ struct rppb {
     for (int j = 11; j >= 0; --j) {
       auto k = 6 * j;
       auto dx = mean_anomaly - B(bounds[j]);
-      auto m = dx >= B(0.);
+      auto m = dx >= B(T(0.));
       auto y = xs::fma(xs::fma(xs::fma(xs::fma(xs::fma(B(table[k + 5]), dx, B(table[k + 4])), dx,
                                                B(table[k + 3])),
                                        dx, B(table[k + 2])),

@@ -28,3 +28,17 @@ foreach(name ${KEPLER_TESTS})
   add_test(${name} ${name})
 
 endforeach()
+
+add_executable(get_simd_size get_simd_size.cpp)
+if(WIN32)
+  # TODO(dfm): Add a Windows-specific compiler flags
+else()
+  target_compile_options(get_simd_size PRIVATE -O3 -Wall -pedantic -Wextra -Werror)
+  if(HAS_NO_DEPRECATED_COPY)
+    target_compile_options(get_simd_size PRIVATE -Wno-deprecated-copy)
+  endif()
+  if(HAS_MARCH_NATIVE)
+    target_compile_options(get_simd_size PRIVATE -march=native)
+  endif()
+endif()
+

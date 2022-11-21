@@ -23,5 +23,8 @@ jobs:
         run: |
           cmake -B build .
           cmake --build build --parallel 2
+      - name: Check size
+        shell: bash
+        run: build/test/get_simd_size
       - name: Test
         run: ctest --output-on-failure --test-dir build

@@ -24,5 +24,5 @@ jobs:
           cmake -B build -DBUILD_KEPLER_BENCHMARK=ON .
           cmake --build build --parallel 2
       - name: Benchmark
-        if: ${{ matrix.os != 'windows-latest' }}
+        shell: bash
         run: build/benchmark/benchmark
