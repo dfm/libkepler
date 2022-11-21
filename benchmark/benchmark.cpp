@@ -13,11 +13,11 @@ struct Benchmark {
 };
 
 #define DEFAULT_NUM_DATA 1000
-#define GENERATE_TEST_DATA(SIZE)                        \
-  using T = typename TestType::value_type;              \
-  std::vector<T> mean_anomaly(SIZE), ecc_anomaly(SIZE); \
-  for (size_t m = 0; m < SIZE; ++m) {                   \
-    mean_anomaly[m] = 100. * m / T(SIZE - 1) - 50.;     \
+#define GENERATE_TEST_DATA(SIZE)                          \
+  using T = typename TestType::value_type;                \
+  std::vector<T> mean_anomaly(SIZE), ecc_anomaly(SIZE);   \
+  for (size_t m = 0; m < SIZE; ++m) {                     \
+    mean_anomaly[m] = T(100.) * m / T(SIZE - 1) - T(50.); \
   }
 
 TEMPLATE_PRODUCT_TEST_CASE("Baseline", "[baseline][bench]", Benchmark,

@@ -6,7 +6,6 @@ add_executable(benchmark benchmark.cpp)
 target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain)
 
 if(MSVC)
-  # TODO(dfm): Add a Windows-specific compiler flags
   target_compile_options(benchmark PRIVATE /arch:AVX2)
 else()
   target_compile_options(benchmark PRIVATE -O3 -Wall -pedantic -Wextra -Werror)
@@ -17,3 +16,5 @@ else()
     target_compile_options(benchmark PRIVATE -march=native -mtune=native)
   endif()
 endif()
+
+add_executable(get_simd_size get_simd_size.cpp)
