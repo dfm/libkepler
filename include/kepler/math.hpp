@@ -56,13 +56,13 @@ template <typename T>
 inline std::pair<T, T> sincos(const T& x) {
   T s, c;
   if (x < constants::pio4<T>()) {
-    s = std::sin(x);  // detail::short_sin_eval(x);
+    s = detail::short_sin_eval(x);
     c = std::sqrt(1 - s * s);
   } else if (x > constants::threepio4<T>()) {
-    s = std::sin(constants::pi<T>() - x);  // detail::short_sin_eval(constants::pi<T>() - x);
+    s = detail::short_sin_eval(constants::pi<T>() - x);
     c = -std::sqrt(1 - s * s);
   } else {
-    c = std::sin(constants::pio2<T>() - x);  // detail::short_sin_eval(constants::pio2<T>() - x);
+    c = detail::short_sin_eval(constants::pio2<T>() - x);
     s = std::sqrt(1 - c * c);
   }
   return std::make_pair(s, c);
