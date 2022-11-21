@@ -26,10 +26,10 @@ jobs:
 
       - name: Check size
         if: ${{ matrix.os != 'windows-latest' }}
-        run: build/test/get_simd_size
+        run: build/benchmark/get_simd_size
       - name: Check size (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        run: build\test\Debug\get_simd_size.exe
+        run: build\benchmark\Debug\get_simd_size.exe
 
       - name: Benchmark
         if: ${{ matrix.os != 'windows-latest' }}

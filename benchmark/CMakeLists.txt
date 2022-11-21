@@ -4,7 +4,6 @@ check_cxx_compiler_flag(-march=native HAS_MARCH_NATIVE)
 
 add_executable(benchmark benchmark.cpp)
 target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain)
-
 if(MSVC)
   target_compile_options(benchmark PRIVATE /arch:AVX2)
 else()
