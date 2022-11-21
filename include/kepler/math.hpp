@@ -123,7 +123,7 @@ inline void sin_cos_reduc(const T& x, T& sr, T& cr) noexcept {
 namespace simd {
 template <typename B, uint64_t c0>
 inline B poly(const B& x) noexcept {
-  return B(1.) - xs::kernel::detail::coef<B, c0>() * x;
+  return B(T(1.)) - xs::kernel::detail::coef<B, c0>() * x;
 }
 
 template <typename B, uint64_t c0, uint64_t c1, uint64_t... args>
@@ -192,11 +192,11 @@ inline void sin_cos_reduc(const xs::batch<T, A>& x, xs::batch<T, A>& sr,
   auto s = simd::sin_reduc_eval(v, v2);
   auto c = simd::cos_reduc_eval(v2);
 
-  sr = xs::select(mid, u + c - B(1.), s);
-  cr = xs::select(mid, u + s + B(1. - constants::pio2<typename B::value_type>()), c);
+  sr = xs::select(mid, u + c - B(T(1.)), s);
+  cr = xs::select(mid, u + s + B(T(1.) - constants::pio2<typename B::value_type>()), c);
 
-  sr = xs::select(big, xs::fma(B(2.), x, sr) - constants::pi<B>(), sr);
-  cr = xs::select(big, B(2.) - cr, cr);
+  sr = xs::select(big, xs::fma(B(T(2.)), x, sr) - constants::pi<B>(), sr);
+  cr = xs::select(big, B(T(2.)) - cr, cr);
 }
 
 }  // namespace detail

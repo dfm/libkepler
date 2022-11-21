@@ -15,7 +15,7 @@ struct default_abs {
 
 template <>
 struct default_abs<float> {
-  constexpr static float value = 5e-5;
+  constexpr static float value = 5e-5f;
 };
 
 template <typename T>
@@ -25,7 +25,7 @@ struct default_rel {
 
 template <>
 struct default_rel<float> {
-  constexpr static float value = 5e-2;
+  constexpr static float value = 5e-2f;
 };
 
 template <typename T>

@@ -20,7 +20,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
   const typename TestType::refiner_type refiner;
   std::vector<T> mean_anomaly(anom_size), ecc_anom(anom_size), ecc_anom_simd(anom_size);
   for (size_t m = 0; m < anom_size; ++m) {
-    mean_anomaly[m] = 100. * m / T(anom_size - 1) - 50.;
+    mean_anomaly[m] = T(100.) * m / T(anom_size - 1) - T(50.);
   }
 
   for (size_t n = 0; n < ecc_size; ++n) {
@@ -32,9 +32,6 @@ TEMPLATE_PRODUCT_TEST_CASE(
         eccentricity, anom_size, mean_anomaly.data(), ecc_anom_simd.data(), refiner);
 
     for (size_t m = 0; m < anom_size; ++m) {
-      // std::cout << m << " " << eccentricity << " " << mean_anomaly[m] << " " << ecc_anom[m] << "
-      // "
-      //           << ecc_anom_simd[m] << std::endl;
       REQUIRE_THAT(ecc_anom_simd[m], WithinAbs(ecc_anom[m], abs_tol));
     }
   }
