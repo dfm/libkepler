@@ -57,3 +57,5 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_subdirectory(benchmark)
   endif()
 endif()
+
+add_subdirectory(src/kepler/metal)

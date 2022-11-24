@@ -2,6 +2,8 @@ include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag(-Wno-deprecated-copy HAS_NO_DEPRECATED_COPY)
 check_cxx_compiler_flag(-march=native HAS_MARCH_NATIVE)
 
+add_executable(get_simd_size get_simd_size.cpp)
+
 add_executable(benchmark benchmark.cpp)
 target_include_directories(benchmark PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../extern)
 target_link_libraries(benchmark PRIVATE Catch2::Catch2WithMain)
@@ -17,4 +19,8 @@ else()
   endif()
 endif()
 
-add_executable(get_simd_size get_simd_size.cpp)
+add_executable(benchmark_metal benchmark_metal.cpp)
+target_compile_options(benchmark PRIVATE -O3 -Wall -pedantic -Wextra -Werror)
+target_include_directories(benchmark_metal PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/metal-cpp)
+target_link_libraries(benchmark_metal PRIVATE Catch2::Catch2WithMain "-framework Metal" "-framework MetalKit" "-framework AppKit" "-framework Foundation" "-framework QuartzCore")
+add_dependencies(benchmark_metal kepler_metallib)
