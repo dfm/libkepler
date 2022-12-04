@@ -1,6 +1,9 @@
 #ifndef KEPLER_MATH_HPP
 #define KEPLER_MATH_HPP
 
+#include <tuple>
+#include <utility>
+
 #include "./simd.hpp"
 
 namespace kepler {
@@ -11,15 +14,15 @@ inline T fma(const T& a, const T& b, const T& c) {
   return a * b + c;
 }
 
-template <typename T>
-inline T fnma(const T& a, const T& b, const T& c) {
-  return c - a * b;
-}
-
 template <typename A, typename T>
 inline xs::batch<T, A> fma(const xs::batch<T, A>& a, const xs::batch<T, A>& b,
                            const xs::batch<T, A>& c) {
   return xs::fma(a, b, c);
+}
+
+template <typename T>
+inline T fnma(const T& a, const T& b, const T& c) {
+  return c - a * b;
 }
 
 template <typename A, typename T>
@@ -36,6 +39,18 @@ inline T horner(const T&, const T& c1) {
 template <typename T, typename... Args>
 inline T horner(const T& x, const T& c1, Args... c2) {
   return fma<T>(horner(x, c2...), x, c1);
+}
+
+namespace detail {
+template <typename T, typename Tuple, size_t... Is>
+inline T horner_impl(const T& x, const T& c1, Tuple t, std::index_sequence<Is...>) {
+  return horner(x, c1, std::get<Is>(t)...);
+}
+}  // namespace detail
+
+template <typename T, typename Tuple>
+inline T horner_impl(const T& x, const T& c1, Tuple t) {
+  return detail::horner_impl(x, c1, t, std::make_index_sequence<std::tuple_size<Tuple>{}>{});
 }
 
 namespace detail {

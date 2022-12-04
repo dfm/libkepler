@@ -19,7 +19,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
      (kepler::refiners::iterative<2, double>), (kepler::refiners::iterative<3, double>),
      (kepler::refiners::iterative<4, double>), (kepler::refiners::iterative<5, double>),
      (kepler::refiners::iterative<6, double>), (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
+     (kepler::refiners::non_iterative<4, double>, kepler::starters::markley<double>),
      (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>))) {
   using T = typename TestType::value_type;
   const size_t ecc_size = 10;
