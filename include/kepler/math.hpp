@@ -42,18 +42,6 @@ inline T horner(const T& x, const T& c1, Args... c2) {
 }
 
 namespace detail {
-template <typename T, typename Tuple, size_t... Is>
-inline T horner_impl(const T& x, const T& c1, Tuple t, std::index_sequence<Is...>) {
-  return horner(x, c1, std::get<Is>(t)...);
-}
-}  // namespace detail
-
-template <typename T, typename Tuple>
-inline T horner_impl(const T& x, const T& c1, Tuple t) {
-  return detail::horner_impl(x, c1, t, std::make_index_sequence<std::tuple_size<Tuple>{}>{});
-}
-
-namespace detail {
 
 template <typename T>
 inline T short_sin_eval(const T& x) {

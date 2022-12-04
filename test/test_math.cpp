@@ -21,8 +21,6 @@ TEMPLATE_TEST_CASE("Short sine (SIMD)", "[math][simd]", double, float) {
 
   for (std::size_t n = 0; n < size; ++n) {
     auto x = kepler::constants::pi<T>() * n / T(size - 1);
-    xs::batch<T> xr;
-    xs::kernel::detail::trigo_reducer<xs::batch<T>>::reduce(x, xr);
     auto calc = kepler::math::sincos(xs::batch<T>(x));
     REQUIRE_THAT(calc.first.get(0), WithinAbs(std::sin(x), abs_tol));
     REQUIRE_THAT(calc.second.get(0), WithinAbs(std::cos(x), abs_tol));
