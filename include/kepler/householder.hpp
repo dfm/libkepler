@@ -3,9 +3,7 @@
 
 #include <cstdint>
 
-#include "./constants.hpp"
 #include "./math.hpp"
-#include "./simd.hpp"
 
 namespace kepler {
 namespace householder {
