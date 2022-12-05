@@ -22,14 +22,14 @@ constexpr auto tuple_init(Tuple t) {
   return tuple_init_impl(t, Is{});
 }
 
-template <std::uint32_t n>
+template <std::uint64_t n>
 struct factorial {
-  constexpr static std::uint32_t value = n * factorial<n - 1>::value;
+  constexpr static std::uint64_t value = n * factorial<n - 1>::value;
 };
 
 template <>
 struct factorial<0> {
-  constexpr static std::uint32_t value = 1;
+  constexpr static std::uint64_t value = 1;
 };
 
 template <typename T, typename Tuple, size_t... Is>
@@ -69,87 +69,104 @@ inline T householder(const T& f0, Args... args) {
 }
 
 template <typename T>
-struct householder_state {
+struct state {
   T f0;
-  T sin;
-  T cos;
+  T ecc_sin;
+  T ecc_cos;
 };
+template <bool is_even>
+struct evaluate_impl {
+  template <typename T>
+  static inline T value(const state<T>& state) {
+    return state.ecc_sin;
+  }
+};
+
+template <>
+struct evaluate_impl<false> {
+  template <typename T>
+  static inline T value(const state<T>& state) {
+    return state.ecc_cos;
+  }
+};
+
+template <size_t order>
+struct evaluate {
+  static_assert(order > 0, "order must be larger than 0");
+  template <typename T>
+  static inline T get(const state<T>& s) {
+    constexpr int sign = order % 4 < 2 ? -1 : 1;
+    return T(sign) * evaluate_impl<order % 2 == 0>::value(s);
+  }
+};
+
+template <>
+struct evaluate<1> {
+  template <typename T>
+  static inline T get(const state<T>& s) {
+    return T(1.) - s.ecc_cos;
+  }
+};
+
+template <>
+struct evaluate<2> {
+  template <typename T>
+  static inline T get(const state<T>& s) {
+    return s.ecc_sin;
+  }
+};
+
+template <>
+struct evaluate<3> {
+  template <typename T>
+  static inline T get(const state<T>& s) {
+    return s.ecc_cos;
+  }
+};
+
+template <typename T, typename Seq>
+struct expander;
+
+template <typename T, std::size_t... Is>
+struct expander<T, std::index_sequence<Is...>> {
+  template <typename E, std::size_t>
+  using elem = E;
+
+  using type = std::tuple<elem<T, Is>...>;
+};
+
+template <size_t N, typename T>
+struct evaluated_tuple {
+  using type = typename expander<T, std::make_index_sequence<N>>::type;
+};
+
+template <size_t order, typename T, size_t... Is>
+inline typename evaluated_tuple<order, T>::type evaluate_into_tuple_impl(
+    const state<T>& s, std::index_sequence<Is...>) {
+  return std::make_tuple(evaluate<Is + 1>::get(s)...);
+}
+
+template <size_t order, typename T>
+inline typename evaluated_tuple<order, T>::type evaluate_into_tuple(const state<T>& s) {
+  return evaluate_into_tuple_impl<order>(s, std::make_index_sequence<order>{});
+}
 
 }  // namespace detail
 
-template <int order>
-struct householder {
-  static_assert(order > 0, "order must be positive");
-  static_assert(order <= 7, "order cannot be larger than 7");
+template <typename A, typename B>
+inline detail::state<B> init(const A& eccentricity, const B& mean_anomaly,
+                             const B& eccentric_anomaly) {
+  auto sincos = math::sincos(eccentric_anomaly);
+  auto ecc_sin = B(eccentricity) * sincos.first;
+  auto f0 = eccentric_anomaly - ecc_sin - mean_anomaly;
+  return {f0, ecc_sin, B(eccentricity) * sincos.second};
+}
 
-  template <typename T>
-  static inline detail::householder_state<T> init(const T& eccentricity, const T& mean_anomaly,
-                                                  T& eccentric_anomaly) {
-    auto sincos = math::sincos(eccentric_anomaly);
-    auto f0 = eccentric_anomaly - math::fma(eccentricity, sincos.first, mean_anomaly);
-    return detail::householder_state<T>{f0, sincos.first, sincos.second};
-  }
-
-  template <typename A, typename T>
-  static inline detail::householder_state<xs::batch<T, A>> init(
-      const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
-      xs::batch<T, A>& eccentric_anomaly) {
-    using B = xs::batch<T, A>;
-    auto sincos = math::sincos(eccentric_anomaly);
-    auto f0 = eccentric_anomaly - xs::fma(B(eccentricity), sincos.first, mean_anomaly);
-    return detail::householder_state<B>{f0, sincos.first, sincos.second};
-  }
-
-  template <typename T, typename B>
-  static inline B step(const detail::householder_state<B>& state, const T& eccentricity) {
-    auto f0 = state.f0;
-    auto s = state.sin;
-    auto c = state.cos;
-
-    auto f1 = math::fnma<B>(B(eccentricity), c, B(T(1.)));
-    KEPLER_IF_CONSTEXPR(order == 1) { return detail::householder(f0, f1); }
-
-    auto f2 = eccentricity * s;
-    KEPLER_IF_CONSTEXPR(order == 2) {
-      return detail::householder(f0, f1, f2);
-      // return detail::householder(f0, f1, constants::hh2<T>() * f2);
-    }
-
-    auto f3 = T(1.) - f1;
-    KEPLER_IF_CONSTEXPR(order == 3) {
-      return detail::householder(f0, f1, f2, f3);
-      // return detail::householder(f0, f1, constants::hh2<T>() * f2, constants::hh3<T>() * f3);
-    }
-
-    auto f4 = -f2;
-    KEPLER_IF_CONSTEXPR(order == 4) {
-      return detail::householder(f0, f1, f2, f3, f4);
-      // return detail::householder(f0, f1, constants::hh2<T>() * f2, constants::hh3<T>() * f3,
-      //                            constants::hh4<T>() * f4);
-    }
-
-    auto f5 = -f3;
-    KEPLER_IF_CONSTEXPR(order == 5) {
-      return detail::householder(f0, f1, f2, f3, f4, f5);
-      // return detail::householder(f0, f1, constants::hh2<T>() * f2, constants::hh3<T>() * f3,
-      //                            constants::hh4<T>() * f4, constants::hh5<T>() * f5);
-    }
-
-    auto f6 = -f4;
-    KEPLER_IF_CONSTEXPR(order == 6) {
-      return detail::householder(f0, f1, f2, f3, f4, f5, f6);
-      // return detail::householder(f0, f1, constants::hh2<T>() * f2, constants::hh3<T>() * f3,
-      //                            constants::hh4<T>() * f4, constants::hh5<T>() * f5,
-      //                            constants::hh6<T>() * f6);
-    }
-
-    auto f7 = -f5;
-    return detail::householder(f0, f1, f2, f3, f4, f5, f6, f7);
-    // return detail::householder(f0, f1, constants::hh2<T>() * f2, constants::hh3<T>() * f3,
-    //                            constants::hh4<T>() * f4, constants::hh5<T>() * f5,
-    //                            constants::hh6<T>() * f6, constants::hh7<T>() * f7);
-  }
-};
+template <size_t order, typename T>
+inline T step(const detail::state<T>& state) {
+  auto args = detail::evaluate_into_tuple<order>(state);
+  return detail::householder_impl(state.f0, args, std::make_index_sequence<order>{});
+}
 
 }  // namespace householder
 }  // namespace kepler
