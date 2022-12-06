@@ -4,7 +4,7 @@
 #include <tuple>
 #include <utility>
 
-#include "./simd.hpp"
+#include "simd.hpp"
 
 namespace kepler {
 namespace math {

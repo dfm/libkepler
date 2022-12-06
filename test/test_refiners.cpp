@@ -28,7 +28,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
   std::vector<T> ecc_anom_expect(anom_size), mean_anomaly(anom_size), ecc_anom_calc(anom_size);
 
   T abs_tol = tolerance<TestType>::abs;
-  KEPLER_IF_CONSTEXPR(has_tolerance<typename TestType::refiner_type>::value) {
+  if constexpr (has_tolerance<typename TestType::refiner_type>::value) {
     abs_tol = 20 * refiner.tolerance;
   }
 

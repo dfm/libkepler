@@ -30,7 +30,7 @@ endif()
 FetchContent_Declare(
   xsimd
   GIT_REPOSITORY https://github.com/xtensor-stack/xsimd.git
-  GIT_TAG        9.0.1
+  GIT_TAG        10.0.0
 )
 FetchContent_MakeAvailable(xsimd)
 include_directories(${xsimd_SOURCE_DIR}/include)
@@ -40,19 +40,21 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 # Testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   include(CTest)
+  option(BUILD_KEPLER_BENCHMARK "Build the benchmark script" OFF)
 
-  FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v3.2.0
-  )
-  FetchContent_MakeAvailable(Catch2)
+  if(BUILD_TESTING OR BUILD_KEPLER_BENCHMARK)
+    FetchContent_Declare(
+      Catch2
+      GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+      GIT_TAG        v3.2.0
+    )
+    FetchContent_MakeAvailable(Catch2)
+  endif()
 
   if(BUILD_TESTING)
     add_subdirectory(test)
   endif()
 
-  OPTION(BUILD_KEPLER_BENCHMARK "Build the benchmark script" OFF)
   if(BUILD_KEPLER_BENCHMARK)
     add_subdirectory(benchmark)
   endif()

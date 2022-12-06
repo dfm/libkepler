@@ -3,8 +3,8 @@
 
 #include <cmath>
 
-#include "./constants.hpp"
-#include "./simd.hpp"
+#include "constants.hpp"
+#include "simd.hpp"
 
 namespace kepler {
 namespace starters {

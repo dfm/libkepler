@@ -13,7 +13,7 @@
 /// ```
 ///
 /// where `ORDER` is any integer `>= 1`. To get a Newton step, use `ORDER = 1`,
-/// and `ORDER = 3` gives Halley's method.
+/// and `ORDER = 2` gives Halley's method.
 ///
 /// For iterative methods, the convergence test will generally be executed using
 /// `state.f0` which is the difference between `mean_anom` and the mean anomaly
@@ -31,7 +31,7 @@
 
 #include <cstdint>
 
-#include "./math.hpp"
+#include "math.hpp"
 
 namespace kepler {
 namespace householder {
@@ -102,6 +102,37 @@ struct evaluate<3> {
     return s.ecc_cos;
   }
 };
+
+/// The `evaluated_tuple` type is used for inferring the tuple type arguments
+/// for a set of coefficients of a given order. This implementation is based on
+/// the answer here: https://stackoverflow.com/a/66255219
+template <typename T, typename Seq>
+struct expander;
+
+template <typename T, std::size_t... Is>
+struct expander<T, std::index_sequence<Is...>> {
+  template <typename E, std::size_t>
+  using elem = E;
+  using type = std::tuple<elem<T, Is>...>;
+};
+
+template <size_t N, typename T>
+struct evaluated_tuple {
+  using type = typename expander<T, std::make_index_sequence<N>>::type;
+};
+
+/// The `evaluate_into_tuple` function is used to construct a tuple of
+/// coefficients for a given order using the `evaluate` struct from above.
+template <size_t order, typename T, size_t... Is>
+inline typename evaluated_tuple<order, T>::type evaluate_into_tuple_impl(
+    const state<T>& s, std::index_sequence<Is...>) {
+  return std::make_tuple(evaluate<Is + 1>::get(s)...);
+}
+
+template <size_t order, typename T>
+inline typename evaluated_tuple<order, T>::type evaluate_into_tuple(const state<T>& s) {
+  return evaluate_into_tuple_impl<order>(s, std::make_index_sequence<order>{});
+}
 
 /// Next we have methods for evaluating factorials at compile time, since these
 /// are used to normalize the terms in the Householder step. In practice,
@@ -176,37 +207,6 @@ inline T householder_impl(const T& f0, Tuple t, std::index_sequence<Is...>) {
 template <typename T, typename... Args>
 inline T householder(const T& f0, Args... args) {
   return householder_impl(f0, std::make_tuple(args...), std::index_sequence_for<Args...>{});
-}
-
-/// The `evaluated_tuple` type is used for inferring the tuple type arguments
-/// for a set of coefficients of a given order. This implementation is based on
-/// the answer here: https://stackoverflow.com/a/66255219
-template <typename T, typename Seq>
-struct expander;
-
-template <typename T, std::size_t... Is>
-struct expander<T, std::index_sequence<Is...>> {
-  template <typename E, std::size_t>
-  using elem = E;
-  using type = std::tuple<elem<T, Is>...>;
-};
-
-template <size_t N, typename T>
-struct evaluated_tuple {
-  using type = typename expander<T, std::make_index_sequence<N>>::type;
-};
-
-/// The `evaluate_into_tuple` function is used to construct a tuple of
-/// coefficients for a given order using the `evaluate` struct from above.
-template <size_t order, typename T, size_t... Is>
-inline typename evaluated_tuple<order, T>::type evaluate_into_tuple_impl(
-    const state<T>& s, std::index_sequence<Is...>) {
-  return std::make_tuple(evaluate<Is + 1>::get(s)...);
-}
-
-template <size_t order, typename T>
-inline typename evaluated_tuple<order, T>::type evaluate_into_tuple(const state<T>& s) {
-  return evaluate_into_tuple_impl<order>(s, std::make_index_sequence<order>{});
 }
 
 }  // namespace detail

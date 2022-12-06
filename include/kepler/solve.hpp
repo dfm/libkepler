@@ -5,10 +5,10 @@
 #include <cstddef>
 #include <type_traits>
 
-#include "./constants.hpp"
-#include "./reduction.hpp"
-#include "./refiners.hpp"
-#include "./starters.hpp"
+#include "constants.hpp"
+#include "reduction.hpp"
+#include "refiners.hpp"
+#include "starters.hpp"
 
 namespace kepler {
 

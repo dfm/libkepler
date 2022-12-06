@@ -2,6 +2,7 @@
 #define KEPLER_UTILS_HPP
 
 #include <cstring>
+
 namespace kepler {
 
 template <typename To, typename From>

@@ -1,2 +1,4 @@
-# kepler-benchmarks
-A standardized framework for benchmarking solvers for Kepler's equation
+# libkepler
+
+A tuned and hardware-accelerated C++ library for solver the elliptic Kepler's
+equation.

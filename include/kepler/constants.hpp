@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "./utils.hpp"
+#include "utils.hpp"
 
 namespace kepler {
 namespace constants {

@@ -3,10 +3,10 @@
 
 #include <cmath>
 
-#include "./constants.hpp"
-#include "./householder.hpp"
-#include "./simd.hpp"
-#include "./starters.hpp"
+#include "constants.hpp"
+#include "householder.hpp"
+#include "simd.hpp"
+#include "starters.hpp"
 
 namespace kepler {
 namespace refiners {
