@@ -30,22 +30,22 @@ struct RefBenchmark {
     mean_anomaly[m] = T(100.) * m / T(SIZE - 1) - T(50.); \
   }
 
-TEMPLATE_PRODUCT_TEST_CASE("Baseline (float)", "[bench][baseline][float]", Benchmark,
+TEMPLATE_PRODUCT_TEST_CASE("baselinef", "[bench][baseline][float]", Benchmark,
                            kepler::refiners::noop<float>) {
   const size_t num_anom = DEFAULT_NUM_DATA;
   GENERATE_TEST_DATA(num_anom);
-  BENCHMARK("Baseline (float)") {
+  BENCHMARK("e=0; n=1000") {
     for (std::size_t n = 0; n < num_anom; ++n) {
       ecc_anomaly[n] = std::sin(mean_anomaly[n]) + std::cos(mean_anomaly[n]);
     }
   };
 }
 
-TEMPLATE_PRODUCT_TEST_CASE("Baseline (double)", "[bench][baseline][double]", Benchmark,
+TEMPLATE_PRODUCT_TEST_CASE("baselined", "[bench][baseline][double]", Benchmark,
                            kepler::refiners::noop<double>) {
   const size_t num_anom = DEFAULT_NUM_DATA;
   GENERATE_TEST_DATA(num_anom);
-  BENCHMARK("Baseline (double)") {
+  BENCHMARK("e=0; n=1000") {
     for (std::size_t n = 0; n < num_anom; ++n) {
       ecc_anomaly[n] = std::sin(mean_anomaly[n]) + std::cos(mean_anomaly[n]);
     }
@@ -61,7 +61,7 @@ TEMPLATE_PRODUCT_TEST_CASE("Baseline (double)", "[bench][baseline][double]", Ben
       GENERATE_TEST_DATA(num_anom);                                                             \
       const T eccentricity = n / T(num_ecc);                                                    \
       std::ostringstream name;                                                                  \
-      name << std::setprecision(1) << NAME << ": e=" << eccentricity << "; n=" << num_anom;     \
+      name << std::setprecision(1) << ": e=" << eccentricity << "; n=" << num_anom;             \
       BENCHMARK(name.str().c_str()) {                                                           \
         return kepler::solve<typename TestType::starter_type, typename TestType::refiner_type>( \
             eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner);          \
@@ -93,22 +93,22 @@ MAIN_BENCHMARK("brandt21d", "[bench][non-iterative][brandt][double]",
 
 #undef MAIN_BENCHMARK
 
-#define SIMD_BENCHMARK(NAME, TAGS, ALGO)                                                    \
-  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, Benchmark, (ALGO)) {                               \
-    const size_t num_ecc = 5;                                                               \
-    const size_t num_anom = DEFAULT_NUM_DATA;                                               \
-    const typename TestType::refiner_type refiner;                                          \
-    for (size_t n = 0; n < num_ecc; ++n) {                                                  \
-      GENERATE_TEST_DATA(num_anom);                                                         \
-      const T eccentricity = n / T(num_ecc);                                                \
-      std::ostringstream name;                                                              \
-      name << std::setprecision(1) << NAME << ": e=" << eccentricity << "; n=" << num_anom; \
-      BENCHMARK(name.str().c_str()) {                                                       \
-        return kepler::solve_simd<typename TestType::starter_type,                          \
-                                  typename TestType::refiner_type>(                         \
-            eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner);      \
-      };                                                                                    \
-    }                                                                                       \
+#define SIMD_BENCHMARK(NAME, TAGS, ALGO)                                               \
+  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, Benchmark, (ALGO)) {                          \
+    const size_t num_ecc = 5;                                                          \
+    const size_t num_anom = DEFAULT_NUM_DATA;                                          \
+    const typename TestType::refiner_type refiner;                                     \
+    for (size_t n = 0; n < num_ecc; ++n) {                                             \
+      GENERATE_TEST_DATA(num_anom);                                                    \
+      const T eccentricity = n / T(num_ecc);                                           \
+      std::ostringstream name;                                                         \
+      name << std::setprecision(1) << ": e=" << eccentricity << "; n=" << num_anom;    \
+      BENCHMARK(name.str().c_str()) {                                                  \
+        return kepler::solve_simd<typename TestType::starter_type,                     \
+                                  typename TestType::refiner_type>(                    \
+            eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), refiner); \
+      };                                                                               \
+    }                                                                                  \
   }
 
 SIMD_BENCHMARK("iter1fv", "[bench][iterative][first-order][float][simd]",
@@ -135,24 +135,24 @@ SIMD_BENCHMARK("brandt21dv", "[bench][non-iterative][brandt][double][simd]",
 
 #undef SIMD_BENCHMARK
 
-#define REFERENCE_BENCHMARK(NAME, TAGS, ALGO)                                               \
-  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, RefBenchmark, (ALGO)) {                            \
-    const size_t num_ecc = 5;                                                               \
-    const size_t num_anom = DEFAULT_NUM_DATA;                                               \
-    typename TestType::solver_type solver;                                                  \
-    for (size_t n = 0; n < num_ecc; ++n) {                                                  \
-      GENERATE_TEST_DATA(num_anom);                                                         \
-      const T eccentricity = n / T(num_ecc);                                                \
-      std::ostringstream name;                                                              \
-      name << std::setprecision(1) << NAME << ": e=" << eccentricity << "; n=" << num_anom; \
-      BENCHMARK(name.str().c_str()) {                                                       \
-        solver.setup(eccentricity);                                                         \
-        for (std::size_t n = 0; n < num_anom; ++n) {                                        \
-          ecc_anomaly[n] = solver.solve(mean_anomaly[n]);                                   \
-        }                                                                                   \
-        return ecc_anomaly[num_anom - 1];                                                   \
-      };                                                                                    \
-    }                                                                                       \
+#define REFERENCE_BENCHMARK(NAME, TAGS, ALGO)                                       \
+  TEMPLATE_PRODUCT_TEST_CASE(NAME, TAGS, RefBenchmark, (ALGO)) {                    \
+    const size_t num_ecc = 5;                                                       \
+    const size_t num_anom = DEFAULT_NUM_DATA;                                       \
+    typename TestType::solver_type solver;                                          \
+    for (size_t n = 0; n < num_ecc; ++n) {                                          \
+      GENERATE_TEST_DATA(num_anom);                                                 \
+      const T eccentricity = n / T(num_ecc);                                        \
+      std::ostringstream name;                                                      \
+      name << std::setprecision(1) << ": e=" << eccentricity << "; n=" << num_anom; \
+      BENCHMARK(name.str().c_str()) {                                               \
+        solver.setup(eccentricity);                                                 \
+        for (std::size_t n = 0; n < num_anom; ++n) {                                \
+          ecc_anomaly[n] = solver.solve(mean_anomaly[n]);                           \
+        }                                                                           \
+        return ecc_anomaly[num_anom - 1];                                           \
+      };                                                                            \
+    }                                                                               \
   }
 
 REFERENCE_BENCHMARK("batman", "[bench][reference][batman][iterative][first-order][double]",
