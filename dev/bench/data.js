@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1670355947881,
+  "lastUpdate": 1670357973215,
   "repoUrl": "https://github.com/dfm/libkepler",
   "entries": {
     "Kepler benchmarks": [
@@ -732,6 +732,740 @@ window.BENCHMARK_DATA = {
             "name": "e = 0.800000; n = 1000",
             "value": 37.8569,
             "range": "± 1.93059",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "dfm",
+            "username": "dfm"
+          },
+          "committer": {
+            "name": "dfm",
+            "username": "dfm"
+          },
+          "id": "1518397bdbd7c91bc61e55f36cf403a484c631a4",
+          "message": "Adding report to benchmark workflow",
+          "timestamp": "2022-12-06T16:35:26Z",
+          "url": "https://github.com/dfm/libkepler/pull/4/commits/1518397bdbd7c91bc61e55f36cf403a484c631a4"
+        },
+        "date": 1670357972299,
+        "tool": "catch2",
+        "benches": [
+          {
+            "name": "Baseline (float)",
+            "value": 7.63023,
+            "range": "± 105.388",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "Baseline (double)",
+            "value": 24.3529,
+            "range": "± 210.035",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter1f: e=0; n=1000",
+            "value": 13.056,
+            "range": "± 139.999",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "iter1f: e=0.2; n=1000",
+            "value": 48.5428,
+            "range": "± 708.625",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1f: e=0.4; n=1000",
+            "value": 51.5549,
+            "range": "± 604.67",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1f: e=0.6; n=1000",
+            "value": 59.7549,
+            "range": "± 636.571",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1f: e=0.8; n=1000",
+            "value": 66.9308,
+            "range": "± 613.814",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1d: e=0; n=1000",
+            "value": 14.5716,
+            "range": "± 157.645",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "iter1d: e=0.2; n=1000",
+            "value": 79.6738,
+            "range": "± 1.00034",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1d: e=0.4; n=1000",
+            "value": 81.8298,
+            "range": "± 601.681",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1d: e=0.6; n=1000",
+            "value": 87.0597,
+            "range": "± 583.786",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter1d: e=0.8; n=1000",
+            "value": 102.55,
+            "range": "± 949.117",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3f: e=0; n=1000",
+            "value": 13.502,
+            "range": "± 142.191",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "iter3f: e=0.2; n=1000",
+            "value": 38.1699,
+            "range": "± 416.415",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3f: e=0.4; n=1000",
+            "value": 45.9149,
+            "range": "± 419.848",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3f: e=0.6; n=1000",
+            "value": 47.6449,
+            "range": "± 419.714",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3f: e=0.8; n=1000",
+            "value": 59.3328,
+            "range": "± 606.962",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3d: e=0; n=1000",
+            "value": 15.0475,
+            "range": "± 210.091",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter3d: e=0.2; n=1000",
+            "value": 76.5588,
+            "range": "± 624.447",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3d: e=0.4; n=1000",
+            "value": 77.7048,
+            "range": "± 614.039",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3d: e=0.6; n=1000",
+            "value": 78.3548,
+            "range": "± 590.433",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "iter3d: e=0.8; n=1000",
+            "value": 79.4098,
+            "range": "± 609.259",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95f: e=0; n=1000",
+            "value": 78.9268,
+            "range": "± 611.91",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95f: e=0.2; n=1000",
+            "value": 79.4878,
+            "range": "± 583.525",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95f: e=0.4; n=1000",
+            "value": 79.2688,
+            "range": "± 609.025",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95f: e=0.6; n=1000",
+            "value": 79.8398,
+            "range": "± 602.774",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95f: e=0.8; n=1000",
+            "value": 80.3697,
+            "range": "± 628.84",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95d: e=0; n=1000",
+            "value": 86.1597,
+            "range": "± 717.468",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95d: e=0.2; n=1000",
+            "value": 86.9707,
+            "range": "± 1.04727",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95d: e=0.4; n=1000",
+            "value": 86.7808,
+            "range": "± 636.004",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95d: e=0.6; n=1000",
+            "value": 86.7758,
+            "range": "± 615.985",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "markley95d: e=0.8; n=1000",
+            "value": 87.4978,
+            "range": "± 656.615",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "brandt21f: e=0; n=1000",
+            "value": 20.3505,
+            "range": "± 218.897",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21f: e=0.2; n=1000",
+            "value": 19.9904,
+            "range": "± 338.022",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21f: e=0.4; n=1000",
+            "value": 19.7564,
+            "range": "± 208.531",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21f: e=0.6; n=1000",
+            "value": 19.4739,
+            "range": "± 205.204",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21f: e=0.8; n=1000",
+            "value": 19.7609,
+            "range": "± 221.646",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21d: e=0; n=1000",
+            "value": 22.7309,
+            "range": "± 1.2266",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21d: e=0.2; n=1000",
+            "value": 22.3754,
+            "range": "± 1.25564",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21d: e=0.4; n=1000",
+            "value": 22.1699,
+            "range": "± 1.27568",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21d: e=0.6; n=1000",
+            "value": 21.8322,
+            "range": "± 1.21143",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21d: e=0.8; n=1000",
+            "value": 22.0959,
+            "range": "± 510.792",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter1fv: e=0; n=1000",
+            "value": 1.80453,
+            "range": "± 179.157",
+            "unit": "us",
+            "extra": "100 samples\n17 iterations"
+          },
+          {
+            "name": "iter1fv: e=0.2; n=1000",
+            "value": 6.46439,
+            "range": "± 492.322",
+            "unit": "us",
+            "extra": "100 samples\n5 iterations"
+          },
+          {
+            "name": "iter1fv: e=0.4; n=1000",
+            "value": 7.44373,
+            "range": "± 580.373",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "iter1fv: e=0.6; n=1000",
+            "value": 9.30999,
+            "range": "± 590.804",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "iter1fv: e=0.8; n=1000",
+            "value": 10.198,
+            "range": "± 760.491",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "iter1dv: e=0; n=1000",
+            "value": 3.75625,
+            "range": "± 391.742",
+            "unit": "us",
+            "extra": "100 samples\n8 iterations"
+          },
+          {
+            "name": "iter1dv: e=0.2; n=1000",
+            "value": 19.2504,
+            "range": "± 1.24249",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter1dv: e=0.4; n=1000",
+            "value": 19.8154,
+            "range": "± 1.33463",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter1dv: e=0.6; n=1000",
+            "value": 22.3499,
+            "range": "± 1.33205",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter1dv: e=0.8; n=1000",
+            "value": 26.5619,
+            "range": "± 1.1844",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter3fv: e=0; n=1000",
+            "value": 1.85637,
+            "range": "± 316.452",
+            "unit": "us",
+            "extra": "100 samples\n16 iterations"
+          },
+          {
+            "name": "iter3fv: e=0.2; n=1000",
+            "value": 5.60798,
+            "range": "± 469.074",
+            "unit": "us",
+            "extra": "100 samples\n6 iterations"
+          },
+          {
+            "name": "iter3fv: e=0.4; n=1000",
+            "value": 7.94748,
+            "range": "± 608.385",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "iter3fv: e=0.6; n=1000",
+            "value": 8.14273,
+            "range": "± 649.498",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "iter3fv: e=0.8; n=1000",
+            "value": 9.09272,
+            "range": "± 1.0283",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "iter3dv: e=0; n=1000",
+            "value": 3.82249,
+            "range": "± 382.679",
+            "unit": "us",
+            "extra": "100 samples\n8 iterations"
+          },
+          {
+            "name": "iter3dv: e=0.2; n=1000",
+            "value": 19.0584,
+            "range": "± 1.20281",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter3dv: e=0.4; n=1000",
+            "value": 19.3789,
+            "range": "± 1.13288",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter3dv: e=0.6; n=1000",
+            "value": 19.8544,
+            "range": "± 2.03799",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "iter3dv: e=0.8; n=1000",
+            "value": 20.7404,
+            "range": "± 1.19976",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "markley95fv: e=0; n=1000",
+            "value": 9.11772,
+            "range": "± 746.456",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "markley95fv: e=0.2; n=1000",
+            "value": 9.16097,
+            "range": "± 639.418",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "markley95fv: e=0.4; n=1000",
+            "value": 9.20566,
+            "range": "± 635.537",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "markley95fv: e=0.6; n=1000",
+            "value": 9.24341,
+            "range": "± 622.892",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "markley95fv: e=0.8; n=1000",
+            "value": 9.28922,
+            "range": "± 584.923",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "markley95dv: e=0; n=1000",
+            "value": 21.2521,
+            "range": "± 1.75585",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "markley95dv: e=0.2; n=1000",
+            "value": 21.3909,
+            "range": "± 1.13639",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "markley95dv: e=0.4; n=1000",
+            "value": 21.4859,
+            "range": "± 1.04954",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "markley95dv: e=0.6; n=1000",
+            "value": 21.5979,
+            "range": "± 1.08001",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "markley95dv: e=0.8; n=1000",
+            "value": 21.6729,
+            "range": "± 1.10099",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "brandt21fv: e=0; n=1000",
+            "value": 8.23973,
+            "range": "± 756.893",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "brandt21fv: e=0.2; n=1000",
+            "value": 7.99448,
+            "range": "± 719.146",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "brandt21fv: e=0.4; n=1000",
+            "value": 7.66423,
+            "range": "± 763.624",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "brandt21fv: e=0.6; n=1000",
+            "value": 7.51898,
+            "range": "± 777.079",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "brandt21fv: e=0.8; n=1000",
+            "value": 7.51748,
+            "range": "± 687.047",
+            "unit": "us",
+            "extra": "100 samples\n4 iterations"
+          },
+          {
+            "name": "brandt21dv: e=0; n=1000",
+            "value": 12.2453,
+            "range": "± 919.612",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "brandt21dv: e=0.2; n=1000",
+            "value": 12.258,
+            "range": "± 879.941",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "brandt21dv: e=0.4; n=1000",
+            "value": 12.2386,
+            "range": "± 913.199",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "brandt21dv: e=0.6; n=1000",
+            "value": 12.2196,
+            "range": "± 861.431",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "brandt21dv: e=0.8; n=1000",
+            "value": 12.1876,
+            "range": "± 950.665",
+            "unit": "us",
+            "extra": "100 samples\n3 iterations"
+          },
+          {
+            "name": "batman: e=0; n=1000",
+            "value": 26.5505,
+            "range": "± 306.138",
+            "unit": "us",
+            "extra": "100 samples\n2 iterations"
+          },
+          {
+            "name": "batman: e=0.2; n=1000",
+            "value": 154.789,
+            "range": "± 911.28",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "batman: e=0.4; n=1000",
+            "value": 168.441,
+            "range": "± 999.338",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "batman: e=0.6; n=1000",
+            "value": 195.693,
+            "range": "± 944.558",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "batman: e=0.8; n=1000",
+            "value": 219.529,
+            "range": "± 1.08852",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "radvel: e=0; n=1000",
+            "value": 62.7969,
+            "range": "± 668.809",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "radvel: e=0.2; n=1000",
+            "value": 220.133,
+            "range": "± 912.393",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "radvel: e=0.4; n=1000",
+            "value": 221.548,
+            "range": "± 1.05849",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "radvel: e=0.6; n=1000",
+            "value": 221.826,
+            "range": "± 944.259",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "radvel: e=0.8; n=1000",
+            "value": 223.734,
+            "range": "± 1.13181",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour8: e=0; n=1000",
+            "value": 1.44133,
+            "range": "± 19.0472",
+            "unit": "us",
+            "extra": "100 samples\n21 iterations"
+          },
+          {
+            "name": "contour8: e=0.2; n=1000",
+            "value": 34.6219,
+            "range": "± 435.099",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour8: e=0.4; n=1000",
+            "value": 34.6279,
+            "range": "± 445.688",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour8: e=0.6; n=1000",
+            "value": 34.6869,
+            "range": "± 455.064",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour8: e=0.8; n=1000",
+            "value": 34.4099,
+            "range": "± 68.9593",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour16: e=0; n=1000",
+            "value": 2.21207,
+            "range": "± 43.3258",
+            "unit": "us",
+            "extra": "100 samples\n14 iterations"
+          },
+          {
+            "name": "contour16: e=0.2; n=1000",
+            "value": 40.6369,
+            "range": "± 2.26118",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour16: e=0.4; n=1000",
+            "value": 40.669,
+            "range": "± 2.56486",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour16: e=0.6; n=1000",
+            "value": 40.755,
+            "range": "± 2.53058",
+            "unit": "us",
+            "extra": "100 samples\n1 iterations"
+          },
+          {
+            "name": "contour16: e=0.8; n=1000",
+            "value": 41.0689,
+            "range": "± 2.39764",
             "unit": "us",
             "extra": "100 samples\n1 iterations"
           }
