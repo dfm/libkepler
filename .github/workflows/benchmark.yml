@@ -42,16 +42,17 @@ jobs:
       - name: Download the previous benchmark results
         run: git clone --branch gh-pages $REPO_URL benchmark-results
         env:
-          REPO_URL: ${github.repositoryUrl}
+          REPO_URL: ${{ github.repositoryUrl }}
 
       - name: Collect the results
         run: |
           python tools/benchmark_results/collect.py \
             --input-file benchmark.xml \
-            --output-file benchmark-results//data.json \
-            --identifier ${github.sha}
+            --output-file benchmark-results/$REF/data.json \
+            --identifier $IDENTIFIER
         env:
-          GITHUB_REF: ${{github.ref}}
+          REF: ${{ github.ref }}
+          IDENTIFIER: ${{ github.sha }}
 
       - name: Commit the results
         run: |
