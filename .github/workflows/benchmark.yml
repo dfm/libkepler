@@ -23,6 +23,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Download the previous benchmark results
+        run: git clone --branch gh-pages https://github.com/$REPO.git benchmark-results
+        env:
+          REPO: ${{ github.repository }}
+
       - name: Compile
         run: |
           cmake -B build -DKEPLER_BUILD_BENCHMARK=ON -DBUILD_TESTING=OFF .
@@ -33,16 +44,6 @@ jobs:
 
       - name: Benchmark
         run: build/benchmark/benchmark "[baseline]" --reporter=xml::out=benchmark.xml
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Download the previous benchmark results
-        run: git clone --branch gh-pages $REPO_URL benchmark-results
-        env:
-          REPO_URL: ${{ github.repositoryUrl }}
 
       - name: Collect the results
         run: |
