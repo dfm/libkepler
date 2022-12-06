@@ -19,21 +19,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Download the previous benchmark results
+        run: git clone --branch gh-pages $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git benchmark-results
+
       - name: Compile
         run: |
           cmake -B build -DKEPLER_BUILD_BENCHMARK=ON -DBUILD_TESTING=OFF .
           cmake --build build --parallel 2
 
-      - name: Check size
-        if: ${{ matrix.os != 'windows-latest' }}
+      - name: Check SIMD size
         run: build/benchmark/get_simd_size
-      - name: Check size (Windows)
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: build\benchmark\Debug\get_simd_size.exe
 
       - name: Benchmark
-        if: ${{ matrix.os != 'windows-latest' }}
-        run: build/benchmark/benchmark
-      - name: Benchmark (Windows)
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: build\benchmark\Debug\benchmark.exe
+        run: build/benchmark/benchmark --reporter=xml::out=benchmark.xml
+
+      - name: Collect the results
+        run: |
+          python tools/benchmark_results/collect.py \
+            --input-file benchmark.xml \
+            --output-file benchmark-results/$GITHUB_REF/data.json \
+            --identifier $GITHUB_SHA
+
+      - name: Commit the results
+        if: github.event_name == 'push'
+        run: |
+          cd benchmark-results
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git add .
+          git commit -m "Update benchmark results"
+          git push

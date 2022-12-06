@@ -64,7 +64,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
   const T abs_tol = tolerance<TestType>::abs;
   const size_t ecc_size = 10;
   const size_t anom_size = 100 * simd_size;
-  alignas(xs::batch<T>::arch_type::alignment()) std::array<T, simd_size> ecc_anom, mean_anom;
+  alignas(B::arch_type::alignment()) std::array<T, simd_size> ecc_anom, mean_anom;
 
   const typename TestType::refiner_type refiner;
   std::vector<T> ecc_anom_expect(anom_size), mean_anomaly(anom_size), ecc_anom_calc(anom_size);

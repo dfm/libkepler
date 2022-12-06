@@ -6,3 +6,7 @@ Testing
 # Other files
 results
 *.ipynb
+
+# Benchmarking outputs
+*.json
+*.xml

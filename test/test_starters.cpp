@@ -69,7 +69,7 @@ TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[starters][simd]",
   const T abs_tol = default_abs<T>::value;
   const size_t ecc_size = 10;
   const size_t anom_size = 100 * simd_size;
-  alignas(xs::batch<T>::arch_type::alignment()) std::array<T, simd_size> ecc_anom, mean_anom;
+  alignas(B::arch_type::alignment()) std::array<T, simd_size> ecc_anom, mean_anom;
 
   for (size_t n = 0; n < ecc_size; ++n) {
     const T eccentricity = n / T(ecc_size);

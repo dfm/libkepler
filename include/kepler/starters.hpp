@@ -265,8 +265,8 @@ struct raposo_pulido_brandt {
 
     // We fall back on the serial algorithm for the lookup table because it
     // seems to be slower to use a vectorized version.
-    std::array<typename I::value_type, I::size> idx;
-    std::array<typename B::value_type, B::size> val;
+    alignas(A::alignment()) std::array<typename I::value_type, I::size> idx;
+    alignas(A::alignment()) std::array<typename B::value_type, B::size> val;
     mean_anomaly.store_aligned(val.data());
     for (size_t n = 0; n < I::size; ++n) {
       auto v = val[n];
@@ -295,8 +295,8 @@ struct raposo_pulido_brandt {
   template <typename A>
   inline xs::batch<T, A> start(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
-    auto flag =
-        (B(eccentricity) < B(T(0.78))) | (xs::fma(B(T(2.)), mean_anomaly, B(ome)) > B(T(0.2)));
+    auto flag = (typename B::batch_bool_type(eccentricity < T(0.78))) |
+                (xs::fma(B(T(2.)), mean_anomaly, B(ome)) > B(T(0.2)));
     auto fastpath = lookup(mean_anomaly);
     if (xs::all(flag)) return fastpath;
     return xs::select(flag, fastpath, singular(mean_anomaly));
