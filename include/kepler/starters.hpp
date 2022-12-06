@@ -265,8 +265,8 @@ struct raposo_pulido_brandt {
 
     // We fall back on the serial algorithm for the lookup table because it
     // seems to be slower to use a vectorized version.
-    std::array<typename I::value_type, I::size> idx;
-    std::array<typename B::value_type, B::size> val;
+    alignas(A::alignment()) std::array<typename I::value_type, I::size> idx;
+    alignas(A::alignment()) std::array<typename B::value_type, B::size> val;
     mean_anomaly.store_aligned(val.data());
     for (size_t n = 0; n < I::size; ++n) {
       auto v = val[n];
