@@ -8,6 +8,10 @@ on:
       - "*"
   pull_request:
 
+permissions:
+  contents: write
+  deployments: write
+
 jobs:
   test:
     name: Benchmark on ${{ matrix.os }}
@@ -33,7 +37,20 @@ jobs:
 
       - name: Benchmark
         if: ${{ matrix.os != 'windows-latest' }}
-        run: build/benchmark/benchmark
+        run: build/benchmark/benchmark | tee benchmark.txt
       - name: Benchmark (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: build\benchmark\Debug\benchmark.exe
+
+      - name: Save benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: Kepler benchmarks
+          tool: "catch2"
+          output-file-path: benchmark.txt
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          alert-threshold: "200%"
+          comment-on-alert: true
+          fail-on-alert: true
+          alert-comment-cc-users: "@dfm"
