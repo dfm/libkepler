@@ -9,7 +9,7 @@ from remez import polynomial_approximation
 
 def approximate(name, target_func, transform, domain, max_order=10, tol=5e-15):
     for order in range(3, max_order + 1):
-        err, coeffs = polynomial_approximation(
+        err, _, coeffs = polynomial_approximation(
             target_func, *transform(domain), order, tol=tol
         )
         if err < tol:

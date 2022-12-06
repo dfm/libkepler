@@ -40,9 +40,9 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 # Testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   include(CTest)
-  option(BUILD_KEPLER_BENCHMARK "Build the benchmark script" OFF)
+  option(KEPLER_BUILD_BENCHMARK "Build the benchmark script" OFF)
 
-  if(BUILD_TESTING OR BUILD_KEPLER_BENCHMARK)
+  if(BUILD_TESTING OR KEPLER_BUILD_BENCHMARK)
     FetchContent_Declare(
       Catch2
       GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -55,7 +55,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_subdirectory(test)
   endif()
 
-  if(BUILD_KEPLER_BENCHMARK)
+  if(KEPLER_BUILD_BENCHMARK)
     add_subdirectory(benchmark)
   endif()
 endif()

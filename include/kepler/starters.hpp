@@ -253,30 +253,35 @@ struct raposo_pulido_brandt {
       if (mean_anomaly > bounds[j]) break;
     auto k = 6 * j;
     auto dx = mean_anomaly - bounds[j];
-    return table[k] + dx * (table[k + 1] +
-                            dx * (table[k + 2] +
-                                  dx * (table[k + 3] + dx * (table[k + 4] + dx * table[k + 5]))));
+    return math::horner(dx, table[k], table[k + 1], table[k + 2], table[k + 3], table[k + 4],
+                        table[k + 5]);
   }
 
   template <typename A>
   inline xs::batch<T, A> lookup(const xs::batch<T, A>& mean_anomaly) const {
     using B = xs::batch<T, A>;
-    xs::batch_bool<T, A> mask(true);
-    B ecc_anom = mean_anomaly;
-    for (int j = 11; j >= 0; --j) {
-      auto k = 6 * j;
-      auto dx = mean_anomaly - B(bounds[j]);
-      auto m = dx >= B(T(0.));
-      auto y = xs::fma(xs::fma(xs::fma(xs::fma(xs::fma(B(table[k + 5]), dx, B(table[k + 4])), dx,
-                                               B(table[k + 3])),
-                                       dx, B(table[k + 2])),
-                               dx, B(table[k + 1])),
-                       dx, B(table[k]));
-      ecc_anom = xs::select(m & mask, y, ecc_anom);
-      mask = mask & !m;
-      if (!xs::any(mask)) break;
+    using I = typename xs::as_integer_t<B>;
+    static_assert(B::size == I::size, "integer batch size must match float batch size");
+
+    // We fall back on the serial algorithm for the lookup table because it
+    // seems to be slower to use a vectorized version.
+    std::array<typename I::value_type, I::size> idx;
+    std::array<typename B::value_type, B::size> val;
+    mean_anomaly.store_aligned(val.data());
+    for (size_t n = 0; n < I::size; ++n) {
+      auto v = val[n];
+      typename I::value_type j = 0;
+      for (j = 11; j > 0; --j)
+        if (v > bounds[j]) break;
+      idx[n] = j;
     }
-    return ecc_anom;
+
+    // Now back to vectorized code
+    auto j = xs::load_aligned(idx.data());
+    auto k = I(6) * j;
+    auto dx = mean_anomaly - B::gather(bounds, j);
+    return math::horner(dx, B::gather(table, k), B::gather(table, k + 1), B::gather(table, k + 2),
+                        B::gather(table, k + 3), B::gather(table, k + 4), B::gather(table, k + 5));
   }
 
   inline T start(const T& mean_anomaly) const {
@@ -292,7 +297,9 @@ struct raposo_pulido_brandt {
     using B = xs::batch<T, A>;
     auto flag =
         (B(eccentricity) < B(T(0.78))) | (xs::fma(B(T(2.)), mean_anomaly, B(ome)) > B(T(0.2)));
-    return xs::select(flag, lookup(mean_anomaly), singular(mean_anomaly));
+    auto fastpath = lookup(mean_anomaly);
+    if (xs::all(flag)) return fastpath;
+    return xs::select(flag, fastpath, singular(mean_anomaly));
   }
 };
 

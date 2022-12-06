@@ -4,17 +4,19 @@ from scipy.optimize import minimize_scalar, brentq
 
 
 def polynomial_approximation(
-    scalar_func, min_x, max_x, poly_order, maxiter=100, tol=5e-13
+    scalar_func, min_x, max_x, poly_order, maxiter=100, tol=5e-13, init_points=None
 ):
-    maxerr, points, coeffs = init_chebyshev(scalar_func, poly_order, (min_x, max_x))
-    if maxerr < tol:
-        return maxerr, coeffs
-    for i in range(maxiter):
-        maxerr, new_points, coeffs = iter_remez(scalar_func, points, (min_x, max_x))
+    if init_points is None:
+        maxerr, points, coeffs = init_chebyshev(scalar_func, poly_order, (min_x, max_x))
         if maxerr < tol:
             return maxerr, coeffs
-        points = new_points
-    return maxerr, coeffs
+    else:
+        points = init_points
+    for i in range(maxiter):
+        maxerr, points, coeffs = iter_remez(scalar_func, points, (min_x, max_x))
+        if maxerr < tol:
+            break
+    return maxerr, points, coeffs
 
 
 def init_chebyshev(func, order, domain):
