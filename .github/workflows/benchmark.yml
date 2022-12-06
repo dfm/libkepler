@@ -37,7 +37,7 @@ jobs:
         run: build/benchmark/get_simd_size
 
       - name: Benchmark
-        run: build/benchmark/benchmark "[baseline]" --reporter=xml::out=benchmark.xml
+        run: build/benchmark/benchmark --reporter=xml::out=benchmark.xml
 
       - name: Collect the results
         run: |
