@@ -51,7 +51,7 @@ jobs:
           python -m pip install pandas altair
           python tools/benchmark_results/summarize.py \
             --input-file benchmark-results/$GITHUB_REF/data.json \
-            --input-file benchmark-results/$GITHUB_REF/plot.html
+            --output-file benchmark-results/$GITHUB_REF/plot.html
 
       - name: Commit the results
         if: github.event_name == 'push'
