@@ -10,3 +10,4 @@ results
 # Benchmarking outputs
 *.json
 *.xml
+*.html
