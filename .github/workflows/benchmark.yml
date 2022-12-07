@@ -62,5 +62,5 @@ jobs:
           git add .
           git commit -m "Update benchmark results"
           git push https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY gh-pages
-        secrets:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
