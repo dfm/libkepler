@@ -59,7 +59,7 @@ TEMPLATE_PRODUCT_TEST_CASE("baselined", "[bench][baseline][double]", Benchmark,
     const typename TestType::refiner_type refiner;                                              \
     for (size_t n = 0; n < num_ecc; ++n) {                                                      \
       GENERATE_TEST_DATA(num_anom);                                                             \
-      const T eccentricity = n / T(num_ecc);                                                    \
+      const T eccentricity = (T(n) + T(0.5)) / T(num_ecc);                                      \
       std::ostringstream name;                                                                  \
       name << std::setprecision(1) << "e=" << eccentricity << "; n=" << num_anom;               \
       BENCHMARK(name.str().c_str()) {                                                           \
@@ -100,7 +100,7 @@ MAIN_BENCHMARK("brandt21d", "[bench][non-iterative][brandt][double]",
     const typename TestType::refiner_type refiner;                                     \
     for (size_t n = 0; n < num_ecc; ++n) {                                             \
       GENERATE_TEST_DATA(num_anom);                                                    \
-      const T eccentricity = n / T(num_ecc);                                           \
+      const T eccentricity = (T(n) + T(0.5)) / T(num_ecc);                             \
       std::ostringstream name;                                                         \
       name << std::setprecision(1) << "e=" << eccentricity << "; n=" << num_anom;      \
       BENCHMARK(name.str().c_str()) {                                                  \
@@ -142,7 +142,7 @@ SIMD_BENCHMARK("brandt21dv", "[bench][non-iterative][brandt][double][simd]",
     typename TestType::solver_type solver;                                        \
     for (size_t n = 0; n < num_ecc; ++n) {                                        \
       GENERATE_TEST_DATA(num_anom);                                               \
-      const T eccentricity = n / T(num_ecc);                                      \
+      const T eccentricity = (T(n) + T(0.5)) / T(num_ecc);                        \
       std::ostringstream name;                                                    \
       name << std::setprecision(1) << "e=" << eccentricity << "; n=" << num_anom; \
       BENCHMARK(name.str().c_str()) {                                             \
@@ -155,13 +155,15 @@ SIMD_BENCHMARK("brandt21dv", "[bench][non-iterative][brandt][double][simd]",
     }                                                                             \
   }
 
-REFERENCE_BENCHMARK("batman", "[bench][reference][batman][iterative][first-order][double]",
+REFERENCE_BENCHMARK("ref:batman", "[bench][reference][batman][iterative][first-order][double]",
                     kepler::reference::batman)
-REFERENCE_BENCHMARK("radvel", "[bench][reference][radvel][iterative][third-order][double]",
+REFERENCE_BENCHMARK("ref:radvel", "[bench][reference][radvel][iterative][third-order][double]",
                     kepler::reference::radvel)
-REFERENCE_BENCHMARK("contour8", "[bench][reference][non-iterative][contour][contour-8][double]",
+REFERENCE_BENCHMARK("ref:contour8",
+                    "[bench][reference][non-iterative][contour][contour-8][double]",
                     kepler::reference::contour<8>)
-REFERENCE_BENCHMARK("contour16", "[bench][reference][non-iterative][contour][contour-16][double]",
+REFERENCE_BENCHMARK("ref:contour16",
+                    "[bench][reference][non-iterative][contour][contour-16][double]",
                     kepler::reference::contour<16>)
 
 #undef REFERENCE_BENCHMARK
