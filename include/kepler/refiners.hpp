@@ -163,7 +163,7 @@ struct refine_with_eccentricity : detail::_refiner<typename R::value_type> {
     *sin_eccentric_anomaly = sincos.first;
     *cos_eccentric_anomaly = sincos.second;
     return ecc_anom;
-  };
+  }
 };
 
 template <typename T>
