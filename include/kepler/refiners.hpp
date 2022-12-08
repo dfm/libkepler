@@ -79,27 +79,33 @@ struct iterative {
 namespace detail {
 
 template <int order, typename T, typename B>
-struct _non_iterative {
-  static inline B step(const T& eccentricity, const B& mean_anomaly,
-                       const B& initial_eccentric_anomaly) {
-    auto state = householder::init(eccentricity, mean_anomaly, initial_eccentric_anomaly);
-    return initial_eccentric_anomaly + householder::step<order>(state);
-  }
+static inline B _non_iterative_step(const T& eccentricity, const B& mean_anomaly,
+                                    const B& initial_eccentric_anomaly) {
+  auto state = householder::init(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+  return initial_eccentric_anomaly + householder::step<order>(state);
+}
 
-  template <size_t num>
+template <size_t level>
+struct _level {};
+
+template <size_t level>
+struct _non_iterative {
+  template <int order, typename T, typename B>
   static inline B refine(const T& eccentricity, const B& mean_anomaly,
                          const B& initial_eccentric_anomaly) {
     B eccentric_anomaly =
-        _non_iterative<order, T, B>::step(eccentricity, mean_anomaly, initial_eccentric_anomaly);
-    return _non_iterative<order, T, B>::template refine<num - 1>(eccentricity, mean_anomaly,
-                                                                 eccentric_anomaly);
+        _non_iterative_step<order, T, B>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    return _non_iterative<level - 1>::template refine<order, T, B>(eccentricity, mean_anomaly,
+                                                                   eccentric_anomaly);
   }
+};
 
-  template <>
-  static inline B refine<1>(const T& eccentricity, const B& mean_anomaly,
-                            const B& initial_eccentric_anomaly) {
-    return _non_iterative<order, T, B>::step(eccentricity, mean_anomaly,
-                                             initial_eccentric_anomaly);
+template <>
+struct _non_iterative<1> {
+  template <int order, typename T, typename B>
+  static inline B refine(const T& eccentricity, const B& mean_anomaly,
+                         const B& initial_eccentric_anomaly) {
+    return _non_iterative_step<order, T, B>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
   }
 };
 
@@ -112,7 +118,7 @@ struct non_iterative {
   template <typename B>
   inline B refine(const T& eccentricity, const B& mean_anomaly,
                   const B& initial_eccentric_anomaly) const {
-    return detail::_non_iterative<order, T, B>::template refine<num>(eccentricity, mean_anomaly,
+    return detail::_non_iterative<num>::template refine<order, T, B>(eccentricity, mean_anomaly,
                                                                      initial_eccentric_anomaly);
   }
 };
