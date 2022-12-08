@@ -33,8 +33,8 @@ jobs:
           cmake -B build -DKEPLER_BUILD_BENCHMARK=ON -DBUILD_TESTING=OFF .
           cmake --build build --parallel 2
 
-      - name: Check SIMD size
-        run: build/benchmark/get_simd_size
+      - name: Print specs
+        run: build/benchmark/get_specs
 
       - name: Benchmark
         run: build/benchmark/benchmark --reporter=xml::out=benchmark.xml
