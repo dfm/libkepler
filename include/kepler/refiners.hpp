@@ -76,17 +76,44 @@ struct iterative {
   }
 };
 
-template <int order, typename T>
+namespace detail {
+
+template <int order, typename T, typename B>
+struct _non_iterative {
+  static inline B step(const T& eccentricity, const B& mean_anomaly,
+                       const B& initial_eccentric_anomaly) {
+    auto state = householder::init(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    return initial_eccentric_anomaly + householder::step<order>(state);
+  }
+
+  template <size_t num>
+  static inline B refine(const T& eccentricity, const B& mean_anomaly,
+                         const B& initial_eccentric_anomaly) {
+    B eccentric_anomaly =
+        _non_iterative<order, T, B>::step(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    return _non_iterative<order, T, B>::template refine<num - 1>(eccentricity, mean_anomaly,
+                                                                 eccentric_anomaly);
+  }
+
+  template <>
+  static inline B refine<1>(const T& eccentricity, const B& mean_anomaly,
+                            const B& initial_eccentric_anomaly) {
+    return _non_iterative<order, T, B>::step(eccentricity, mean_anomaly,
+                                             initial_eccentric_anomaly);
+  }
+};
+
+}  // namespace detail
+
+template <int order, typename T, size_t num = 1>
 struct non_iterative {
   typedef T value_type;
 
   template <typename B>
   inline B refine(const T& eccentricity, const B& mean_anomaly,
                   const B& initial_eccentric_anomaly) const {
-    B eccentric_anomaly = initial_eccentric_anomaly;
-    auto state = householder::init(eccentricity, mean_anomaly, eccentric_anomaly);
-    eccentric_anomaly += householder::step<order>(state);
-    return eccentric_anomaly;
+    return detail::_non_iterative<order, T, B>::template refine<num>(eccentricity, mean_anomaly,
+                                                                     initial_eccentric_anomaly);
   }
 };
 
