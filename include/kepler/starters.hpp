@@ -253,8 +253,8 @@ struct raposo_pulido_brandt {
       if (mean_anomaly > bounds[j]) break;
     auto k = 6 * j;
     auto dx = mean_anomaly - bounds[j];
-    return math::horner(dx, table[k], table[k + 1], table[k + 2], table[k + 3], table[k + 4],
-                        table[k + 5]);
+    return math::horner_dynamic(dx, table[k], table[k + 1], table[k + 2], table[k + 3],
+                                table[k + 4], table[k + 5]);
   }
 
   template <typename A>
@@ -280,8 +280,9 @@ struct raposo_pulido_brandt {
     auto j = xs::load_aligned(idx.data());
     auto k = I(6) * j;
     auto dx = mean_anomaly - B::gather(bounds, j);
-    return math::horner(dx, B::gather(table, k), B::gather(table, k + 1), B::gather(table, k + 2),
-                        B::gather(table, k + 3), B::gather(table, k + 4), B::gather(table, k + 5));
+    return math::horner_dynamic(dx, B::gather(table, k), B::gather(table, k + 1),
+                                B::gather(table, k + 2), B::gather(table, k + 3),
+                                B::gather(table, k + 4), B::gather(table, k + 5));
   }
 
   inline T start(const T& mean_anomaly) const {

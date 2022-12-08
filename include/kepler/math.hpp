@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "simd.hpp"
+#include "utils.hpp"
 
 namespace kepler {
 namespace math {
@@ -32,24 +33,81 @@ inline xs::batch<T, A> fnma(const xs::batch<T, A>& a, const xs::batch<T, A>& b,
 }
 
 template <typename T>
-inline T horner(const T&, const T& c1) {
+inline T horner_dynamic(const T&, const T& c1) {
   return c1;
 }
 
 template <typename T, typename... Args>
-inline T horner(const T& x, const T& c1, Args... c2) {
-  return fma<T>(horner(x, c2...), x, c1);
+inline T horner_dynamic(const T& x, const T& c1, Args... c2) {
+  return fma<T>(x, horner_dynamic(x, c2...), c1);
+}
+
+namespace detail {
+
+template <std::uint64_t c>
+struct coef {
+  template <typename T>
+  static inline T value() {
+    return T(coef<c>::value<typename T::value_type>());
+  }
+
+  template <>
+  static inline float value<float>() {
+    return bit_cast<float>((uint32_t)c);
+  }
+
+  template <>
+  static inline double value<double>() {
+    return bit_cast<double>((uint64_t)c);
+  }
+};
+
+}  // namespace detail
+
+template <typename T, std::uint64_t c1>
+inline T horner_static(const T&) noexcept {
+  return detail::coef<c1>::template value<T>();
+}
+
+template <class T, std::uint64_t c1, std::uint64_t c2, std::uint64_t... args>
+inline T horner_static(const T& x) noexcept {
+  return fma<T>(x, horner_static<T, c2, args...>(x), detail::coef<c1>::template value<T>());
 }
 
 namespace detail {
 
 template <typename T>
-inline T short_sin_eval(const T& x) {
+inline T short_sin_eval(const T&);
+
+template <>
+inline float short_sin_eval<float>(const float& x) {
   auto x2 = x * x;
-  return x * horner(-x2, T(1), constants::shortsin1<T>(), constants::shortsin2<T>(),
-                    constants::shortsin3<T>(), constants::shortsin4<T>(),
-                    constants::shortsin5<T>(), constants::shortsin6<T>(),
-                    constants::shortsin7<T>());
+  return x * horner_static<float, 0x3f800000, 0x3e2aaaab, 0x3c088889, 0x39500d01, 0x3638ef1d,
+                           0x32d7322b, 0x2f309231, 0x2b573f9f>(-x2);
+}
+template <>
+inline double short_sin_eval<double>(const double& x) {
+  auto x2 = x * x;
+  return x * horner_static<double, 0x3ff0000000000000, 0x3fc5555555555555, 0x3f81111111111111,
+                           0x3f2a01a01a01a01a, 0x3ec71de3a556c734, 0x3e5ae64567f544e4,
+                           0x3de6124613a86d09, 0x3d6ae7f3e733b81f>(-x2);
+}
+
+template <typename A>
+inline xs::batch<float, A> short_sin_eval(const xs::batch<float, A>& x) {
+  using B = xs::batch<float, A>;
+  auto x2 = x * x;
+  return x * horner_static<B, 0x3f800000, 0x3e2aaaab, 0x3c088889, 0x39500d01, 0x3638ef1d,
+                           0x32d7322b, 0x2f309231, 0x2b573f9f>(-x2);
+}
+
+template <typename A>
+inline xs::batch<double, A> short_sin_eval(const xs::batch<double, A>& x) {
+  using B = xs::batch<double, A>;
+  auto x2 = x * x;
+  return x * horner_static<B, 0x3ff0000000000000, 0x3fc5555555555555, 0x3f81111111111111,
+                           0x3f2a01a01a01a01a, 0x3ec71de3a556c734, 0x3e5ae64567f544e4,
+                           0x3de6124613a86d09, 0x3d6ae7f3e733b81f>(-x2);
 }
 
 }  // namespace detail

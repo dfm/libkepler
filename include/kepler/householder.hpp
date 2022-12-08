@@ -149,11 +149,10 @@ struct factorial<0> {
 
 /// The `horner_packed` function provides an interface for evaluating a
 /// polynomial using Horner's method with support for unpacking a tuple of
-/// coefficients. This depends on the (very simple) `horner` function defined in
-/// `math.hpp`.
+/// coefficients.
 template <typename T, typename Tuple, size_t... Is>
 inline T horner_packed_impl(const T& x, Tuple t, std::index_sequence<Is...>) {
-  return math::horner(x, std::get<Is>(t)...);
+  return math::horner_dynamic(x, std::get<Is>(t)...);
 }
 
 template <typename T>
