@@ -13,13 +13,6 @@ struct has_tolerance<kepler::refiners::iterative<order, T>> {
   static const bool value = true;
 };
 
-template <>
-struct tolerance<SolveTestCase<kepler::refiners::brandt<double>,
-                               kepler::starters::raposo_pulido_brandt<double>>> {
-  constexpr static double abs = 1e-11;
-  constexpr static double rel = 5e-4;
-};
-
 TEMPLATE_PRODUCT_TEST_CASE(
     "Refiners", "[refiners]", SolveTestCase,
     ((kepler::refiners::iterative<1, float>), (kepler::refiners::iterative<1, double>),

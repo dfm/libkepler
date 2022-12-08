@@ -32,16 +32,17 @@ inline void solve_one(const typename value_type<Starter, Refiner>::type& eccentr
   T mean_anom_reduc;
   bool high = range_reduce(abs_mean_anom, mean_anom_reduc);
   auto ecc_anom_reduc = starter.start(mean_anom_reduc);
-  ecc_anom_reduc = refiner.refine(eccentricity, mean_anom_reduc, ecc_anom_reduc);
-  auto sincos = math::sincos(ecc_anom_reduc);
+  T s, c;
+  ecc_anom_reduc = refiners::refine_with_eccentricity<Refiner>::refine(
+      refiner, eccentricity, mean_anom_reduc, ecc_anom_reduc, &s, &c);
   if (high) {
     eccentric_anomaly = sgn * (constants::twopi<T>() - ecc_anom_reduc);
-    sin_eccentric_anomaly = -sgn * sincos.first;
-    cos_eccentric_anomaly = sincos.second;
+    sin_eccentric_anomaly = -sgn * s;
+    cos_eccentric_anomaly = c;
   } else {
     eccentric_anomaly = sgn * ecc_anom_reduc;
-    sin_eccentric_anomaly = sgn * sincos.first;
-    cos_eccentric_anomaly = sincos.second;
+    sin_eccentric_anomaly = sgn * s;
+    cos_eccentric_anomaly = c;
   }
 }
 
@@ -81,11 +82,12 @@ inline void solve_simd(const typename value_type<Starter, Refiner>::type& eccent
     B mean_anom_reduc;
     auto high = range_reduce(abs_mean_anom, mean_anom_reduc);
     auto ecc_anom_reduc = starter.start(mean_anom_reduc);
-    ecc_anom_reduc = refiner.refine(eccentricity, mean_anom_reduc, ecc_anom_reduc);
-    auto sincos = math::sincos(ecc_anom_reduc);
+    B s, c;
+    ecc_anom_reduc = refiners::refine_with_eccentricity<Refiner>::refine(
+        refiner, eccentricity, mean_anom_reduc, ecc_anom_reduc, &s, &c);
     auto ecc_anom = sgn * xs::select(high, constants::twopi<T>() - ecc_anom_reduc, ecc_anom_reduc);
-    auto sin_ecc_anom = sgn * sincos.first * xs::select(high, B(-1.), B(1.));
-    auto cos_ecc_anom = sincos.second;
+    auto sin_ecc_anom = sgn * s * xs::select(high, B(-1.), B(1.));
+    auto cos_ecc_anom = c;
     ecc_anom.store(&eccentric_anomaly[i], Tag());
     sin_ecc_anom.store(&sin_eccentric_anomaly[i], Tag());
     cos_ecc_anom.store(&cos_eccentric_anomaly[i], Tag());
