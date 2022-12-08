@@ -44,34 +44,49 @@ inline T horner_dynamic(const T& x, const T& c1, Args... c2) {
 
 namespace detail {
 
-template <std::uint64_t c>
-struct coef {
-  template <typename T>
-  static inline T value() {
-    return T(coef<c>::value<typename T::value_type>());
-  }
+template <typename T>
+constexpr inline T coef(std::uint64_t c) {
+  return T(coef<typename T::value_type>(c));
+}
 
-  template <>
-  static inline float value<float>() {
-    return bit_cast<float>((uint32_t)c);
-  }
+template <>
+constexpr inline float coef<float>(std::uint64_t c) {
+  return bit_cast<float>((uint32_t)c);
+}
 
-  template <>
-  static inline double value<double>() {
-    return bit_cast<double>((uint64_t)c);
-  }
-};
+template <>
+constexpr inline double coef<double>(std::uint64_t c) {
+  return bit_cast<double>((uint64_t)c);
+}
+
+// template <std::uint64_t c>
+// struct coef {
+//   template <typename T>
+//   static inline T value() {
+//     return T(coef<c>::value<typename T::value_type>());
+//   }
+
+//   template <>
+//   static inline float value<float>() {
+//     return bit_cast<float>((uint32_t)c);
+//   }
+
+//   template <>
+//   static inline double value<double>() {
+//     return bit_cast<double>((uint64_t)c);
+//   }
+// };
 
 }  // namespace detail
 
 template <typename T, std::uint64_t c1>
 inline T horner_static(const T&) noexcept {
-  return detail::coef<c1>::template value<T>();
+  return detail::coef<T>(c1);
 }
 
 template <class T, std::uint64_t c1, std::uint64_t c2, std::uint64_t... args>
 inline T horner_static(const T& x) noexcept {
-  return fma<T>(x, horner_static<T, c2, args...>(x), detail::coef<c1>::template value<T>());
+  return fma<T>(x, horner_static<T, c2, args...>(x), detail::coef<T>(c1));
 }
 
 namespace detail {
