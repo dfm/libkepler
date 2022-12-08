@@ -45,48 +45,51 @@ inline T horner_dynamic(const T& x, const T& c1, Args... c2) {
 namespace detail {
 
 template <typename T>
-constexpr inline T coef(std::uint64_t c) {
-  return T(coef<typename T::value_type>(c));
-}
+struct value_type {
+  using type = typename T::value_type;
+};
 
 template <>
-constexpr inline float coef<float>(std::uint64_t c) {
-  return bit_cast<float>((uint32_t)c);
-}
+struct value_type<float> {
+  using type = float;
+};
 
 template <>
-constexpr inline double coef<double>(std::uint64_t c) {
-  return bit_cast<double>((uint64_t)c);
+struct value_type<double> {
+  using type = double;
+};
+
+template <typename T>
+struct as_unsigned_integer_t {
+  using type = typename as_unsigned_integer_t<value_type<T>>::type;
+};
+
+template <>
+struct as_unsigned_integer_t<float> {
+  using type = std::uint32_t;
+};
+
+template <>
+struct as_unsigned_integer_t<double> {
+  using type = std::uint64_t;
+};
+
+template <typename T, std::uint64_t c>
+inline T coef() {
+  using V = typename value_type<T>::type;
+  return T(bit_cast<V>((typename as_unsigned_integer_t<V>::type)(c)));
 }
-
-// template <std::uint64_t c>
-// struct coef {
-//   template <typename T>
-//   static inline T value() {
-//     return T(coef<c>::value<typename T::value_type>());
-//   }
-
-//   template <>
-//   static inline float value<float>() {
-//     return bit_cast<float>((uint32_t)c);
-//   }
-
-//   template <>
-//   static inline double value<double>() {
-//     return bit_cast<double>((uint64_t)c);
-//   }
-// };
 
 }  // namespace detail
 
 template <typename T, std::uint64_t c1>
 inline T horner_static(const T&) noexcept {
-  return detail::coef<T>(c1);
+  return detail::coef<T, c1>();
 }
 
 template <class T, std::uint64_t c1, std::uint64_t c2, std::uint64_t... args>
 inline T horner_static(const T& x) noexcept {
-  return fma<T>(x, horner_static<T, c2, args...>(x), detail::coef<T>(c1));
+  return fma<T>(x, horner_static<T, c2, args...>(x), detail::coef<T, c1>());
 }
 
 namespace detail {
