@@ -8803,5 +8803,2940 @@
                 ]
             }
         ]
+    },
+    {
+        "identifier": "7e80004eeb75603bdcdc03c0040d61df59d894d4",
+        "results": [
+            {
+                "name": "baselinef - Benchmark<kepler::refiners::noop<float>>",
+                "tags": "[baseline][bench][float]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "33",
+                "results": [
+                    {
+                        "name": "e=0; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "4",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.046e+06",
+                        "mean": {
+                            "value": 7599.7,
+                            "lowerBound": 7586.94,
+                            "upperBound": 7649.19,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 114.973,
+                            "lowerBound": 23.5344,
+                            "upperBound": 269.078,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0756308,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 1.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "baselined - Benchmark<kepler::refiners::noop<double>>",
+                "tags": "[baseline][bench][double]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "44",
+                "results": [
+                    {
+                        "name": "e=0; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.8724e+06",
+                        "mean": {
+                            "value": 24337.6,
+                            "lowerBound": 24278.6,
+                            "upperBound": 24487.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 429.543,
+                            "lowerBound": 56.9851,
+                            "upperBound": 795.718,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.103931,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter1f - Benchmark<kepler::refiners::iterative<1, float>>",
+                "tags": "[bench][first-order][float][iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "73",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.1082e+06",
+                        "mean": {
+                            "value": 51146.7,
+                            "lowerBound": 51045.7,
+                            "upperBound": 51401.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 723.549,
+                            "lowerBound": 87.1605,
+                            "upperBound": 1316.43,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0750031,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.4229e+06",
+                        "mean": {
+                            "value": 54293.7,
+                            "lowerBound": 54233.6,
+                            "upperBound": 54544.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 556.729,
+                            "lowerBound": 79.0262,
+                            "upperBound": 1314.66,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 1.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.7792e+06",
+                        "mean": {
+                            "value": 57945.7,
+                            "lowerBound": 57834.7,
+                            "upperBound": 58191.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 802.999,
+                            "lowerBound": 410.006,
+                            "upperBound": 1311.59,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0660132,
+                            "lowMild": 6.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.0121e+06",
+                        "mean": {
+                            "value": 70048.6,
+                            "lowerBound": 69942.7,
+                            "upperBound": 70538.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 992.707,
+                            "lowerBound": 100.081,
+                            "upperBound": 2356.56,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0750208,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 5.0,
+                            "highSevere": 1.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.5201e+06",
+                        "mean": {
+                            "value": 75200.2,
+                            "lowerBound": 75028.3,
+                            "upperBound": 75793.2,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1432.62,
+                            "lowerBound": 290.653,
+                            "upperBound": 3209.83,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.122724,
+                            "lowMild": 6.0,
+                            "lowSevere": 0.0,
+                            "highMild": 3.0,
+                            "highSevere": 3.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter1d - Benchmark<kepler::refiners::iterative<1, double>>",
+                "tags": "[bench][double][first-order][iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "75",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.6363e+06",
+                        "mean": {
+                            "value": 96455.0,
+                            "lowerBound": 96309.0,
+                            "upperBound": 96786.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1079.14,
+                            "lowerBound": 602.338,
+                            "upperBound": 1718.46,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 6.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.05361e+07",
+                        "mean": {
+                            "value": 105327.0,
+                            "lowerBound": 105219.0,
+                            "upperBound": 105564.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 785.753,
+                            "lowerBound": 417.116,
+                            "upperBound": 1258.42,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.09787e+07",
+                        "mean": {
+                            "value": 109763.0,
+                            "lowerBound": 109647.0,
+                            "upperBound": 110026.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 848.678,
+                            "lowerBound": 471.359,
+                            "upperBound": 1368.49,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.15245e+07",
+                        "mean": {
+                            "value": 115297.0,
+                            "lowerBound": 115133.0,
+                            "upperBound": 115663.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1194.24,
+                            "lowerBound": 619.999,
+                            "upperBound": 1970.03,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.29082e+07",
+                        "mean": {
+                            "value": 129085.0,
+                            "lowerBound": 128948.0,
+                            "upperBound": 129366.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 959.51,
+                            "lowerBound": 554.897,
+                            "upperBound": 1511.64,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 5.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter3f - Benchmark<kepler::refiners::iterative<3, float>>",
+                "tags": "[bench][float][iterative][third-order]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "78",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.0539e+06",
+                        "mean": {
+                            "value": 40498.7,
+                            "lowerBound": 40451.7,
+                            "upperBound": 40677.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 426.143,
+                            "lowerBound": 72.0151,
+                            "upperBound": 1004.02,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 1.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.6998e+06",
+                        "mean": {
+                            "value": 47166.7,
+                            "lowerBound": 47042.7,
+                            "upperBound": 47480.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 906.231,
+                            "lowerBound": 191.176,
+                            "upperBound": 1626.68,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.122847,
+                            "lowMild": 2.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.39e+06",
+                        "mean": {
+                            "value": 53890.6,
+                            "lowerBound": 53815.6,
+                            "upperBound": 54178.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 675.573,
+                            "lowerBound": 131.173,
+                            "upperBound": 1584.65,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.015521,
+                            "lowMild": 8.0,
+                            "lowSevere": 0.0,
+                            "highMild": 6.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.9471e+06",
+                        "mean": {
+                            "value": 59550.6,
+                            "lowerBound": 59487.5,
+                            "upperBound": 59806.5,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 581.711,
+                            "lowerBound": 85.4368,
+                            "upperBound": 1373.38,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 1.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "6.9062e+06",
+                        "mean": {
+                            "value": 69281.5,
+                            "lowerBound": 69157.6,
+                            "upperBound": 69593.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 884.196,
+                            "lowerBound": 101.24,
+                            "upperBound": 1614.13,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0497821,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter3d - Benchmark<kepler::refiners::iterative<3, double>>",
+                "tags": "[bench][double][iterative][third-order]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "80",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.7626e+06",
+                        "mean": {
+                            "value": 97706.4,
+                            "lowerBound": 97555.4,
+                            "upperBound": 98058.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1112.86,
+                            "lowerBound": 553.052,
+                            "upperBound": 1928.91,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 3.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.01914e+07",
+                        "mean": {
+                            "value": 101778.0,
+                            "lowerBound": 101634.0,
+                            "upperBound": 102108.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1063.31,
+                            "lowerBound": 574.99,
+                            "upperBound": 1753.43,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.02819e+07",
+                        "mean": {
+                            "value": 102943.0,
+                            "lowerBound": 102767.0,
+                            "upperBound": 103369.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1314.45,
+                            "lowerBound": 635.77,
+                            "upperBound": 2397.26,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.050713,
+                            "lowMild": 7.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.04936e+07",
+                        "mean": {
+                            "value": 104934.0,
+                            "lowerBound": 104813.0,
+                            "upperBound": 105224.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 892.198,
+                            "lowerBound": 328.186,
+                            "upperBound": 1585.73,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.05864e+07",
+                        "mean": {
+                            "value": 105887.0,
+                            "lowerBound": 105777.0,
+                            "upperBound": 106138.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 802.305,
+                            "lowerBound": 323.213,
+                            "upperBound": 1383.58,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 5.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "markley95f - Benchmark<kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>>",
+                "tags": "[bench][float][markley][non-iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "83",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.1973e+06",
+                        "mean": {
+                            "value": 92039.7,
+                            "lowerBound": 91906.8,
+                            "upperBound": 92414.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1024.84,
+                            "lowerBound": 279.125,
+                            "upperBound": 2158.58,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.2639e+06",
+                        "mean": {
+                            "value": 92704.6,
+                            "lowerBound": 92567.7,
+                            "upperBound": 93063.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1018.6,
+                            "lowerBound": 264.224,
+                            "upperBound": 2043.12,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.2679e+06",
+                        "mean": {
+                            "value": 92692.7,
+                            "lowerBound": 92558.7,
+                            "upperBound": 93036.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 982.534,
+                            "lowerBound": 227.096,
+                            "upperBound": 1800.86,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.2557e+06",
+                        "mean": {
+                            "value": 92614.4,
+                            "lowerBound": 92510.4,
+                            "upperBound": 92881.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 776.147,
+                            "lowerBound": 196.26,
+                            "upperBound": 1433.01,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "9.2699e+06",
+                        "mean": {
+                            "value": 92663.4,
+                            "lowerBound": 92568.3,
+                            "upperBound": 92889.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 702.327,
+                            "lowerBound": 250.544,
+                            "upperBound": 1227.28,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 3.0,
+                            "highSevere": 3.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "markley95d - Benchmark<kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>>",
+                "tags": "[bench][double][markley][non-iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "85",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.09297e+07",
+                        "mean": {
+                            "value": 109391.0,
+                            "lowerBound": 109249.0,
+                            "upperBound": 109706.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1024.41,
+                            "lowerBound": 537.805,
+                            "upperBound": 1712.66,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 5.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.09985e+07",
+                        "mean": {
+                            "value": 109987.0,
+                            "lowerBound": 109843.0,
+                            "upperBound": 110347.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1050.78,
+                            "lowerBound": 167.365,
+                            "upperBound": 1946.11,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.10384e+07",
+                        "mean": {
+                            "value": 110452.0,
+                            "lowerBound": 110316.0,
+                            "upperBound": 110750.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 984.84,
+                            "lowerBound": 534.892,
+                            "upperBound": 1609.63,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.10492e+07",
+                        "mean": {
+                            "value": 110503.0,
+                            "lowerBound": 110399.0,
+                            "upperBound": 110762.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 768.432,
+                            "lowerBound": 212.275,
+                            "upperBound": 1368.79,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.10735e+07",
+                        "mean": {
+                            "value": 110809.0,
+                            "lowerBound": 110674.0,
+                            "upperBound": 111144.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 988.551,
+                            "lowerBound": 231.76,
+                            "upperBound": 1791.98,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 3.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "brandt21f - Benchmark<kepler::refiners::brandt<float>, kepler::starters::raposo_pulido_brandt<float>>",
+                "tags": "[bench][brandt][float][non-iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "88",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.9819e+06",
+                        "mean": {
+                            "value": 29862.9,
+                            "lowerBound": 29787.9,
+                            "upperBound": 30199.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 690.865,
+                            "lowerBound": 83.8292,
+                            "upperBound": 1636.87,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.161563,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.9658e+06",
+                        "mean": {
+                            "value": 29718.8,
+                            "lowerBound": 29637.9,
+                            "upperBound": 30018.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 676.749,
+                            "lowerBound": 77.6758,
+                            "upperBound": 1540.13,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.161292,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.9691e+06",
+                        "mean": {
+                            "value": 29720.8,
+                            "lowerBound": 29663.8,
+                            "upperBound": 29922.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 485.51,
+                            "lowerBound": 108.459,
+                            "upperBound": 1108.98,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0941447,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.9584e+06",
+                        "mean": {
+                            "value": 29554.8,
+                            "lowerBound": 29541.8,
+                            "upperBound": 29567.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 66.3628,
+                            "lowerBound": 57.1057,
+                            "upperBound": 79.6237,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 0.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.1126e+06",
+                        "mean": {
+                            "value": 31170.8,
+                            "lowerBound": 31089.7,
+                            "upperBound": 31489.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 695.257,
+                            "lowerBound": 78.675,
+                            "upperBound": 1597.45,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.15196,
+                            "lowMild": 0.0,
+                            "lowSevere": 18.0,
+                            "highMild": 0.0,
+                            "highSevere": 21.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "brandt21d - Benchmark<kepler::refiners::brandt<double>, kepler::starters::raposo_pulido_brandt<double>>",
+                "tags": "[bench][brandt][double][non-iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "90",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.564e+06",
+                        "mean": {
+                            "value": 35931.8,
+                            "lowerBound": 35599.9,
+                            "upperBound": 37364.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2901.51,
+                            "lowerBound": 67.6189,
+                            "upperBound": 6837.46,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.707578,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.5441e+06",
+                        "mean": {
+                            "value": 35965.8,
+                            "lowerBound": 35422.9,
+                            "upperBound": 38434.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 4927.76,
+                            "lowerBound": 65.0123,
+                            "upperBound": 11697.7,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.883407,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.5514e+06",
+                        "mean": {
+                            "value": 35819.8,
+                            "lowerBound": 35475.8,
+                            "upperBound": 37485.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 3316.66,
+                            "lowerBound": 63.8803,
+                            "upperBound": 7908.58,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.768912,
+                            "lowMild": 0.0,
+                            "lowSevere": 17.0,
+                            "highMild": 0.0,
+                            "highSevere": 16.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.5509e+06",
+                        "mean": {
+                            "value": 35691.8,
+                            "lowerBound": 35517.8,
+                            "upperBound": 36334.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1444.78,
+                            "lowerBound": 121.842,
+                            "upperBound": 3312.26,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.375496,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.706e+06",
+                        "mean": {
+                            "value": 37325.8,
+                            "lowerBound": 37052.8,
+                            "upperBound": 38104.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2124.47,
+                            "lowerBound": 577.336,
+                            "upperBound": 4482.54,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.544874,
+                            "lowMild": 0.0,
+                            "lowSevere": 24.0,
+                            "highMild": 0.0,
+                            "highSevere": 23.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter1fv - Benchmark<kepler::refiners::iterative<1, float>>",
+                "tags": "[bench][first-order][float][iterative][simd]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "114",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "4",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.1828e+06",
+                        "mean": {
+                            "value": 8011.95,
+                            "lowerBound": 7932.97,
+                            "upperBound": 8397.95,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 774.691,
+                            "lowerBound": 16.729,
+                            "upperBound": 1848.16,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.77957,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 1.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "4",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.2364e+06",
+                        "mean": {
+                            "value": 8205.45,
+                            "lowerBound": 8091.45,
+                            "upperBound": 8607.44,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 905.589,
+                            "lowerBound": 21.5973,
+                            "upperBound": 2068.25,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.821163,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "4",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.6652e+06",
+                        "mean": {
+                            "value": 9324.44,
+                            "lowerBound": 9193.44,
+                            "upperBound": 9810.69,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1127.16,
+                            "lowerBound": 257.095,
+                            "upperBound": 2596.06,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.852092,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.2781e+06",
+                        "mean": {
+                            "value": 11026.3,
+                            "lowerBound": 10921.3,
+                            "upperBound": 11488.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 923.961,
+                            "lowerBound": 22.1327,
+                            "upperBound": 2180.27,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.727815,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.5112e+06",
+                        "mean": {
+                            "value": 11807.9,
+                            "lowerBound": 11692.6,
+                            "upperBound": 12290.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1007.63,
+                            "lowerBound": 32.1119,
+                            "upperBound": 2369.63,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.73793,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter1dv - Benchmark<kepler::refiners::iterative<1, double>>",
+                "tags": "[bench][double][first-order][iterative][simd]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "116",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.5468e+06",
+                        "mean": {
+                            "value": 22900.3,
+                            "lowerBound": 22737.8,
+                            "upperBound": 23578.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1415.83,
+                            "lowerBound": 39.7812,
+                            "upperBound": 3329.44,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.585284,
+                            "lowMild": 0.0,
+                            "lowSevere": 24.0,
+                            "highMild": 0.0,
+                            "highSevere": 23.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.6248e+06",
+                        "mean": {
+                            "value": 23265.8,
+                            "lowerBound": 23106.9,
+                            "upperBound": 23918.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1374.34,
+                            "lowerBound": 34.2043,
+                            "upperBound": 3229.23,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.564936,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.9146e+06",
+                        "mean": {
+                            "value": 24744.8,
+                            "lowerBound": 24566.9,
+                            "upperBound": 25456.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1542.34,
+                            "lowerBound": 327.315,
+                            "upperBound": 3559.34,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.595035,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.315e+06",
+                        "mean": {
+                            "value": 26711.8,
+                            "lowerBound": 26557.9,
+                            "upperBound": 27370.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1375.35,
+                            "lowerBound": 157.946,
+                            "upperBound": 3212.97,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.49467,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.061e+06",
+                        "mean": {
+                            "value": 31162.8,
+                            "lowerBound": 30640.8,
+                            "upperBound": 32484.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 3765.51,
+                            "lowerBound": 811.582,
+                            "upperBound": 7485.78,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.852085,
+                            "lowMild": 0.0,
+                            "lowSevere": 21.0,
+                            "highMild": 0.0,
+                            "highSevere": 18.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter3fv - Benchmark<kepler::refiners::iterative<3, float>>",
+                "tags": "[bench][float][iterative][simd][third-order]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "119",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "4",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.9768e+06",
+                        "mean": {
+                            "value": 7582.2,
+                            "lowerBound": 7488.46,
+                            "upperBound": 8001.94,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 846.682,
+                            "lowerBound": 26.2971,
+                            "upperBound": 2003.44,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.831158,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.0564e+06",
+                        "mean": {
+                            "value": 10306.3,
+                            "lowerBound": 10199.9,
+                            "upperBound": 10743.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 924.161,
+                            "lowerBound": 32.6059,
+                            "upperBound": 2169.64,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.758479,
+                            "lowMild": 5.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.321e+06",
+                        "mean": {
+                            "value": 11228.3,
+                            "lowerBound": 11116.6,
+                            "upperBound": 11636.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 912.45,
+                            "lowerBound": 49.9273,
+                            "upperBound": 2090.44,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.717391,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.5007e+06",
+                        "mean": {
+                            "value": 11829.9,
+                            "lowerBound": 11723.6,
+                            "upperBound": 12304.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 966.617,
+                            "lowerBound": 81.1706,
+                            "upperBound": 2277.18,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.717528,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.546e+06",
+                        "mean": {
+                            "value": 11947.3,
+                            "lowerBound": 11823.2,
+                            "upperBound": 12383.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 984.396,
+                            "lowerBound": 22.6004,
+                            "upperBound": 2260.35,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.717735,
+                            "lowMild": 0.0,
+                            "lowSevere": 22.0,
+                            "highMild": 0.0,
+                            "highSevere": 16.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "iter3dv - Benchmark<kepler::refiners::iterative<3, double>>",
+                "tags": "[bench][double][iterative][simd][third-order]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "121",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.8332e+06",
+                        "mean": {
+                            "value": 24348.8,
+                            "lowerBound": 24190.3,
+                            "upperBound": 24966.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1364.12,
+                            "lowerBound": 305.532,
+                            "upperBound": 3130.32,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.534941,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.909e+06",
+                        "mean": {
+                            "value": 24709.8,
+                            "lowerBound": 24547.3,
+                            "upperBound": 25409.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1434.74,
+                            "lowerBound": 132.02,
+                            "upperBound": 3345.29,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.554942,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "4.9718e+06",
+                        "mean": {
+                            "value": 25010.3,
+                            "lowerBound": 24856.4,
+                            "upperBound": 25682.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1379.6,
+                            "lowerBound": 166.018,
+                            "upperBound": 3224.69,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.534466,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.249e+06",
+                        "mean": {
+                            "value": 26409.3,
+                            "lowerBound": 26251.8,
+                            "upperBound": 27124.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1438.11,
+                            "lowerBound": 130.514,
+                            "upperBound": 3378.41,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.524635,
+                            "lowMild": 0.0,
+                            "lowSevere": 20.0,
+                            "highMild": 0.0,
+                            "highSevere": 13.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.3132e+06",
+                        "mean": {
+                            "value": 26819.3,
+                            "lowerBound": 26553.3,
+                            "upperBound": 28011.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2432.57,
+                            "lowerBound": 32.5211,
+                            "upperBound": 5778.77,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.758739,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "markley95fv - Benchmark<kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>>",
+                "tags": "[bench][float][markley][non-iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "124",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4236e+06",
+                        "mean": {
+                            "value": 11548.9,
+                            "lowerBound": 11421.2,
+                            "upperBound": 12100.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1126.31,
+                            "lowerBound": 48.6099,
+                            "upperBound": 2648.05,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.779747,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4431e+06",
+                        "mean": {
+                            "value": 11655.3,
+                            "lowerBound": 11504.6,
+                            "upperBound": 12347.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1389.29,
+                            "lowerBound": 90.2508,
+                            "upperBound": 3285.5,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.842055,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4602e+06",
+                        "mean": {
+                            "value": 11629.3,
+                            "lowerBound": 11516.6,
+                            "upperBound": 12117.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 990.829,
+                            "lowerBound": 35.6888,
+                            "upperBound": 2333.39,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.737893,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4743e+06",
+                        "mean": {
+                            "value": 11696.3,
+                            "lowerBound": 11580.6,
+                            "upperBound": 12220.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1059.23,
+                            "lowerBound": 90.9639,
+                            "upperBound": 2499.46,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.758704,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4806e+06",
+                        "mean": {
+                            "value": 11722.3,
+                            "lowerBound": 11605.3,
+                            "upperBound": 12259.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1075.68,
+                            "lowerBound": 93.3276,
+                            "upperBound": 2540.94,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.758998,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "markley95dv - Benchmark<kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>>",
+                "tags": "[bench][double][markley][non-iterative]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "126",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.189e+06",
+                        "mean": {
+                            "value": 26084.3,
+                            "lowerBound": 25938.3,
+                            "upperBound": 26721.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1322.86,
+                            "lowerBound": 128.092,
+                            "upperBound": 3105.7,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.484812,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.233e+06",
+                        "mean": {
+                            "value": 26339.3,
+                            "lowerBound": 26180.8,
+                            "upperBound": 26969.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1319.1,
+                            "lowerBound": 54.8055,
+                            "upperBound": 3054.97,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.484425,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 6.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.2634e+06",
+                        "mean": {
+                            "value": 26618.3,
+                            "lowerBound": 26365.8,
+                            "upperBound": 27781.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2352.96,
+                            "lowerBound": 195.086,
+                            "upperBound": 5578.44,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.74845,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.3054e+06",
+                        "mean": {
+                            "value": 26660.3,
+                            "lowerBound": 26497.3,
+                            "upperBound": 27374.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1467.73,
+                            "lowerBound": 53.6419,
+                            "upperBound": 3467.77,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.534405,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "5.326e+06",
+                        "mean": {
+                            "value": 26794.3,
+                            "lowerBound": 26651.8,
+                            "upperBound": 27394.8,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1223.1,
+                            "lowerBound": 39.7612,
+                            "upperBound": 2863.57,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.434815,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "brandt21fv - Benchmark<kepler::refiners::brandt<float>, kepler::starters::raposo_pulido_brandt<float>>",
+                "tags": "[bench][brandt][float][non-iterative][simd]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "129",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.1371e+06",
+                        "mean": {
+                            "value": 10628.3,
+                            "lowerBound": 10479.3,
+                            "upperBound": 11310.9,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1386.24,
+                            "lowerBound": 61.4962,
+                            "upperBound": 3289.48,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.872887,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.1002e+06",
+                        "mean": {
+                            "value": 10516.9,
+                            "lowerBound": 10347.3,
+                            "upperBound": 11268.3,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1536.63,
+                            "lowerBound": 224.877,
+                            "upperBound": 3618.03,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.894072,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.0621e+06",
+                        "mean": {
+                            "value": 10311.3,
+                            "lowerBound": 10228.9,
+                            "upperBound": 10551.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 623.329,
+                            "lowerBound": 51.783,
+                            "upperBound": 1332.44,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.575116,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.0198e+06",
+                        "mean": {
+                            "value": 10204.6,
+                            "lowerBound": 10080.3,
+                            "upperBound": 10758.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1117.36,
+                            "lowerBound": 70.9733,
+                            "upperBound": 2625.85,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.821022,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "3",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.6591e+06",
+                        "mean": {
+                            "value": 12346.9,
+                            "lowerBound": 12185.6,
+                            "upperBound": 13086.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1486.86,
+                            "lowerBound": 52.3521,
+                            "upperBound": 3525.89,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.852031,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "brandt21dv - Benchmark<kepler::refiners::brandt<double>, kepler::starters::raposo_pulido_brandt<double>>",
+                "tags": "[bench][brandt][double][non-iterative][simd]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "131",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.3962e+06",
+                        "mean": {
+                            "value": 17233.4,
+                            "lowerBound": 16991.9,
+                            "upperBound": 18170.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2009.2,
+                            "lowerBound": 43.2228,
+                            "upperBound": 4679.08,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.841695,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4212e+06",
+                        "mean": {
+                            "value": 17249.9,
+                            "lowerBound": 17067.9,
+                            "upperBound": 18048.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1612.51,
+                            "lowerBound": 44.5004,
+                            "upperBound": 3807.73,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.769121,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 3.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4482e+06",
+                        "mean": {
+                            "value": 17411.4,
+                            "lowerBound": 17202.9,
+                            "upperBound": 18323.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1843.57,
+                            "lowerBound": 33.1727,
+                            "upperBound": 4357.41,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.810629,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.4676e+06",
+                        "mean": {
+                            "value": 17493.4,
+                            "lowerBound": 17297.4,
+                            "upperBound": 18304.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1694.09,
+                            "lowerBound": 43.3694,
+                            "upperBound": 3977.23,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.779602,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "2",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "3.93e+06",
+                        "mean": {
+                            "value": 19843.9,
+                            "lowerBound": 19639.9,
+                            "upperBound": 20670.4,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1744.31,
+                            "lowerBound": 40.5713,
+                            "upperBound": 4091.0,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.74832,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "ref:batman - RefBenchmark<kepler::reference::batman>",
+                "tags": "[batman][bench][double][first-order][iterative][reference]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "159",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.52017e+07",
+                        "mean": {
+                            "value": 151974.0,
+                            "lowerBound": 151815.0,
+                            "upperBound": 152276.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1080.32,
+                            "lowerBound": 616.378,
+                            "upperBound": 1619.22,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "1.9001e+07",
+                        "mean": {
+                            "value": 190078.0,
+                            "lowerBound": 189846.0,
+                            "upperBound": 190611.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1693.63,
+                            "lowerBound": 906.471,
+                            "upperBound": 3332.75,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 4.0,
+                            "highSevere": 7.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.11386e+07",
+                        "mean": {
+                            "value": 211422.0,
+                            "lowerBound": 211228.0,
+                            "upperBound": 211786.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1323.0,
+                            "lowerBound": 828.035,
+                            "upperBound": 2070.32,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 7.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.28365e+07",
+                        "mean": {
+                            "value": 228560.0,
+                            "lowerBound": 228344.0,
+                            "upperBound": 228945.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1423.4,
+                            "lowerBound": 948.505,
+                            "upperBound": 2114.74,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 8.0,
+                            "highSevere": 8.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.60671e+07",
+                        "mean": {
+                            "value": 260330.0,
+                            "lowerBound": 260081.0,
+                            "upperBound": 260736.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1588.05,
+                            "lowerBound": 1087.17,
+                            "upperBound": 2173.54,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 8.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "ref:radvel - RefBenchmark<kepler::reference::radvel>",
+                "tags": "[bench][double][iterative][radvel][reference][third-order]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "161",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.41144e+07",
+                        "mean": {
+                            "value": 241326.0,
+                            "lowerBound": 241064.0,
+                            "upperBound": 241756.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1680.56,
+                            "lowerBound": 1125.26,
+                            "upperBound": 2341.34,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 7.0,
+                            "highSevere": 8.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.47866e+07",
+                        "mean": {
+                            "value": 247850.0,
+                            "lowerBound": 247630.0,
+                            "upperBound": 248190.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1371.27,
+                            "lowerBound": 977.494,
+                            "upperBound": 1814.05,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 11.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.48178e+07",
+                        "mean": {
+                            "value": 248343.0,
+                            "lowerBound": 248076.0,
+                            "upperBound": 248847.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1803.67,
+                            "lowerBound": 1159.99,
+                            "upperBound": 3015.68,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 9.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.50317e+07",
+                        "mean": {
+                            "value": 250586.0,
+                            "lowerBound": 250295.0,
+                            "upperBound": 251200.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2054.85,
+                            "lowerBound": 1152.78,
+                            "upperBound": 3666.19,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 3.0,
+                            "highSevere": 6.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "2.51448e+07",
+                        "mean": {
+                            "value": 251227.0,
+                            "lowerBound": 251019.0,
+                            "upperBound": 251575.0,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 1343.0,
+                            "lowerBound": 890.467,
+                            "upperBound": 1894.18,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 8.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "ref:contour8 - RefBenchmark<kepler::reference::contour<8>>",
+                "tags": "[bench][contour][contour-8][double][non-iterative][reference]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "163",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "6.9582e+06",
+                        "mean": {
+                            "value": 69615.7,
+                            "lowerBound": 69488.7,
+                            "upperBound": 69943.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 927.174,
+                            "lowerBound": 86.657,
+                            "upperBound": 1887.35,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0656837,
+                            "lowMild": 2.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "6.9789e+06",
+                        "mean": {
+                            "value": 69742.6,
+                            "lowerBound": 69684.6,
+                            "upperBound": 69941.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 481.777,
+                            "lowerBound": 114.709,
+                            "upperBound": 1077.93,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "6.97e+06",
+                        "mean": {
+                            "value": 69756.6,
+                            "lowerBound": 69653.6,
+                            "upperBound": 70015.5,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 740.912,
+                            "lowerBound": 101.635,
+                            "upperBound": 1358.72,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 2.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "6.9867e+06",
+                        "mean": {
+                            "value": 69840.6,
+                            "lowerBound": 69768.6,
+                            "upperBound": 70084.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 592.286,
+                            "lowerBound": 106.791,
+                            "upperBound": 1324.54,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0099,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 2.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "6.9888e+06",
+                        "mean": {
+                            "value": 69953.6,
+                            "lowerBound": 69825.6,
+                            "upperBound": 70289.7,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 947.732,
+                            "lowerBound": 206.141,
+                            "upperBound": 1776.64,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.0658288,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 3.0
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "ref:contour16 - RefBenchmark<kepler::reference::contour<16>>",
+                "tags": "[bench][contour][contour-16][double][non-iterative][reference]",
+                "filename": "/home/runner/work/libkepler/libkepler/benchmark/benchmark.cpp",
+                "line": "166",
+                "results": [
+                    {
+                        "name": "e=0.1; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.5441e+06",
+                        "mean": {
+                            "value": 75819.6,
+                            "lowerBound": 75405.5,
+                            "upperBound": 77048.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 3162.08,
+                            "lowerBound": 583.083,
+                            "upperBound": 6839.31,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.394899,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 1.0,
+                            "highSevere": 3.0
+                        }
+                    },
+                    {
+                        "name": "e=0.3; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.5563e+06",
+                        "mean": {
+                            "value": 75857.6,
+                            "lowerBound": 75535.6,
+                            "upperBound": 77133.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2810.27,
+                            "lowerBound": 566.078,
+                            "upperBound": 6497.38,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.336054,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 4.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.5; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.546e+06",
+                        "mean": {
+                            "value": 75764.6,
+                            "lowerBound": 75416.6,
+                            "upperBound": 77149.5,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 3005.67,
+                            "lowerBound": 685.209,
+                            "upperBound": 6895.97,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.365664,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.7; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.5616e+06",
+                        "mean": {
+                            "value": 76083.6,
+                            "lowerBound": 75628.5,
+                            "upperBound": 77732.6,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 3889.49,
+                            "lowerBound": 982.342,
+                            "upperBound": 8864.53,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.494449,
+                            "lowMild": 1.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    },
+                    {
+                        "name": "e=0.9; n=1000",
+                        "samples": "100",
+                        "resamples": "100000",
+                        "iterations": "1",
+                        "clockResolution": "29.1362",
+                        "estimatedDuration": "7.5661e+06",
+                        "mean": {
+                            "value": 75941.6,
+                            "lowerBound": 75618.5,
+                            "upperBound": 77238.5,
+                            "ci": 0.95
+                        },
+                        "standardDeviation": {
+                            "value": 2817.37,
+                            "lowerBound": 606.912,
+                            "upperBound": 6505.49,
+                            "ci": 0.95
+                        },
+                        "outliers": {
+                            "variance": 0.336093,
+                            "lowMild": 0.0,
+                            "lowSevere": 0.0,
+                            "highMild": 0.0,
+                            "highSevere": 4.0
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ]
