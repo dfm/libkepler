@@ -95,40 +95,6 @@ inline T horner_static(const T& x) noexcept {
 namespace detail {
 
 template <typename T>
-inline T short_sin_eval(const T&);
-
-template <>
-inline float short_sin_eval<float>(const float& x) {
-  auto x2 = x * x;
-  return x * horner_static<float, 0x3f800000, 0x3e2aaaab, 0x3c088889, 0x39500d01, 0x3638ef1d,
-                           0x32d7322b, 0x2f309231, 0x2b573f9f>(-x2);
-}
-template <>
-inline double short_sin_eval<double>(const double& x) {
-  auto x2 = x * x;
-  return x * horner_static<double, 0x3ff0000000000000, 0x3fc5555555555555, 0x3f81111111111111,
-                           0x3f2a01a01a01a01a, 0x3ec71de3a556c734, 0x3e5ae64567f544e4,
-                           0x3de6124613a86d09, 0x3d6ae7f3e733b81f>(-x2);
-}
-
-template <typename A>
-inline xs::batch<float, A> short_sin_eval(const xs::batch<float, A>& x) {
-  using B = xs::batch<float, A>;
-  auto x2 = x * x;
-  return x * horner_static<B, 0x3f800000, 0x3e2aaaab, 0x3c088889, 0x39500d01, 0x3638ef1d,
-                           0x32d7322b, 0x2f309231, 0x2b573f9f>(-x2);
-}
-
-template <typename A>
-inline xs::batch<double, A> short_sin_eval(const xs::batch<double, A>& x) {
-  using B = xs::batch<double, A>;
-  auto x2 = x * x;
-  return x * horner_static<B, 0x3ff0000000000000, 0x3fc5555555555555, 0x3f81111111111111,
-                           0x3f2a01a01a01a01a, 0x3ec71de3a556c734, 0x3e5ae64567f544e4,
-                           0x3de6124613a86d09, 0x3d6ae7f3e733b81f>(-x2);
-}
-
-template <typename T>
 static inline T cos_eval(const T&);
 template <typename T>
 static inline T sin_eval(const T&, const T&);

@@ -86,9 +86,6 @@ static inline B _non_iterative_step(const T& eccentricity, const B& mean_anomaly
 }
 
 template <size_t level>
-struct _level {};
-
-template <size_t level>
 struct _non_iterative {
   template <int order, typename T, typename B>
   static inline B refine(const T& eccentricity, const B& mean_anomaly,
@@ -120,6 +117,38 @@ struct non_iterative {
                   const B& initial_eccentric_anomaly) const {
     return detail::_non_iterative<num>::template refine<order, T, B>(eccentricity, mean_anomaly,
                                                                      initial_eccentric_anomaly);
+  }
+};
+
+template <typename T>
+struct brandt {
+  typedef T value_type;
+
+  inline T refine(const T& eccentricity, const T& mean_anomaly,
+                  const T& initial_eccentric_anomaly) const {
+    if (eccentricity < T(0.78) || mean_anomaly > T(0.4)) {
+      return detail::_non_iterative_step<1>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    } else {
+      return detail::_non_iterative_step<2>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    }
+  }
+
+  template <typename A>
+  inline xs::batch<T, A> refine(const T& eccentricity, const xs::batch<T, A>& mean_anomaly,
+                                const xs::batch<T, A>& initial_eccentric_anomaly) const {
+    using B = xs::batch<T, A>;
+    auto flag = typename B::batch_bool_type(eccentricity < T(0.78)) | (mean_anomaly > B(T(0.4)));
+    if (xs::all(flag)) {
+      return detail::_non_iterative_step<1>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    } else if (xs::none(flag)) {
+      return detail::_non_iterative_step<2>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+    } else {
+      auto fast =
+          detail::_non_iterative_step<1>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+      auto slow =
+          detail::_non_iterative_step<2>(eccentricity, mean_anomaly, initial_eccentric_anomaly);
+      return xs::select(flag, fast, slow);
+    }
   }
 };
 
