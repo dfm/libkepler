@@ -34,7 +34,7 @@ write_to = "python/libkepler/_version.py"
 
 [tool.cibuildwheel]
 build-verbosity = 1
-test-command = "pytest {project}/python/test"
+test-command = "pytest -s {project}/python/test"
 test-requires = "pytest"
 skip = "pp*"
 

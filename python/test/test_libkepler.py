@@ -1,2 +1,4 @@
 def test_import():
-    import libkepler as libkepler
+    from libkepler import _libkepler
+
+    _libkepler.print_system_specs()
