@@ -18,6 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: pypa/cibuildwheel@v2.14.1
+        env:
+          CIBW_ARCHS_MACOS: x86_64 arm64
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
