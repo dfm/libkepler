@@ -36,6 +36,7 @@ write_to = "python/libkepler/_version.py"
 build-verbosity = 1
 test-command = "pytest {project}/python/test"
 test-requires = "pytest"
+skip = "pp*"
 
 [tool.cibuildwheel.macos.environment]
 MACOSX_DEPLOYMENT_TARGET = "10.14"
