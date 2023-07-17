@@ -35,3 +35,12 @@ sdist.include = ["python/libkepler/_version.py"]
 
 [tool.setuptools_scm]
 write_to = "python/libkepler/_version.py"
+
+
+[tool.cibuildwheel]
+build-verbosity = 1
+test-command = "pytest {project}/python/test"
+test-requires = "pytest"
+
+[tool.cibuildwheel.macos.environment]
+MACOSX_DEPLOYMENT_TARGET = "10.14"

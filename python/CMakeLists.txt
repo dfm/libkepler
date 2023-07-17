@@ -35,6 +35,7 @@ find_package(nanobind CONFIG REQUIRED)
 nanobind_add_module(
   _libkepler
   STABLE_ABI
+  NB_STATIC
   ${CMAKE_CURRENT_SOURCE_DIR}/libkepler/_libkepler.cpp
 )
 install(TARGETS _libkepler LIBRARY DESTINATION libkepler)
