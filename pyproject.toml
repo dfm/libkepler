@@ -1,9 +1,5 @@
 [build-system]
-requires = [
-  "scikit-build-core[pyproject]>=0.4.3",
-  "nanobind>=1.3.2",
-  "oldest-supported-numpy",
-]
+requires = ["scikit-build-core[pyproject]>=0.4.3", "nanobind>=1.3.2"]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -35,7 +31,6 @@ sdist.include = ["python/libkepler/_version.py"]
 
 [tool.setuptools_scm]
 write_to = "python/libkepler/_version.py"
-
 
 [tool.cibuildwheel]
 build-verbosity = 1
