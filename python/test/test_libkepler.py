@@ -1,1 +1,2 @@
-import libkepler as libkepler
+def test_import():
+    import libkepler as libkepler
