@@ -14,13 +14,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-11]
+        os: [ubuntu-20.04, windows-2019, macos-13]
     steps:
       - uses: actions/checkout@v3
       - uses: pypa/cibuildwheel@v2.14.1
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "10.13"
 
   build_sdist:
     name: Build source distribution
