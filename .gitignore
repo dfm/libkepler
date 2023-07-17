@@ -11,3 +11,7 @@ results
 *.json
 *.xml
 *.html
+
+# Python
+dist
+*.egg-info
