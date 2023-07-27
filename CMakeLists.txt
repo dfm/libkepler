@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 project(Kepler VERSION 0.1.0 LANGUAGES CXX)
+cmake_policy(SET CMP0077 NEW)
 
 # Don't allow in-tree builds
 if(CMAKE_BINARY_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -32,7 +33,7 @@ endif()
 FetchContent_Declare(
   xsimd
   GIT_REPOSITORY https://github.com/xtensor-stack/xsimd.git
-  GIT_TAG 10.0.0
+  GIT_TAG 11.1.0
 )
 
 # Instead of
@@ -60,7 +61,7 @@ if(CMAKE_PROJECT_NAME STREQUAL "Kepler" AND NOT SKBUILD)
     FetchContent_Declare(
       Catch2
       GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-      GIT_TAG v3.2.0
+      GIT_TAG v3.4.0
     )
     FetchContent_MakeAvailable(Catch2)
   endif()
