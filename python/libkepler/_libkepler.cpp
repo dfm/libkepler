@@ -65,7 +65,9 @@ int print_system_specs() {
   xsimd::supported_architectures archs;
   specs::print_types(archs);
 
-  std::cout << "Best architecture: " << specs::type_name<xsimd::best_arch>() << std::endl;
+  std::cout << "Best architecture: "
+            << specs::type_name<xsimd::detail::best<xsimd::supported_architectures>::type>()
+            << std::endl;
 
   constexpr std::size_t float_size = xsimd::simd_type<float>::size;
   constexpr std::size_t double_size = xsimd::simd_type<double>::size;

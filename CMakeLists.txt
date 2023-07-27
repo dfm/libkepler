@@ -30,7 +30,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
 # Include the source for the libkepler project
-include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/vendor/xsimd-11.1.0)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/extern/vendor/xsimd-10.0.0)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 
 # Testing
