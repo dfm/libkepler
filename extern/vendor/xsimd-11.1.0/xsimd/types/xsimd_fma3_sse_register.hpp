@@ -14,30 +14,33 @@
 
 #include "./xsimd_sse4_2_register.hpp"
 
-namespace xsimd {
-template <typename arch>
-struct fma3;
+namespace xsimd
+{
+    template <typename arch>
+    struct fma3;
 
-/**
- * @ingroup architectures
- *
- * SSE4.2 + FMA instructions
- */
-template <>
-struct fma3<sse4_2> : sse4_2 {
-  static constexpr bool supported() noexcept { return XSIMD_WITH_FMA3_SSE; }
-  static constexpr bool available() noexcept { return true; }
-  static constexpr unsigned version() noexcept { return generic::version(1, 4, 3); }
-  static constexpr char const* name() noexcept { return "fma3+sse4.2"; }
-};
+    /**
+     * @ingroup architectures
+     *
+     * SSE4.2 + FMA instructions
+     */
+    template <>
+    struct fma3<sse4_2> : sse4_2
+    {
+        static constexpr bool supported() noexcept { return XSIMD_WITH_FMA3_SSE; }
+        static constexpr bool available() noexcept { return true; }
+        static constexpr unsigned version() noexcept { return generic::version(1, 4, 3); }
+        static constexpr char const* name() noexcept { return "fma3+sse4.2"; }
+    };
 
 #if XSIMD_WITH_FMA3_SSE
-namespace types {
+    namespace types
+    {
 
-XSIMD_DECLARE_SIMD_REGISTER_ALIAS(fma3<sse4_2>, sse4_2);
+        XSIMD_DECLARE_SIMD_REGISTER_ALIAS(fma3<sse4_2>, sse4_2);
 
-}
+    }
 #endif
 
-}  // namespace xsimd
+}
 #endif

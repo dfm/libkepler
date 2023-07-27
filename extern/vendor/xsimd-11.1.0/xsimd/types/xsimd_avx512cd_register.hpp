@@ -14,31 +14,35 @@
 
 #include "./xsimd_avx512f_register.hpp"
 
-namespace xsimd {
+namespace xsimd
+{
 
-/**
- * @ingroup architectures
- *
- * AVX512CD instructions
- */
-struct avx512cd : avx512f {
-  static constexpr bool supported() noexcept { return XSIMD_WITH_AVX512CD; }
-  static constexpr bool available() noexcept { return true; }
-  static constexpr unsigned version() noexcept { return generic::version(3, 2, 0); }
-  static constexpr char const* name() noexcept { return "avx512cd"; }
-};
+    /**
+     * @ingroup architectures
+     *
+     * AVX512CD instructions
+     */
+    struct avx512cd : avx512f
+    {
+        static constexpr bool supported() noexcept { return XSIMD_WITH_AVX512CD; }
+        static constexpr bool available() noexcept { return true; }
+        static constexpr unsigned version() noexcept { return generic::version(3, 2, 0); }
+        static constexpr char const* name() noexcept { return "avx512cd"; }
+    };
 
 #if XSIMD_WITH_AVX512CD
 
-namespace types {
-template <class T>
-struct get_bool_simd_register<T, avx512cd> {
-  using type = simd_avx512_bool_register<T>;
-};
+    namespace types
+    {
+        template <class T>
+        struct get_bool_simd_register<T, avx512cd>
+        {
+            using type = simd_avx512_bool_register<T>;
+        };
 
-XSIMD_DECLARE_SIMD_REGISTER_ALIAS(avx512cd, avx512f);
+        XSIMD_DECLARE_SIMD_REGISTER_ALIAS(avx512cd, avx512f);
 
-}  // namespace types
+    }
 #endif
-}  // namespace xsimd
+}
 #endif

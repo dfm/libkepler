@@ -12,33 +12,27 @@
 #ifndef XSIMD_GENERIC_FWD_HPP
 #define XSIMD_GENERIC_FWD_HPP
 
-#include <type_traits>
-
 #include "../types/xsimd_batch_constant.hpp"
 
-namespace xsimd {
-namespace kernel {
-// forward declaration
-template <class A, class T,
-          class = typename std::enable_if<std::is_integral<T>::value, void>::type>
-inline batch<T, A> abs(batch<T, A> const& self, requires_arch<generic>) noexcept;
-template <class A, class T,
-          class = typename std::enable_if<std::is_integral<T>::value, void>::type>
-inline batch<T, A> bitwise_lshift(batch<T, A> const& self, batch<T, A> const& other,
-                                  requires_arch<generic>) noexcept;
-template <class A, class T,
-          class = typename std::enable_if<std::is_integral<T>::value, void>::type>
-inline batch<T, A> bitwise_rshift(batch<T, A> const& self, batch<T, A> const& other,
-                                  requires_arch<generic>) noexcept;
-template <class A, class T>
-inline batch_bool<T, A> gt(batch<T, A> const& self, batch<T, A> const& other,
-                           requires_arch<generic>) noexcept;
-template <class A, class T,
-          class = typename std::enable_if<std::is_integral<T>::value, void>::type>
-inline batch<T, A> mul(batch<T, A> const& self, batch<T, A> const& other,
-                       requires_arch<generic>) noexcept;
+#include <type_traits>
 
-}  // namespace kernel
-}  // namespace xsimd
+namespace xsimd
+{
+    namespace kernel
+    {
+        // forward declaration
+        template <class A, class T, class = typename std::enable_if<std::is_integral<T>::value, void>::type>
+        inline batch<T, A> abs(batch<T, A> const& self, requires_arch<generic>) noexcept;
+        template <class A, class T, class = typename std::enable_if<std::is_integral<T>::value, void>::type>
+        inline batch<T, A> bitwise_lshift(batch<T, A> const& self, batch<T, A> const& other, requires_arch<generic>) noexcept;
+        template <class A, class T, class = typename std::enable_if<std::is_integral<T>::value, void>::type>
+        inline batch<T, A> bitwise_rshift(batch<T, A> const& self, batch<T, A> const& other, requires_arch<generic>) noexcept;
+        template <class A, class T>
+        inline batch_bool<T, A> gt(batch<T, A> const& self, batch<T, A> const& other, requires_arch<generic>) noexcept;
+        template <class A, class T, class = typename std::enable_if<std::is_integral<T>::value, void>::type>
+        inline batch<T, A> mul(batch<T, A> const& self, batch<T, A> const& other, requires_arch<generic>) noexcept;
+
+    }
+}
 
 #endif

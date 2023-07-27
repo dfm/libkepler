@@ -13,6 +13,7 @@
 #define XSIMD_ISA_HPP
 
 #include "../config/xsimd_arch.hpp"
+
 #include "./xsimd_generic_fwd.hpp"
 
 #if XSIMD_WITH_SSE2

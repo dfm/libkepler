@@ -18,24 +18,27 @@
 #include <nmmintrin.h>
 #endif
 
-namespace xsimd {
-/**
- * @ingroup architectures
- *
- * SSE4.2 instructions
- */
-struct sse4_2 : sse4_1 {
-  static constexpr bool supported() noexcept { return XSIMD_WITH_SSE4_2; }
-  static constexpr bool available() noexcept { return true; }
-  static constexpr unsigned version() noexcept { return generic::version(1, 4, 2); }
-  static constexpr char const* name() noexcept { return "sse4.2"; }
-};
+namespace xsimd
+{
+    /**
+     * @ingroup architectures
+     *
+     * SSE4.2 instructions
+     */
+    struct sse4_2 : sse4_1
+    {
+        static constexpr bool supported() noexcept { return XSIMD_WITH_SSE4_2; }
+        static constexpr bool available() noexcept { return true; }
+        static constexpr unsigned version() noexcept { return generic::version(1, 4, 2); }
+        static constexpr char const* name() noexcept { return "sse4.2"; }
+    };
 
 #if XSIMD_WITH_SSE4_2
-namespace types {
-XSIMD_DECLARE_SIMD_REGISTER_ALIAS(sse4_2, sse4_1);
-}
+    namespace types
+    {
+        XSIMD_DECLARE_SIMD_REGISTER_ALIAS(sse4_2, sse4_1);
+    }
 #endif
-}  // namespace xsimd
+}
 
 #endif

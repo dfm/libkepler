@@ -50,8 +50,9 @@
 #define XSIMD_IF_CONSTEXPR if
 #endif
 
-#include "arch/xsimd_scalar.hpp"
 #include "config/xsimd_config.hpp"
+
+#include "arch/xsimd_scalar.hpp"
 #include "memory/xsimd_aligned_allocator.hpp"
 
 #if defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)

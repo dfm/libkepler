@@ -3,19 +3,24 @@ repos:
     rev: "v4.4.0"
     hooks:
       - id: trailing-whitespace
+        exclude: extern/vendor
       - id: end-of-file-fixer
         exclude_types: [json, binary]
+        exclude: extern/vendor
   - repo: https://github.com/pre-commit/mirrors-clang-format
     rev: "v16.0.6"
     hooks:
       - id: clang-format
+        exclude: extern/vendor
   - repo: https://github.com/psf/black
     rev: "23.1.0"
     hooks:
       - id: black-jupyter
+        exclude: extern/vendor
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.0.277"
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
         types_or: [python, pyi, jupyter]
+        exclude: extern/vendor

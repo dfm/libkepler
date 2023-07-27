@@ -14,13 +14,15 @@
 
 #include "../types/xsimd_avx512cd_register.hpp"
 
-namespace xsimd {
+namespace xsimd
+{
 
-namespace kernel {
-// Nothing there yet.
+    namespace kernel
+    {
+        // Nothing there yet.
+
+    }
 
 }
-
-}  // namespace xsimd
 
 #endif

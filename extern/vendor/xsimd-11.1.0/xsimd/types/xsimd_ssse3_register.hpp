@@ -18,24 +18,27 @@
 #include <tmmintrin.h>
 #endif
 
-namespace xsimd {
-/**
- * @ingroup architectures
- *
- * SSSE3 instructions
- */
-struct ssse3 : sse3 {
-  static constexpr bool supported() noexcept { return XSIMD_WITH_SSSE3; }
-  static constexpr bool available() noexcept { return true; }
-  static constexpr unsigned version() noexcept { return generic::version(1, 3, 1); }
-  static constexpr char const* name() noexcept { return "ssse3"; }
-};
+namespace xsimd
+{
+    /**
+     * @ingroup architectures
+     *
+     * SSSE3 instructions
+     */
+    struct ssse3 : sse3
+    {
+        static constexpr bool supported() noexcept { return XSIMD_WITH_SSSE3; }
+        static constexpr bool available() noexcept { return true; }
+        static constexpr unsigned version() noexcept { return generic::version(1, 3, 1); }
+        static constexpr char const* name() noexcept { return "ssse3"; }
+    };
 
 #if XSIMD_WITH_SSSE3
-namespace types {
-XSIMD_DECLARE_SIMD_REGISTER_ALIAS(ssse3, sse3);
-}
+    namespace types
+    {
+        XSIMD_DECLARE_SIMD_REGISTER_ALIAS(ssse3, sse3);
+    }
 #endif
-}  // namespace xsimd
+}
 
 #endif

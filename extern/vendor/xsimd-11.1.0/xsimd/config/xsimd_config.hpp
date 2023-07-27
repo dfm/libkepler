@@ -107,7 +107,7 @@
 #ifdef __FMA__
 
 #if defined(__SSE__)
-#ifndef XSIMD_WITH_FMA3_SSE  // Leave the opportunity to manually disable it, see #643
+#ifndef XSIMD_WITH_FMA3_SSE // Leave the opportunity to manually disable it, see #643
 #define XSIMD_WITH_FMA3_SSE 1
 #endif
 #else
@@ -136,7 +136,7 @@
 #ifdef __FMA__
 
 #if defined(__AVX__)
-#ifndef XSIMD_WITH_FMA3_AVX  // Leave the opportunity to manually disable it, see #643
+#ifndef XSIMD_WITH_FMA3_AVX // Leave the opportunity to manually disable it, see #643
 #define XSIMD_WITH_FMA3_AVX 1
 #endif
 #else
@@ -149,7 +149,7 @@
 #endif
 
 #if defined(__AVX2__)
-#ifndef XSIMD_WITH_FMA3_AVX2  // Leave the opportunity to manually disable it, see #643
+#ifndef XSIMD_WITH_FMA3_AVX2 // Leave the opportunity to manually disable it, see #643
 #define XSIMD_WITH_FMA3_AVX2 1
 #endif
 #else
@@ -336,19 +336,14 @@
 
 #endif
 
-#if XSIMD_WITH_SSE3 || defined(_M_AMD64) || defined(_M_X64) || \
-    (defined(_M_IX86_FP) && _M_IX86_FP >= 2)
+#if XSIMD_WITH_SSE3 || defined(_M_AMD64) || defined(_M_X64) || (defined(_M_IX86_FP) && _M_IX86_FP >= 2)
 #undef XSIMD_WITH_SSE2
 #define XSIMD_WITH_SSE2 1
 #endif
 
 #endif
 
-#if !XSIMD_WITH_SSE2 && !XSIMD_WITH_SSE3 && !XSIMD_WITH_SSSE3 && !XSIMD_WITH_SSE4_1 &&          \
-    !XSIMD_WITH_SSE4_2 && !XSIMD_WITH_AVX && !XSIMD_WITH_AVX2 && !XSIMD_WITH_FMA3_SSE &&        \
-    !XSIMD_WITH_FMA4 && !XSIMD_WITH_FMA3_AVX && !XSIMD_WITH_FMA3_AVX2 && !XSIMD_WITH_AVX512F && \
-    !XSIMD_WITH_AVX512CD && !XSIMD_WITH_AVX512DQ && !XSIMD_WITH_AVX512BW && !XSIMD_WITH_NEON && \
-    !XSIMD_WITH_NEON64 && !XSIMD_WITH_SVE
+#if !XSIMD_WITH_SSE2 && !XSIMD_WITH_SSE3 && !XSIMD_WITH_SSSE3 && !XSIMD_WITH_SSE4_1 && !XSIMD_WITH_SSE4_2 && !XSIMD_WITH_AVX && !XSIMD_WITH_AVX2 && !XSIMD_WITH_FMA3_SSE && !XSIMD_WITH_FMA4 && !XSIMD_WITH_FMA3_AVX && !XSIMD_WITH_FMA3_AVX2 && !XSIMD_WITH_AVX512F && !XSIMD_WITH_AVX512CD && !XSIMD_WITH_AVX512DQ && !XSIMD_WITH_AVX512BW && !XSIMD_WITH_NEON && !XSIMD_WITH_NEON64 && !XSIMD_WITH_SVE
 #define XSIMD_NO_SUPPORTED_ARCHITECTURE
 #endif
 
