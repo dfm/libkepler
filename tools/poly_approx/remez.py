@@ -36,7 +36,9 @@ def init_chebyshev(func, order, domain):
     b = func(zeros[1:-1])
     soln = np.linalg.solve(A, b)
     poly = Polynomial(soln)
-    resid = lambda x: -np.abs(func(x) - poly(x))
+
+    def resid(x):
+        return -np.abs(func(x) - poly(x))
 
     maxerr = 0.0
     points = np.zeros(unknowns)
@@ -59,7 +61,9 @@ def iter_remez(func, points, domain):
 
     soln = np.linalg.solve(A, b)
     poly = Polynomial(soln[:-1])
-    resid = lambda x: func(x) - poly(x)
+
+    def resid(x):
+        return func(x) - poly(x)
 
     zeros = np.zeros(len(points) + 1)
     zeros[0] = mn
@@ -68,7 +72,9 @@ def iter_remez(func, points, domain):
         result = brentq(resid, points[n], points[n + 1])
         zeros[n + 1] = result
 
-    resid = lambda x: -np.abs(func(x) - poly(x))
+    def resid(x):
+        return -np.abs(func(x) - poly(x))
+
     maxerr = 0.0
     points = np.zeros_like(points)
     for n in range(len(points)):

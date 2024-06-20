@@ -17,7 +17,9 @@ def approximate(name, target_func, transform, domain, max_order=10, tol=5e-15):
 
     print(name, order, err)
     poly = Polynomial(coeffs)
-    approx = lambda x: poly(transform(x))
+
+    def approx(x):
+        return poly(transform(x))
 
     fig, axes = plt.subplots(2, 1, sharex=True)
     x = np.linspace(*domain, 1000)
@@ -55,6 +57,7 @@ domain = [0.0, 0.25 * np.pi]
 fig, _ = approximate("sin(x) / x", target_func, transform, domain, tol=1e-15)
 fig.savefig("sin.png", bbox_inches="tight")
 plt.close(fig)
+
 
 #
 # Approximate cos(x) in the range [0, pi/4)
@@ -103,7 +106,9 @@ def target_func(ecc, x, starter=False, correct=False):
         return kepler.solve(np.pi * x, ecc)
 
 
-transform = lambda x: x
+def transform(x):
+    return x
+
 
 eccs = np.linspace(0.0, 1.0, 25)[1:-1]
 

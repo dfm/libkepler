@@ -1,7 +1,11 @@
+#include <nanobind/nanobind.h>
+
 #include <iostream>
+#include <kepler/kepler.hpp>
 #include <string_view>
 #include <xsimd/xsimd.hpp>
 
+namespace specs {
 // Ref:
 // https://stackoverflow.com/questions/81870/is-it-possible-to-print-a-variables-type-in-standard-c/64490578#64490578
 template <typename T>
@@ -54,17 +58,25 @@ void print_types(const xsimd::arch_list<Args...>&) {
   ((std::cout << type_name<Args>() << " "), ...);
   std::cout << std::endl;
 }
+}  // namespace specs
 
-int main() {
+int print_system_specs() {
   std::cout << "Supported architectures: ";
   xsimd::supported_architectures archs;
-  print_types(archs);
+  specs::print_types(archs);
 
-  std::cout << "Best architecture: " << type_name<xsimd::best_arch>() << std::endl;
+  std::cout << "Best architecture: " << specs::type_name<xsimd::best_arch>() << std::endl;
 
   constexpr std::size_t float_size = xsimd::simd_type<float>::size;
   constexpr std::size_t double_size = xsimd::simd_type<double>::size;
   std::cout << "SIMD size (float): " << float_size << std::endl;
   std::cout << "SIMD size (double): " << double_size << std::endl;
   return 0;
+}
+
+int add(int a, int b) { return a + b; }
+
+NB_MODULE(_libkepler, m) {
+  m.def("print_system_specs", &print_system_specs);
+  m.def("add", &add);
 }
