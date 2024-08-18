@@ -5,10 +5,13 @@
 #include <cstdint>
 #include <limits>
 
-#include "constants.hpp"
-#include "simd.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "xsimd/xsimd.hpp"
 
 namespace kepler {
+namespace reduction {
+
+namespace xs = xsimd;
 
 namespace detail {
 
@@ -117,5 +120,6 @@ inline xs::batch_bool<T, A> range_reduce(xs::batch<T, A> const& x, xs::batch<T, 
   return hi | lo;
 }
 
+}  // namespace reduction
 }  // namespace kepler
 #endif

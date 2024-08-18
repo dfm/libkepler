@@ -4,11 +4,13 @@
 #include <tuple>
 #include <utility>
 
-#include "simd.hpp"
-#include "utils.hpp"
+#include "kepler/kepler/utils.hpp"
+#include "xsimd/xsimd.hpp"
 
 namespace kepler {
 namespace math {
+
+namespace xs = xsimd;
 
 template <typename T>
 inline T fma(const T& a, const T& b, const T& c) {

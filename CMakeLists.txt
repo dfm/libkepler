@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.15...3.30)
 project(Kepler VERSION 0.1.0 LANGUAGES CXX)
 
 # Don't allow in-tree builds
@@ -15,27 +15,17 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 # Add external dependencies
 include(FetchContent)
-
-# https://cliutils.gitlab.io/modern-cmake/chapters/projects/fetch.html
-if(${CMAKE_VERSION} VERSION_LESS 3.14)
-  macro(FetchContent_MakeAvailable NAME)
-    FetchContent_GetProperties(${NAME})
-    if(NOT ${NAME}_POPULATED)
-      FetchContent_Populate(${NAME})
-      add_subdirectory(${${NAME}_SOURCE_DIR} ${${NAME}_BINARY_DIR})
-    endif()
-  endmacro()
-endif()
-
 FetchContent_Declare(
   xsimd
   GIT_REPOSITORY https://github.com/xtensor-stack/xsimd.git
-  GIT_TAG        10.0.0
+  GIT_TAG        13.0.0
 )
 FetchContent_MakeAvailable(xsimd)
 include_directories(${xsimd_SOURCE_DIR}/include)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+
+add_library(kepler SHARED src/kepler.cpp)
 
 # Testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

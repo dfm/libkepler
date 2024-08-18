@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string_view>
-#include <xsimd/xsimd.hpp>
+
+#include "xsimd/xsimd.hpp"
 
 // Ref:
 // https://stackoverflow.com/questions/81870/is-it-possible-to-print-a-variables-type-in-standard-c/64490578#64490578
@@ -60,8 +61,8 @@ int main() {
   xsimd::supported_architectures archs;
   print_types(archs);
 
-  std::cout << "Best architecture: "
-            << type_name<xsimd::detail::best<xsimd::supported_architectures>::type>() << std::endl;
+  std::cout << "Best architecture: " << type_name<xsimd::supported_architectures::best>()
+            << std::endl;
 
   constexpr std::size_t float_size = xsimd::simd_type<float>::size;
   constexpr std::size_t double_size = xsimd::simd_type<double>::size;

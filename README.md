@@ -5,7 +5,7 @@ equation.
 
 ## License
 
-Copyright 2021, 2022 Simons Foundation, Inc.
+Copyright 2021, 2022, 2023, 2024 Dan Foreman-Mackey
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the

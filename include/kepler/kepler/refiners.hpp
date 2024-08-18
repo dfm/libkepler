@@ -3,13 +3,15 @@
 
 #include <cmath>
 
-#include "constants.hpp"
-#include "householder.hpp"
-#include "simd.hpp"
-#include "starters.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/householder.hpp"
+#include "kepler/kepler/starters.hpp"
+#include "xsimd/xsimd.hpp"
 
 namespace kepler {
 namespace refiners {
+
+namespace xs = xsimd;
 
 namespace detail {
 template <typename T>

@@ -1,19 +1,24 @@
 #include "./test_utils.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/reduction.hpp"
+
+using namespace kepler;
 
 TEST_CASE("Range reduction", "[reduction]") {
   const double abs_tol = 5e-15;
   double xr;
 
-  REQUIRE(kepler::range_reduce(0.0, xr) == false);
+  REQUIRE(reduction::range_reduce(0.0, xr) == false);
   REQUIRE_THAT(xr, WithinAbs(0.0, abs_tol));
 
-  REQUIRE(kepler::range_reduce(kepler::constants::pi<double>(), xr) == true);
-  REQUIRE_THAT(xr, WithinAbs(kepler::constants::pi<double>(), 1e-15));
+  REQUIRE(reduction::range_reduce(constants::pi<double>(), xr) == true);
+  REQUIRE_THAT(xr, WithinAbs(constants::pi<double>(), 1e-15));
 
-  kepler::range_reduce(kepler::constants::twopi<double>(), xr);
+  reduction::range_reduce(constants::twopi<double>(), xr);
   REQUIRE_THAT(xr, WithinAbs(0.0, abs_tol));
 
-  REQUIRE(kepler::range_reduce(100 * kepler::constants::twopi<double>() - 1e-8, xr) == true);
+  REQUIRE(reduction::range_reduce(100 * constants::twopi<double>() - 1e-8, xr) ==
+          true);
   REQUIRE_THAT(xr, WithinAbs(1e-8, abs_tol));
 }
 
@@ -23,16 +28,17 @@ TEST_CASE("Range reduction (SIMD)", "[reduction][simd]") {
   const T abs_tol = 5e-15;
   B xr;
 
-  REQUIRE(!xs::any(kepler::range_reduce(B(0.0), xr)));
+  REQUIRE(!xs::any(reduction::range_reduce(B(0.0), xr)));
   REQUIRE_THAT(xr.get(0), WithinAbs(0.0, abs_tol));
 
-  REQUIRE(xs::all(kepler::range_reduce(kepler::constants::pi<B>(), xr)));
-  REQUIRE_THAT(xr.get(0), WithinAbs(kepler::constants::pi<T>(), 1e-15));
+  REQUIRE(xs::all(reduction::range_reduce(constants::pi<B>(), xr)));
+  REQUIRE_THAT(xr.get(0), WithinAbs(constants::pi<T>(), 1e-15));
 
-  kepler::range_reduce(kepler::constants::twopi<B>(), xr);
+  reduction::range_reduce(constants::twopi<B>(), xr);
   REQUIRE_THAT(xr.get(0), WithinAbs(0.0, abs_tol));
 
-  REQUIRE(xs::all(kepler::range_reduce(B(100.) * kepler::constants::twopi<B>() - B(1e-8), xr)));
+  REQUIRE(xs::all(
+      reduction::range_reduce(B(100.) * constants::twopi<B>() - B(1e-8), xr)));
   REQUIRE_THAT(xr.get(0), WithinAbs(1e-8, abs_tol));
 }
 

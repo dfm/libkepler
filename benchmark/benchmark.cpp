@@ -63,7 +63,8 @@ TEMPLATE_PRODUCT_TEST_CASE("baselined", "[bench][baseline][double]", Benchmark,
       std::ostringstream name;                                                                    \
       name << std::setprecision(1) << "e=" << eccentricity << "; n=" << num_anom;                 \
       BENCHMARK(name.str().c_str()) {                                                             \
-        return kepler::solve<typename TestType::starter_type, typename TestType::refiner_type>(   \
+        return kepler::solver::solve<typename TestType::starter_type,                             \
+                                     typename TestType::refiner_type>(                            \
             eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), sin_ecc_anom.data(), \
             cos_ecc_anom.data(), refiner);                                                        \
       };                                                                                          \
@@ -103,8 +104,8 @@ MAIN_BENCHMARK("brandt21d", "[bench][non-iterative][brandt][double]",
       std::ostringstream name;                                                                    \
       name << std::setprecision(1) << "e=" << eccentricity << "; n=" << num_anom;                 \
       BENCHMARK(name.str().c_str()) {                                                             \
-        return kepler::solve_simd<typename TestType::starter_type,                                \
-                                  typename TestType::refiner_type>(                               \
+        return kepler::solver::solve_simd<typename TestType::starter_type,                        \
+                                          typename TestType::refiner_type>(                       \
             eccentricity, num_anom, mean_anomaly.data(), ecc_anomaly.data(), sin_ecc_anom.data(), \
             cos_ecc_anom.data(), refiner);                                                        \
       };                                                                                          \
