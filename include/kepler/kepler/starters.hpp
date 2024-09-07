@@ -3,11 +3,14 @@
 
 #include <cmath>
 
-#include "constants.hpp"
-#include "simd.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/math.hpp"
+#include "xsimd/xsimd.hpp"
 
 namespace kepler {
 namespace starters {
+
+namespace xs = xsimd;
 
 template <typename T>
 struct noop {

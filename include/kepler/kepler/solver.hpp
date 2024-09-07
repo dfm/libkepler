@@ -1,16 +1,20 @@
-#ifndef KEPLER_SOLVE_HPP
-#define KEPLER_SOLVE_HPP
+#ifndef KEPLER_SOLVER_HPP
+#define KEPLER_SOLVER_HPP
 
 #include <cmath>
 #include <cstddef>
 #include <type_traits>
 
-#include "constants.hpp"
-#include "reduction.hpp"
-#include "refiners.hpp"
-#include "starters.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/reduction.hpp"
+#include "kepler/kepler/refiners.hpp"
+#include "kepler/kepler/starters.hpp"
+#include "xsimd/xsimd.hpp"
 
 namespace kepler {
+namespace solver {
+
+namespace xs = xsimd;
 
 template <typename A, typename B>
 struct value_type {
@@ -30,7 +34,7 @@ inline void solve_one(const typename value_type<Starter, Refiner>::type& eccentr
   auto abs_mean_anom = std::abs(mean_anomaly);
   auto sgn = std::copysign(T(1.), mean_anomaly);
   T mean_anom_reduc;
-  bool high = range_reduce(abs_mean_anom, mean_anom_reduc);
+  bool high = reduction::range_reduce(abs_mean_anom, mean_anom_reduc);
   auto ecc_anom_reduc = starter.start(mean_anom_reduc);
   T s, c;
   ecc_anom_reduc = refiners::refine_with_eccentricity<Refiner>::refine(
@@ -80,7 +84,7 @@ inline void solve_simd(const typename value_type<Starter, Refiner>::type& eccent
     auto sgn = xs::copysign(B(1.), mean_anom);
     auto abs_mean_anom = xs::abs(mean_anom);
     B mean_anom_reduc;
-    auto high = range_reduce(abs_mean_anom, mean_anom_reduc);
+    auto high = reduction::range_reduce(abs_mean_anom, mean_anom_reduc);
     auto ecc_anom_reduc = starter.start(mean_anom_reduc);
     B s, c;
     ecc_anom_reduc = refiners::refine_with_eccentricity<Refiner>::refine(
@@ -99,6 +103,7 @@ inline void solve_simd(const typename value_type<Starter, Refiner>::type& eccent
   }
 }
 
+}  // namespace solver
 }  // namespace kepler
 
 #endif

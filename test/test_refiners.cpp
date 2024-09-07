@@ -2,27 +2,31 @@
 #include <vector>
 
 #include "./test_utils.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/refiners.hpp"
+#include "kepler/kepler/solver.hpp"
+#include "kepler/kepler/starters.hpp"
 
+using namespace kepler;
 template <typename T>
 struct has_tolerance {
   static const bool value = false;
 };
 
 template <int order, typename T>
-struct has_tolerance<kepler::refiners::iterative<order, T>> {
+struct has_tolerance<refiners::iterative<order, T>> {
   static const bool value = true;
 };
 
-TEMPLATE_PRODUCT_TEST_CASE(
-    "Refiners", "[refiners]", SolveTestCase,
-    ((kepler::refiners::iterative<1, float>), (kepler::refiners::iterative<1, double>),
-     (kepler::refiners::iterative<2, double>), (kepler::refiners::iterative<3, double>),
-     (kepler::refiners::iterative<4, double>), (kepler::refiners::iterative<5, double>),
-     (kepler::refiners::iterative<6, double>), (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
-     (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>),
-     (kepler::refiners::brandt<float>, kepler::starters::raposo_pulido_brandt<float>),
-     (kepler::refiners::brandt<double>, kepler::starters::raposo_pulido_brandt<double>))) {
+TEMPLATE_PRODUCT_TEST_CASE("Refiners", "[refiners]", SolveTestCase,
+                           ((refiners::iterative<1, float>), (refiners::iterative<1, double>),
+                            (refiners::iterative<2, double>), (refiners::iterative<3, double>),
+                            (refiners::iterative<4, double>), (refiners::iterative<5, double>),
+                            (refiners::iterative<6, double>), (refiners::iterative<7, double>),
+                            (refiners::non_iterative<3, double>, starters::markley<double>),
+                            (refiners::non_iterative<3, float>, starters::markley<float>),
+                            (refiners::brandt<float>, starters::raposo_pulido_brandt<float>),
+                            (refiners::brandt<double>, starters::raposo_pulido_brandt<double>))) {
   using T = typename TestType::value_type;
   const size_t ecc_size = 10;
   const size_t anom_size = 1000;
@@ -42,7 +46,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
       mean_anomaly[m] = ecc_anom_expect[m] - eccentricity * std::sin(ecc_anom_expect[m]);
     }
 
-    kepler::solve<typename TestType::starter_type, typename TestType::refiner_type>(
+    solver::solve<typename TestType::starter_type, typename TestType::refiner_type>(
         eccentricity, anom_size, mean_anomaly.data(), ecc_anom_calc.data(), sin_ecc_anom.data(),
         cos_ecc_anom.data(), refiner);
 
@@ -55,17 +59,16 @@ TEMPLATE_PRODUCT_TEST_CASE(
   }
 }
 
-TEMPLATE_PRODUCT_TEST_CASE(
-    "SIMD comparison", "[refiners][simd]", SolveTestCase,
-    (kepler::refiners::noop<double>, (kepler::refiners::iterative<1, float>),
-     (kepler::refiners::iterative<1, double>), (kepler::refiners::iterative<2, double>),
-     (kepler::refiners::iterative<3, double>), (kepler::refiners::iterative<4, double>),
-     (kepler::refiners::iterative<5, double>), (kepler::refiners::iterative<6, double>),
-     (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
-     (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>),
-     (kepler::refiners::brandt<float>, kepler::starters::raposo_pulido_brandt<float>),
-     (kepler::refiners::brandt<double>, kepler::starters::raposo_pulido_brandt<double>))) {
+TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[refiners][simd]", SolveTestCase,
+                           (refiners::noop<double>, (refiners::iterative<1, float>),
+                            (refiners::iterative<1, double>), (refiners::iterative<2, double>),
+                            (refiners::iterative<3, double>), (refiners::iterative<4, double>),
+                            (refiners::iterative<5, double>), (refiners::iterative<6, double>),
+                            (refiners::iterative<7, double>),
+                            (refiners::non_iterative<3, double>, starters::markley<double>),
+                            (refiners::non_iterative<3, float>, starters::markley<float>),
+                            (refiners::brandt<float>, starters::raposo_pulido_brandt<float>),
+                            (refiners::brandt<double>, starters::raposo_pulido_brandt<double>))) {
   using T = typename TestType::value_type;
   using B = xs::batch<T>;
   constexpr std::size_t simd_size = B::size;
@@ -83,7 +86,7 @@ TEMPLATE_PRODUCT_TEST_CASE(
 
     for (size_t m = 0; m < anom_size; m += simd_size) {
       for (size_t k = 0; k < simd_size; ++k) {
-        mean_anom[k] = kepler::constants::pi<T>() * (m + k) / T(anom_size - 1);
+        mean_anom[k] = constants::pi<T>() * (m + k) / T(anom_size - 1);
       }
       auto mean_anom_b = xs::load_aligned(mean_anom.data());
       auto ecc_anom_b = starter.start(mean_anom_b);

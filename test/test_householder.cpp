@@ -1,15 +1,19 @@
 #include <cmath>
 
 #include "./test_utils.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/householder.hpp"
+
+using namespace kepler;
 
 TEMPLATE_TEST_CASE("Evaluate", "[householder]", double, float) {
-  using namespace kepler::householder::detail;
+  using namespace householder::detail;
   using T = TestType;
   const T abs_tol = default_abs<TestType>::value;
   const T e = 0.65;
   const T M = 0.123;
   const T E = 0.456;
-  auto state = kepler::householder::init(e, M, E);
+  auto state = householder::init(e, M, E);
 
   REQUIRE_THAT(evaluate<1>::get(state), WithinAbs(1 - e * std::cos(E), abs_tol));
   REQUIRE_THAT(evaluate<2>::get(state), WithinAbs(e * std::sin(E), abs_tol));
@@ -36,10 +40,10 @@ TEMPLATE_TEST_CASE("Newton", "[householder]", double, float) {
   const T e = 0.65;
   const T M = 0.123;
   for (std::size_t n = 0; n < size; ++n) {
-    auto E = kepler::constants::pi<T>() * n / T(size - 1);
+    auto E = constants::pi<T>() * n / T(size - 1);
     auto expect = newton_reference(e, M, E);
-    auto state = kepler::householder::init(e, M, E);
-    auto calc = kepler::householder::step<1>(state);
+    auto state = householder::init(e, M, E);
+    auto calc = householder::step<1>(state);
     REQUIRE_THAT(calc, WithinAbs(expect, abs_tol));
   }
 }
@@ -63,10 +67,10 @@ TEMPLATE_TEST_CASE("Halley", "[householder]", double, float) {
   const T e = 0.65;
   const T M = 0.123;
   for (std::size_t n = 0; n < size; ++n) {
-    auto E = kepler::constants::pi<T>() * n / T(size - 1);
+    auto E = constants::pi<T>() * n / T(size - 1);
     auto expect = halley_reference(e, M, E);
-    auto state = kepler::householder::init(e, M, E);
-    auto calc = kepler::householder::step<3>(state);
+    auto state = householder::init(e, M, E);
+    auto calc = householder::step<3>(state);
     REQUIRE_THAT(calc, WithinAbs(expect, abs_tol));
   }
 }
@@ -92,10 +96,10 @@ TEMPLATE_TEST_CASE("Fourth", "[householder]", double, float) {
   const T e = 0.65;
   const T M = 0.123;
   for (std::size_t n = 0; n < size; ++n) {
-    auto E = kepler::constants::pi<T>() * n / T(size - 1);
+    auto E = constants::pi<T>() * n / T(size - 1);
     auto expect = fourth_reference(e, M, E);
-    auto state = kepler::householder::init(e, M, E);
-    auto calc = kepler::householder::step<4>(state);
+    auto state = householder::init(e, M, E);
+    auto calc = householder::step<4>(state);
     REQUIRE_THAT(calc, WithinAbs(expect, abs_tol));
   }
 }

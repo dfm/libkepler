@@ -31,7 +31,7 @@
 
 #include <cstdint>
 
-#include "math.hpp"
+#include "kepler/kepler/math.hpp"
 
 namespace kepler {
 namespace householder {

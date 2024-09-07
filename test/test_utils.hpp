@@ -3,7 +3,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <xsimd/xsimd.hpp>
 
-#include "kepler/kepler.hpp"
+#include "kepler/kepler/starters.hpp"
 
 using namespace Catch::Matchers;
 namespace xs = xsimd;

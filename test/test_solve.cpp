@@ -2,18 +2,23 @@
 #include <vector>
 
 #include "./test_utils.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/refiners.hpp"
+#include "kepler/kepler/solver.hpp"
+#include "kepler/kepler/starters.hpp"
 
-TEMPLATE_PRODUCT_TEST_CASE(
-    "SIMD comparison", "[refiners][simd]", SolveTestCase,
-    ((kepler::refiners::noop<double>), (kepler::refiners::iterative<1, float>),
-     (kepler::refiners::iterative<1, double>), (kepler::refiners::iterative<2, double>),
-     (kepler::refiners::iterative<3, double>), (kepler::refiners::iterative<4, double>),
-     (kepler::refiners::iterative<5, double>), (kepler::refiners::iterative<6, double>),
-     (kepler::refiners::iterative<7, double>),
-     (kepler::refiners::non_iterative<3, double>, kepler::starters::markley<double>),
-     (kepler::refiners::non_iterative<3, float>, kepler::starters::markley<float>),
-     (kepler::refiners::brandt<float>, kepler::starters::raposo_pulido_brandt<float>),
-     (kepler::refiners::brandt<double>, kepler::starters::raposo_pulido_brandt<double>))) {
+using namespace kepler;
+
+TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[refiners][simd]", SolveTestCase,
+                           ((refiners::noop<double>), (refiners::iterative<1, float>),
+                            (refiners::iterative<1, double>), (refiners::iterative<2, double>),
+                            (refiners::iterative<3, double>), (refiners::iterative<4, double>),
+                            (refiners::iterative<5, double>), (refiners::iterative<6, double>),
+                            (refiners::iterative<7, double>),
+                            (refiners::non_iterative<3, double>, starters::markley<double>),
+                            (refiners::non_iterative<3, float>, starters::markley<float>),
+                            (refiners::brandt<float>, starters::raposo_pulido_brandt<float>),
+                            (refiners::brandt<double>, starters::raposo_pulido_brandt<double>))) {
   using T = typename TestType::value_type;
   const T abs_tol = tolerance<TestType>::abs;
   const size_t ecc_size = 10;
@@ -29,10 +34,10 @@ TEMPLATE_PRODUCT_TEST_CASE(
   for (size_t n = 0; n < ecc_size; ++n) {
     const T eccentricity = n / T(ecc_size);
 
-    kepler::solve<typename TestType::starter_type, typename TestType::refiner_type>(
+    solver::solve<typename TestType::starter_type, typename TestType::refiner_type>(
         eccentricity, anom_size, mean_anomaly.data(), ecc_anom.data(), sin_ecc_anom.data(),
         cos_ecc_anom.data(), refiner);
-    kepler::solve_simd<typename TestType::starter_type, typename TestType::refiner_type>(
+    solver::solve_simd<typename TestType::starter_type, typename TestType::refiner_type>(
         eccentricity, anom_size, mean_anomaly.data(), ecc_anom_simd.data(),
         sin_ecc_anom_simd.data(), cos_ecc_anom_simd.data(), refiner);
 

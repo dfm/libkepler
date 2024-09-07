@@ -2,16 +2,19 @@
 #include <cmath>
 
 #include "./test_utils.hpp"
+#include "kepler/kepler/constants.hpp"
+#include "kepler/kepler/starters.hpp"
+
+using namespace kepler;
 
 template <>
-struct tolerance<kepler::starters::mikkola<double>> {
+struct tolerance<starters::mikkola<double>> {
   constexpr static double abs = 1e-13;
   constexpr static double rel = 0.002;
 };
 
 TEMPLATE_PRODUCT_TEST_CASE("Starters", "[starters]",
-                           (kepler::starters::mikkola, kepler::starters::markley,
-                            kepler::starters::raposo_pulido_brandt),
+                           (starters::mikkola, starters::markley, starters::raposo_pulido_brandt),
                            (double, float)) {
   using T = typename TestType::value_type;
   const T abs_tol = tolerance<TestType>::abs;
@@ -22,7 +25,7 @@ TEMPLATE_PRODUCT_TEST_CASE("Starters", "[starters]",
     const T eccentricity = n / T(ecc_size);
     const TestType starter(eccentricity);
     for (size_t m = 0; m < anom_size; ++m) {
-      const T ecc_anom_expect = kepler::constants::pi<T>() * m / T(anom_size - 1);
+      const T ecc_anom_expect = constants::pi<T>() * m / T(anom_size - 1);
       auto mean_anomaly = ecc_anom_expect - eccentricity * std::sin(ecc_anom_expect);
       auto ecc_anom = starter.start(mean_anomaly);
       if (m == 0) {
@@ -44,7 +47,7 @@ TEST_CASE("RPP17/B21 singular corner", "[starters]") {
   const T ecc_anom_max = 0.1;
   for (size_t n = 0; n < ecc_size; ++n) {
     const T eccentricity = ecc_min + (1. - ecc_min) * n / T(ecc_size);
-    const kepler::starters::raposo_pulido_brandt starter(eccentricity);
+    const starters::raposo_pulido_brandt starter(eccentricity);
     for (size_t m = 0; m < anom_size; ++m) {
       const T ecc_anom_expect = ecc_anom_max * m / T(anom_size - 1);
       auto mean_anomaly = ecc_anom_expect - eccentricity * std::sin(ecc_anom_expect);
@@ -59,9 +62,8 @@ TEST_CASE("RPP17/B21 singular corner", "[starters]") {
 }
 
 TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[starters][simd]",
-                           (kepler::starters::noop, kepler::starters::basic,
-                            kepler::starters::mikkola, kepler::starters::markley,
-                            kepler::starters::raposo_pulido_brandt),
+                           (starters::noop, starters::basic, starters::mikkola, starters::markley,
+                            starters::raposo_pulido_brandt),
                            (double, float)) {
   using T = typename TestType::value_type;
   using B = xs::batch<T>;
@@ -77,7 +79,7 @@ TEMPLATE_PRODUCT_TEST_CASE("SIMD comparison", "[starters][simd]",
 
     for (size_t m = 0; m < anom_size; m += simd_size) {
       for (size_t k = 0; k < simd_size; ++k) {
-        mean_anom[k] = kepler::constants::pi<T>() * (m + k) / T(anom_size - 1);
+        mean_anom[k] = constants::pi<T>() * (m + k) / T(anom_size - 1);
       }
       auto mean_anom_b = xs::load_aligned(mean_anom.data());
       auto ecc_anom_b = starter.start(mean_anom_b);
