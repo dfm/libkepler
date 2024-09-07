@@ -13,6 +13,8 @@ set(KEPLER_TESTS
 foreach(name ${KEPLER_TESTS})
   add_executable(${name} ${name}.cpp)
   target_link_libraries(${name} PRIVATE Catch2::Catch2WithMain)
+  target_include_directories(${name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+  target_include_directories(${name} PRIVATE ${xsimd_SOURCE_DIR}/include)
 
   if(MSVC)
     target_compile_options(${name} PRIVATE /arch:AVX2)

@@ -1,4 +1,4 @@
-// Copyright 2021, 2022, 2023, 2024 Dan Foreman-Mackey
+// Copyright 2021-2024 Dan Foreman-Mackey
 //
 // Distributed under the terms of the Apache 2.0 License.
 //
@@ -12,24 +12,12 @@
 #include "kepler/kepler/refiners.hpp"
 #include "kepler/kepler/solver.hpp"
 #include "kepler/kepler/starters.hpp"
-#include "xsimd/xsimd.hpp"
 
 namespace kepler {
 
-namespace xs = xsimd;
-
-namespace detail {
-struct solve {
-  template <class Arch, class T>
-  void operator()(Arch, std::size_t size, const T* eccentricity, std::size_t batch_size,
-                  const T* mean_anomaly, T* eccentric_anomaly, T* sin_eccentric_anomaly,
-                  T* cos_eccentric_anomaly);
-};
-
-template <class Arch, class T>
-void solve::operator()(Arch, std::size_t size, const T* eccentricity, std::size_t batch_size,
-                       const T* mean_anomaly, T* eccentric_anomaly, T* sin_eccentric_anomaly,
-                       T* cos_eccentric_anomaly) {
+template <typename T>
+void solve(std::size_t size, const T* eccentricity, std::size_t batch_size, const T* mean_anomaly,
+           T* eccentric_anomaly, T* sin_eccentric_anomaly, T* cos_eccentric_anomaly) {
   for (std::size_t n = 0; n < size; ++n) {
     solver::solve_simd<starters::raposo_pulido_brandt<T>, refiners::brandt<T>>(
         eccentricity[n], batch_size, mean_anomaly, eccentric_anomaly, sin_eccentric_anomaly,
@@ -40,19 +28,6 @@ void solve::operator()(Arch, std::size_t size, const T* eccentricity, std::size_
     cos_eccentric_anomaly += batch_size;
   }
 }
-
-#define KEPLER_DEFINE_EXTERN_(arch, type)                                                         \
-  extern template void solve::operator()<arch, type>(arch, std::size_t, const type*, std::size_t, \
-                                                     const type*, type*, type*, type*)
-
-#define KEPLER_DEFINE_EXTERN(arch)     \
-  KEPLER_DEFINE_EXTERN_(arch, double); \
-  KEPLER_DEFINE_EXTERN_(arch, float)
-
-KEPLER_DEFINE_EXTERN(xs::sse2);
-KEPLER_DEFINE_EXTERN(xs::avx2);
-#undef KEPLER_DEFINE_EXTERN
-}  // namespace detail
 
 }  // namespace kepler
 #endif
